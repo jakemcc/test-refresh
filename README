@@ -1,0 +1,12 @@
+# autoexpect
+
+This currently doesn't work. Someday it will.
+
+Code under src/autoexpect/core.clj works from command line.
+Code under src/leiningen/autoexpect.clj is not yet there.
+
+## License
+
+Copyright (C) 2011 FIXME
+
+Distributed under the Eclipse Public License, the same as Clojure.
