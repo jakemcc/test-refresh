@@ -10,8 +10,8 @@
       (try
         (let [report (check)]
           (when-let [reloaded (seq (:reloaded report))]
-            (println )
             (println stars "Running tests" stars)
             (run-all-tests))
-          (Thread/sleep 500)))
+          (Thread/sleep 500))
+        (catch Exception ex (println ex)))
       (recur nil))))
