@@ -8,11 +8,11 @@ In your `project.clj` file add `[lein-autoexpect "0.0.2"]` to your dependencies.
 
 Here is what it looks like. 
 
-   $ lein autoexpect
-   *********************************************
-   *************** Running tests ***************
-   Ran 3 tests containing 3 assertions in 16 msecs
-   0 failures, 0 errors.
+    $ lein autoexpect
+    *********************************************
+    *************** Running tests ***************
+    Ran 3 tests containing 3 assertions in 16 msecs
+    0 failures, 0 errors.
 
 Your terminal will just stay like that. Every half a second autoexpect polls the file system to see if anything has changed.
 
