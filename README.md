@@ -14,7 +14,7 @@ Here is what it looks like.
     Ran 3 tests containing 3 assertions in 16 msecs
     0 failures, 0 errors.
 
-Your terminal will just stay like that. Every half a second autoexpect polls the file system to see if anything has changed. When there is a change your expectations are run again.
+Your terminal will just stay like that. Every half a second autoexpect polls the file system to see if anything has changed. When there is a change your code is tested again.
 
 autoexpect has been tested with `expectations 1.1.0` and `expectations 1.3.0`. It is up to you to specify what version of expectations you are using in your `project.clj` file.
 
