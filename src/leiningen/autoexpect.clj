@@ -4,8 +4,8 @@
 (defn autoexpect
   "Autoruns expecations on source change"
   [project & args]
-  (let [test-path (get :test-path project "test")
-        source-path (get :source-path project "src")]
+  (let [test-path (get project :test-path "test")
+        source-path (get project :source-path "src")]
     (eval-in-project
      project
      `(do
