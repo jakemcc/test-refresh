@@ -4,7 +4,7 @@ Leiningen plug-in for automatically running [expectations](https://github.com/ja
 
 ## Usage
 
-In your `project.clj` file add `[lein-autoexpect "0.0.2"]` to your dependencies. At the command line run `lein autoexpect` to start the continuous testing.
+In your `project.clj` file add `[lein-autoexpect "0.0.3"]` to your dependencies. At the command line run `lein autoexpect` to start the continuous testing.
 
 Here is what it looks like. 
 
@@ -16,7 +16,7 @@ Here is what it looks like.
 
 Your terminal will just stay like that. Every half a second autoexpect polls the file system to see if anything has changed. When there is a change your code is tested again.
 
-autoexpect has been tested with `expectations 1.1.0` and `expectations 1.3.0`. It is up to you to specify what version of expectations you are using in your `project.clj` file.
+autoexpect should work with any version of expectations. It has been tested with 1.1.0, 1.3.0, and 1.3.2. It does not currently support Leiningen 2.0.
 
 ## License
 
