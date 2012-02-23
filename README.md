@@ -20,6 +20,6 @@ autoexpect should work with any version of expectations. It has been tested with
 
 ## License
 
-Copyright (C) 2011 [Jake McCrary](http://jakemccrary.com)
+Copyright (C) 2011-2012 [Jake McCrary](http://jakemccrary.com)
 
 Distributed under the Eclipse Public License, the same as Clojure.
