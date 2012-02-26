@@ -4,7 +4,7 @@ Leiningen plug-in for automatically running [expectations](https://github.com/ja
 
 ## Usage
 
-Either add `[lein-autoexpect "0.0.3"]` to your `project.clj` file under `:dev-dependencies` or install as a Leiningen plugin `lein plugin install lein-autoexpect 0.0.3`. Run using `lein autoexpect`
+Either add `[lein-autoexpect "0.0.3"]` to your `project.clj` file under `:dev-dependencies` or install as a Leiningen plugin (`lein plugin install lein-autoexpect 0.0.3`). Run using `lein autoexpect`
 
 Here is what it looks like. 
 
