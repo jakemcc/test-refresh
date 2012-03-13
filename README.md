@@ -4,9 +4,7 @@ Leiningen plug-in for automatically running [expectations](https://github.com/ja
 
 ## Usage
 
-Either add `[lein-autoexpect "0.0.3"]` to your `project.clj` file under `:dev-dependencies` or install as a Leiningen plugin (`lein plugin install lein-autoexpect 0.0.3`). Run using `lein autoexpect`
-
-Here is what it looks like. 
+Here is what using it looks like. 
 
     $ lein autoexpect
     *********************************************
@@ -14,9 +12,31 @@ Here is what it looks like.
     Ran 3 tests containing 3 assertions in 16 msecs
     0 failures, 0 errors.
 
-Your terminal will just stay like that. Every half a second autoexpect polls the file system to see if anything has changed. When there is a change your code is tested again.
+Your terminal will just stay like that. Every half second autoexpect polls the file system to see if anything has changed. When there is a change your code is tested again.
 
-autoexpect should work with any version of expectations. It has been tested with 1.1.0, 1.3.0, and 1.3.2. It does not currently support Leiningen 2.0.
+### Leiningen 2.0
+
+Add `[lein-autoexpect "0.1.1"]` to your `~/.lein/profiles.clj` as
+follows:
+
+    {:user {:plugins [[lein-autoexpect "0.1.1"]]}}
+    
+Alternatively add to your `:plugins` vector in your project.clj file.
+   
+    (defproject sample
+      :dependencies [[org.clojure/clojure "1.3.0"]]
+      :profile {:dev {:dependencies [[expectations "1.3.6"]]}}
+      :plugins [[lein-autoexpect "0.1.1"]])
+
+### Leiningen 1.7 and older
+
+Add `[lein-autoexpect "0.1.1"]` to your `project.clj` file under `:dev-dependencies` or install as a Leiningen plugin (`lein plugin install lein-autoexpect 0.1.1`). Run using `lein autoexpect`
+
+
+## Compatibility
+
+autoexpect should work with any version of expectations. If there is
+an issue please report it. I've tested it with versions 1.1.0 and 1.3.[0236].
 
 ## License
 
