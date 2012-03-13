@@ -23,10 +23,10 @@
 
 (defn- code-paths [project]
   (remove nil?
-          (flatten [(get project :test-path)
-                    (get project :source-path)
-                    (get project :test-paths)
-                    (get project :source-paths)])))
+          (flatten [(:test-path project)
+                    (:source-path project)
+                    (:test-paths project)
+                    (:source-paths project)])))
 
 (defn autoexpect
   "Autoruns expecations on source change"
