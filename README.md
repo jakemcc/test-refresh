@@ -25,7 +25,7 @@ Alternatively add to your `:plugins` vector in your project.clj file.
    
     (defproject sample
       :dependencies [[org.clojure/clojure "1.3.0"]]
-      :profile {:dev {:dependencies [[expectations "1.3.6"]]}}
+      :profile {:dev {:dependencies [[expectations "1.3.8"]]}}
       :plugins [[lein-autoexpect "0.1.1"]])
 
 ### Leiningen 1.7 and older
@@ -36,7 +36,7 @@ Add `[lein-autoexpect "0.1.1"]` to your `project.clj` file under `:dev-dependenc
 ## Compatibility
 
 autoexpect should work with any version of expectations. If there is
-an issue please report it. I've tested it with versions 1.1.0 and 1.3.[0236].
+an issue please report it. I've tested it with versions 1.1.0 and 1.3.[023678].
 
 ## License
 
