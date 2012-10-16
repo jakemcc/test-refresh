@@ -14,43 +14,36 @@
       (eip project form init)
       (eip project form nil nil init))))
 
-(def dep ['fresh "1.0.2"])
+(def dep ['org.clojure/tools.namespace "0.2.0"])
 
 (defn- add-fresh-dep [project]
   (if-let [conj-dependency (resolve 'leiningen.core.project/conj-dependency)]
     (conj-dependency project dep)
     (update-in project [:dependencies] conj dep)))
 
-(defn- code-paths [project]
-  (remove nil?
-          (flatten [(:test-path project)
-                    (:source-path project)
-                    (:test-paths project)
-                    (:source-paths project)])))
-
 (defn autoexpect
   "Autoruns expecations on source change"
   [project & args]
-  (let [src (vec (code-paths project))]
-    (eval-in-project
-     (add-fresh-dep project)
-     `(do
-        (reset! expectations/run-tests-on-shutdown false)
-        (let [top-stars#  (apply str (repeat 45 "*"))
-              side-stars# (apply str (repeat 15 "*"))
-              check# (fresh.core/freshener
-                      #(apply fresh.core/clj-files-in
-                              (map clojure.java.io/file ~src)))]
-          (loop [_# nil]
+  (eval-in-project
+   (add-fresh-dep project)
+   `(do
+      (reset! expectations/run-tests-on-shutdown false)
+      (let [top-stars#  (apply str (repeat 45 "*"))
+            side-stars# (apply str (repeat 15 "*"))]
+        (loop [tracker# (clojure.tools.namespace.track/tracker)]
+          (let [new-tracker# (clojure.tools.namespace.dir/scan tracker#)]
             (try
-              (let [report# (check#)]
-                (when-let [reloaded# (seq (:reloaded report#))]
-                  (println top-stars#)
-                  (println side-stars# "Running tests" side-stars#)
-                  (expectations/run-all-tests))
-                (Thread/sleep 500))
+              (when (not= new-tracker# tracker#)
+                (let [result# (binding [*out* (java.io.StringWriter.)]
+                                (clojure.tools.namespace.repl/refresh))]
+                  (if (= :ok result#)
+                    (do
+                      (println top-stars#)
+                      (println side-stars# "Running tests" side-stars#)
+                      (expectations/run-all-tests))
+                    (println "Error refreshing environment:" clojure.core/*e))))
+              (Thread/sleep 500)
               (catch Exception ex# (.printStackTrace ex#)))
-            (recur nil))))
-     `(require 'fresh.core
-               'expectations
-               'clojure.java.io))))
+            (recur new-tracker#)))))
+   `(require '(clojure.tools.namespace track repl)
+             'expectations)))
