@@ -38,6 +38,13 @@ Add `[lein-autoexpect "0.2.0"]` to your `project.clj` file under `:dev-dependenc
 autoexpect should work with any version of expectations. If there is
 an issue please report it. I've tested it with versions 1.1.0, 1.3.[023678], and 1.4.*
 
+Because of a dependency on
+[tools.namespace](https://github.com/clojure/tools.namespace) it also
+requires a version of Clojure >= 1.3.0 and that your project not
+depend on a version of tools.namespace < 0.2.0. lein-autoexpect might
+still work with a version of tools.namespace < 0.2.0 but expect the
+occasional exception.
+
 ## License
 
 Copyright (C) 2011-2012 [Jake McCrary](http://jakemccrary.com)
