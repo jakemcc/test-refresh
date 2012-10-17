@@ -16,21 +16,21 @@ Your terminal will just stay like that. Every half second autoexpect polls the f
 
 ### Leiningen 2.0
 
-Add `[lein-autoexpect "0.1.3"]` to your `~/.lein/profiles.clj` as
+Add `[lein-autoexpect "0.2.0"]` to your `~/.lein/profiles.clj` as
 follows:
 
-    {:user {:plugins [[lein-autoexpect "0.1.3"]]}}
+    {:user {:plugins [[lein-autoexpect "0.2.0"]]}}
     
 Alternatively add to your `:plugins` vector in your project.clj file.
    
     (defproject sample
       :dependencies [[org.clojure/clojure "1.3.0"]]
       :profile {:dev {:dependencies [[expectations "1.3.8"]]}}
-      :plugins [[lein-autoexpect "0.1.3"]])
+      :plugins [[lein-autoexpect "0.2.0"]])
 
 ### Leiningen 1.7 and older
 
-Add `[lein-autoexpect "0.1.3"]` to your `project.clj` file under `:dev-dependencies` or install as a Leiningen plugin (`lein plugin install lein-autoexpect 0.1.3`). Run using `lein autoexpect`
+Add `[lein-autoexpect "0.2.0"]` to your `project.clj` file under `:dev-dependencies` or install as a Leiningen plugin (`lein plugin install lein-autoexpect 0.2.0`). Run using `lein autoexpect`
 
 
 ## Compatibility
