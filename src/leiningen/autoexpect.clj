@@ -45,5 +45,6 @@
               (Thread/sleep 500)
               (catch Exception ex# (.printStackTrace ex#)))
             (recur new-tracker#)))))
-   `(require '(clojure.tools.namespace track repl)
+   `(require 'clojure.tools.namespace.track
+             'clojure.tools.namespace.repl
              'expectations)))
