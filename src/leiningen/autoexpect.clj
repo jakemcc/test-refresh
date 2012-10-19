@@ -14,8 +14,7 @@
       (eip project form init)
       (eip project form nil nil init))))
 
-(def deps [['org.clojure/tools.namespace "0.2.0"]
-           ['lein-autoexpect "0.2.1-SNAPSHOT"]])
+(def deps [['lein-autoexpect "0.2.1-SNAPSHOT"]])
 
 (defn- add-deps [project]
   (if-let [conj-dependency (resolve 'leiningen.core.project/conj-dependency)]
