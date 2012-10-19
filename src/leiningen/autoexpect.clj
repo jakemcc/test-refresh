@@ -18,7 +18,8 @@
 
 (defn- add-deps [project]
   (if-let [conj-dependency (resolve 'leiningen.core.project/conj-dependency)]
-    (reduce conj-dependency project deps)
+    (binding [*out* (java.io.StringWriter.)]
+     (reduce conj-dependency project deps))
     (reduce (partial update-in project [:dependencies] conj) deps)))
 
 (defn autoexpect
