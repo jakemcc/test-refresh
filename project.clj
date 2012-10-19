@@ -3,4 +3,4 @@
   :url "https://github.com/jakemccrary/lein-autoexpect"
   :developer "Jake McCrary"
   :dependencies [[org.clojure/tools.namespace "0.2.0"]
-                 [clj-growl "0.2.1"]])
+                 [clj-gntp "0.0.1"]])
