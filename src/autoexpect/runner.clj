@@ -2,12 +2,12 @@
   (:require clojure.tools.namespace.track
             clojure.tools.namespace.repl
             expectations
-            clj-gntp.core))
+            jakemcc.clojure-gntp.gntp))
 
 (defn- turn-off-testing-at-shutdown []
   (reset! expectations/run-tests-on-shutdown false))
 
-(defn- make-tracker []
+(defn- make-change-tracker []
   (clojure.tools.namespace.track/tracker))
 
 (defn- scan-for-changes [tracker]
@@ -28,15 +28,16 @@
   (println side-stars "Running tests" side-stars))
 
 (defn- growl [title-postfix message]
-  (clj-gntp.core/growl-notify (str "AutoExpect - " title-postfix)
-                              message
-                              nil nil))
+  (jakemcc.clojure-gntp.gntp/message
+   (str "AutoExpect - " title-postfix)
+   message))
+
 (defn- report [results]
   (let [{:keys [fail error test run-time]} results]
     (if (< 0 (+ fail error))
       (growl "Failed" (format "Failed %s of %s tests."
-                               (+ fail error)
-                               test))
+                              (+ fail error)
+                              test))
       (growl "Passed" (format "Passed %s tests" test)))))
 
 (defn- run-tests []
@@ -45,14 +46,16 @@
       (do
         (print-banner)
         (report (expectations/run-all-tests)))
-      (println "Error refreshing environment:" clojure.core/*e))))
+      (let [message (str "Error refreshing environment: " clojure.core/*e)]
+        (println message)
+        (growl "Error" message )))))
 
 (defn- something-changed? [x y]
   (not= x y))
 
 (defn monitor-project []
   (turn-off-testing-at-shutdown)
-  (loop [tracker (make-tracker)]
+  (loop [tracker (make-change-tracker)]
     (let [new-tracker (scan-for-changes tracker)]
       (try
         (when (something-changed? new-tracker tracker)
