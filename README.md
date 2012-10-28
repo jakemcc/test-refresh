@@ -25,21 +25,21 @@ for [OS X](http://growl.info/),
 
 ### Leiningen 2.0
 
-Add `[lein-autoexpect "0.2.1"]` to your `~/.lein/profiles.clj` as
+Add `[lein-autoexpect "0.2.2"]` to your `~/.lein/profiles.clj` as
 follows:
 
-    {:user {:plugins [[lein-autoexpect "0.2.1"]]}}
+    {:user {:plugins [[lein-autoexpect "0.2.2"]]}}
     
 Alternatively add to your `:plugins` vector in your project.clj file.
    
     (defproject sample
       :dependencies [[org.clojure/clojure "1.3.0"]]
       :profile {:dev {:dependencies [[expectations "1.3.8"]]}}
-      :plugins [[lein-autoexpect "0.2.1"]])
+      :plugins [[lein-autoexpect "0.2.2"]])
 
 ### Leiningen 1.7 and older
 
-Add `[lein-autoexpect "0.2.1"]` to your `project.clj` file under `:dev-dependencies` or install as a Leiningen plugin (`lein plugin install lein-autoexpect 0.2.1`). Run using `lein autoexpect`
+Add `[lein-autoexpect "0.2.2"]` to your `project.clj` file under `:dev-dependencies` or install as a Leiningen plugin (`lein plugin install lein-autoexpect 0.2.2`). Run using `lein autoexpect`
 
 
 ## Compatibility
