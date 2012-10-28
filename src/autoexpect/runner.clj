@@ -4,6 +4,8 @@
             expectations
             jakemcc.clojure-gntp.gntp))
 
+(def ^:private ^:dynamic *growl* nil)
+
 (defn- turn-off-testing-at-shutdown []
   (reset! expectations/run-tests-on-shutdown false))
 
@@ -28,9 +30,10 @@
   (println side-stars "Running tests" side-stars))
 
 (defn- growl [title-postfix message]
-  (jakemcc.clojure-gntp.gntp/message
-   (str "AutoExpect - " title-postfix)
-   message))
+  (when *growl*
+    (jakemcc.clojure-gntp.gntp/message
+     (str "AutoExpect - " title-postfix)
+     message)))
 
 (defn- report [results]
   (let [{:keys [fail error test run-time]} results]
@@ -53,13 +56,14 @@
 (defn- something-changed? [x y]
   (not= x y))
 
-(defn monitor-project []
+(defn monitor-project [should-growl]
   (turn-off-testing-at-shutdown)
   (loop [tracker (make-change-tracker)]
     (let [new-tracker (scan-for-changes tracker)]
       (try
         (when (something-changed? new-tracker tracker)
-          (run-tests))
+          (binding [*growl* should-growl]
+            (run-tests)))
         (Thread/sleep 500)
         (catch Exception ex (.printStackTrace ex)))
       (recur new-tracker))))

@@ -19,13 +19,22 @@
 (defn- add-deps [project]
   (if-let [conj-dependency (resolve 'leiningen.core.project/conj-dependency)]
     (binding [*out* (java.io.StringWriter.)]
-     (reduce conj-dependency project deps))
+      (reduce conj-dependency project deps))
     (reduce (partial update-in project [:dependencies] conj) deps)))
 
-(defn autoexpect
-  "Autoruns expecations on source change"
+(defn ^{:help-arglists '([])} autoexpect
+  "Autoruns expecations on source change
+
+USAGE: lein autoexpect
+Runs expectations whenever there is a change to code in classpath.
+Reports test successes and failures to STDOUT.
+
+USAGE: lein autoexpect :growl
+Runs expectations whenever code changes.
+Reports results to growl and STDOUT."
   [project & args]
-  (eval-in-project
-   (add-deps project)
-   `(autoexpect.runner/monitor-project)
-   `(require 'autoexpect.runner)))
+  (let [should-growl (some #{:growl ":growl"} args)]
+    (eval-in-project
+     (add-deps project)
+     `(autoexpect.runner/monitor-project ~should-growl)
+     `(require 'autoexpect.runner))))
