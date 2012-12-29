@@ -1,4 +1,5 @@
-(ns leiningen.autoexpect)
+(ns leiningen.autoexpect
+  (:require [leinjacker.deps :as deps]))
 
 (defn- eval-in-project
   "Support eval-in-project in both Leiningen 1.x and 2.x."
@@ -14,14 +15,10 @@
       (eip project form init)
       (eip project form nil nil init))))
 
-(def deps [['lein-autoexpect "0.2.3-SNAPSHOT"]
-           ['org.clojure/tools.namespace "0.2.2"]])
-
 (defn- add-deps [project]
-  (if-let [conj-dependency (resolve 'leiningen.core.project/conj-dependency)]
-    (binding [*out* (java.io.StringWriter.)]
-      (reduce conj-dependency project deps))
-    (reduce (partial update-in project [:dependencies] conj) deps)))
+  (-> project
+      (deps/add-if-missing '[lein-autoexpect "0.2.4-SNAPSHOT"])
+      (deps/add-if-missing '[org.clojure/tools.namespace "0.2.2"])))
 
 (defn ^{:help-arglists '([])} autoexpect
   "Autoruns expecations on source change
