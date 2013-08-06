@@ -1,7 +1,9 @@
-(defproject lein-autoexpect "0.2.7-SNAPSHOT"
+(defproject lein-autoexpect "0.2.9-SNAPSHOT"
   :description "Automatically run expecations when a source file changes"
   :url "https://github.com/jakemcc/lein-autoexpect"
   :developer "Jake McCrary"
+  :license {:name "Eclipse Public License"
+            :url "http://www.eclipse.org/legal/epl-v10.html"}
   :dependencies [[org.clojure/tools.namespace "0.2.4" :exclusions [org.clojure/clojure]]
                  [leinjacker "0.4.1" :exclusions [org.clojure/clojure]]
                  [jakemcc/clojure-gntp "0.1.1" :exclusions [org.clojure/clojure]]]
