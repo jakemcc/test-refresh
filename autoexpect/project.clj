@@ -10,8 +10,4 @@
   :plugins [[lein-release/lein-release "1.0.4"]]
   :profiles {:dev {:dependencies [[expectations "1.4.10"]]}}
   :lein-release {:scm :git
-                 :deploy-via :lein-deploy}
-  :repositories [["releases" {:url "https://clojars.org/repo"
-                              :creds :gpg}]
-                 ["snapshots" {:url "https://clojars.org/repo"
-                              :creds :gpg}]])
+                 :deploy-via :lein-deploy})
