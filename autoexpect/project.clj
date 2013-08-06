@@ -8,4 +8,4 @@
   :plugins [[lein-release/lein-release "1.0.4"]]
   :profiles {:dev {:dependencies [[expectations "1.4.10"]]}}
   :lein-release {:scm :git
-                 :deploy-via :clojars})
+                 :deploy-via :lein-deploy})
