@@ -4,8 +4,8 @@
 
 (defn- add-deps [project]
   (-> project
-      (deps/add-if-missing '[lein-autoexpect "0.2.6-SNAPSHOT"])
-      (deps/add-if-missing '[org.clojure/tools.namespace "0.2.2"])))
+      (deps/add-if-missing '[lein-autoexpect "1.0"])
+      (deps/add-if-missing '[org.clojure/tools.namespace "0.2.4"])))
 
 (defn ^{:help-arglists '([])} autoexpect
   "Autoruns expecations on source change

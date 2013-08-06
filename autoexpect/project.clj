@@ -1,4 +1,4 @@
-(defproject lein-autoexpect "0.2.9"
+(defproject lein-autoexpect "1.0"
   :description "Automatically run expecations when a source file changes"
   :url "https://github.com/jakemcc/lein-autoexpect"
   :developer "Jake McCrary"
@@ -10,4 +10,8 @@
   :plugins [[lein-release/lein-release "1.0.4"]]
   :profiles {:dev {:dependencies [[expectations "1.4.10"]]}}
   :lein-release {:scm :git
-                 :deploy-via :lein-deploy})
+                 :deploy-via :lein-deploy}
+  :repositories [["releases" {:url "https://clojars.org/repo"
+                              :creds :gpg}]
+                 ["snapshots" {:url "https://clojars.org/repo"
+                              :creds :gpg}]])

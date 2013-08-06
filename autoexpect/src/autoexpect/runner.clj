@@ -30,10 +30,13 @@
   (println side-stars "Running tests" side-stars))
 
 (defn- growl [title-postfix message]
-  (when *growl*
-    (jakemcc.clojure-gntp.gntp/message
-     (str "AutoExpect - " title-postfix)
-     message)))
+  (try
+    (when *growl*
+      (jakemcc.clojure-gntp.gntp/message
+       (str "AutoExpect - " title-postfix)
+       message))
+    (catch Exception ex
+      (println "Problem communicating with growl, exception:" (.getMessage ex)))))
 
 (defn- report [results]
   (let [{:keys [fail error test run-time]} results]
