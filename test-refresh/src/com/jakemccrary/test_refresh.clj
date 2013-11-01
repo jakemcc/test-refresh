@@ -50,13 +50,12 @@
                               test))
       (growl "Passed" (format "Passed %s tests" test)))))
 
-(defn- run-tests [source-paths]
-  (println source-paths) 
+(defn- run-tests [test-paths]
   (let [result (suppress-stdout (refresh-environment))]
     (if (= :ok result)
       (do
         (print-banner)
-        (report (apply clojure.test/run-tests (namespaces-in-directories source-paths))))
+        (report (apply clojure.test/run-tests (namespaces-in-directories test-paths))))
       (let [message (str "Error refreshing environment: " clojure.core/*e)]
         (println message)
         (growl "Error" message )))))
@@ -64,13 +63,13 @@
 (defn- something-changed? [x y]
   (not= x y))
 
-(defn monitor-project [should-growl source-paths]
+(defn monitor-project [should-growl test-paths]
   (loop [tracker (make-change-tracker)]
     (let [new-tracker (scan-for-changes tracker)]
       (try
         (when (something-changed? new-tracker tracker)
           (binding [*growl* should-growl]
-            (run-tests source-paths)))
+            (run-tests test-paths)))
         (Thread/sleep 500)
         (catch Exception ex (.printStackTrace ex)))
       (recur new-tracker))))
