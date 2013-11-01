@@ -4,7 +4,7 @@
 
 (defn- add-deps [project]
   (-> project
-      (deps/add-if-missing '[com.jakemccrary/lein-test-refresh "0.1"])
+      (deps/add-if-missing '[com.jakemccrary/lein-test-refresh "0.1.1"])
       (deps/add-if-missing '[org.clojure/tools.namespace "0.2.4"])))
 
 (defn- clojure-code-directories [project]
@@ -28,5 +28,5 @@ Reports results to growl and STDOUT."
         code-dirs (clojure-code-directories project)]
     (eval/eval-in-project
      (add-deps project)
-     `(autotest.runner/monitor-project ~should-growl '~code-dirs)
-     `(require 'autotest.runner))))
+     `(com.jakemccrary.test-refresh/monitor-project ~should-growl '~code-dirs)
+     `(require 'com.jakemccrary.test-refresh))))

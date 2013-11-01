@@ -1,4 +1,4 @@
-(ns autotest.runner
+(ns com.jakemccrary.test-refresh
   (:require clojure.test
             clojure.tools.namespace.dir
             clojure.tools.namespace.find
