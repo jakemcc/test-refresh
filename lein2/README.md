@@ -1,10 +1,10 @@
 # lein2
 
-Project for testing lein-autoexpect with leiningen 2
+Project for testing lein-test-refresh with leiningen 2
 
 ## Usage
 
-run `lein autoexpect` and `lein autoexpect :growl`. Comment and uncomment various lines in `test/sample_expectations.clj` to test out lein-autoexpect.
+run `lein test-refresh` and `lein test-refresh :growl`. Comment and uncomment various lines in `test/sample_expectations.clj` to test out lein-test-refresh.
 
 ## License
 
