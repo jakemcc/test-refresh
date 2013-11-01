@@ -4,14 +4,12 @@
 
 (defn- add-deps [project]
   (-> project
-      (deps/add-if-missing '[com.jakemccrary/lein-test-refresh "0.1.1"])
+      (deps/add-if-missing '[com.jakemccrary/lein-test-refresh "0.1.2"])
       (deps/add-if-missing '[org.clojure/tools.namespace "0.2.4"])))
 
-(defn- clojure-code-directories [project]
-  (doall (concat (:source-path project [])
-                 (:source-paths project [])
-                 (:test-path project [])
-                 (:test-paths project []))))
+(defn- clojure-test-directories [project]
+  (vec (concat (:test-path project [])
+               (:test-paths project []))))
 
 (defn test-refresh
   "Autoruns clojure.test tests on source change
@@ -25,8 +23,8 @@ Runs tests whenever code changes.
 Reports results to growl and STDOUT."
   [project & args]
   (let [should-growl (some #{:growl ":growl" "growl"} args)
-        code-dirs (clojure-code-directories project)]
+        tests (clojure-test-directories project)]
     (eval/eval-in-project
      (add-deps project)
-     `(com.jakemccrary.test-refresh/monitor-project ~should-growl '~code-dirs)
+     `(com.jakemccrary.test-refresh/monitor-project ~should-growl ~tests)
      `(require 'com.jakemccrary.test-refresh))))
