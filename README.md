@@ -35,7 +35,7 @@ Alternatively add to your `:plugins` vector in your project.clj file.
    
     (defproject sample
       :dependencies [[org.clojure/clojure "1.5.1"]]
-      :profile {:dev {:plugins [[com.jakemccrary/lein-test-refresh "0.1.2"]])})
+      :profiles {:dev {:plugins [[com.jakemccrary/lein-test-refresh "0.1.2"]]}})
 
 This project has not been tested with versions of Leiningen 1. This
 project is heavily based of `lein-autoexpect` which has been tested
