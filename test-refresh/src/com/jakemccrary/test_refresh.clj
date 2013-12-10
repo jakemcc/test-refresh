@@ -77,6 +77,6 @@
         (when (something-changed? new-tracker tracker)
           (binding [*growl* should-growl]
             (run-tests test-paths)))
-        (Thread/sleep 500)
+        (Thread/sleep 200)
         (catch Exception ex (.printStackTrace ex)))
       (recur new-tracker))))
