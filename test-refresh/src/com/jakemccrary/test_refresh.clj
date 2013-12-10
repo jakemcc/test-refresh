@@ -4,7 +4,8 @@
             clojure.tools.namespace.find
             clojure.tools.namespace.track
             clojure.tools.namespace.repl
-            jakemcc.clojure-gntp.gntp))
+            jakemcc.clojure-gntp.gntp)
+  (:import [java.text SimpleDateFormat]))
 
 (def ^:private ^:dynamic *growl* nil)
 
@@ -50,12 +51,18 @@
                               test))
       (growl "Passed" (format "Passed %s tests" test)))))
 
+(defn- print-end-message []
+  (let [date-str (.format (java.text.SimpleDateFormat. "HH:mm:ss.SSS")
+                          (java.util.Date.))]
+    (println "Finished at" date-str)))
+
 (defn- run-tests [test-paths]
   (let [result (suppress-stdout (refresh-environment))]
     (if (= :ok result)
       (do
         (print-banner)
-        (report (apply clojure.test/run-tests (namespaces-in-directories test-paths))))
+        (report (apply clojure.test/run-tests (namespaces-in-directories test-paths)))
+        (print-end-message))
       (let [message (str "Error refreshing environment: " clojure.core/*e)]
         (println message)
         (growl "Error" message )))))
