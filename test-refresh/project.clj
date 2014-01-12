@@ -7,8 +7,7 @@
   :dependencies [[org.clojure/clojure "1.5.1"]
                  [org.clojure/tools.namespace "0.2.4" :exclusions [org.clojure/clojure]]
                  [leinjacker "0.4.1" :exclusions [org.clojure/clojure]]
-                 [jakemcc/clojure-gntp "0.1.1" :exclusions [org.clojure/clojure]]
-                 [jline "0.9.94"]]
+                 [jakemcc/clojure-gntp "0.1.1" :exclusions [org.clojure/clojure]]]
   :profiles {:dev {:plugins [[lein-release/lein-release "1.0.4"]]}}
   :lein-release {:scm :git
                  :deploy-via :lein-deploy})

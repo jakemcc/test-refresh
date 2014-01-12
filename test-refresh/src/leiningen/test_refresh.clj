@@ -5,15 +5,15 @@
 (defn- add-deps [project]
   (-> project
       (deps/add-if-missing '[com.jakemccrary/lein-test-refresh "0.3.0-SNAPSHOT"])
-      (deps/add-if-missing '[org.clojure/tools.namespace "0.2.4"])
-      (deps/add-if-missing '[jline "0.9.94"])))
+      (deps/add-if-missing '[org.clojure/tools.namespace "0.2.4"])))
 
 (defn- clojure-test-directories [project]
   (vec (concat (:test-path project [])
                (:test-paths project []))))
 
 (defn test-refresh
-  "Autoruns clojure.test tests on source change
+  "Autoruns clojure.test tests on source change or
+on the ENTER key being pressed.
 
 USAGE: lein test-refresh
 Runs tests whenever there is a change to code in classpath.
