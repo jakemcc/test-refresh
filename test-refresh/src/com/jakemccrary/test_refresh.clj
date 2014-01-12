@@ -5,7 +5,8 @@
             clojure.tools.namespace.track
             clojure.tools.namespace.repl
             jakemcc.clojure-gntp.gntp)
-  (:import [java.text SimpleDateFormat]))
+  (:import [java.text SimpleDateFormat]
+           [jline Terminal]))
 
 (def ^:private ^:dynamic *growl* nil)
 
@@ -70,13 +71,26 @@
 (defn- something-changed? [x y]
   (not= x y))
 
+
+
+(defn monitor-keystrokes [keystroke-pressed]
+  (future
+    (let [term (Terminal/getTerminal)]
+      (while true
+        (.readCharacter term System/in)
+        (reset! keystroke-pressed true)))))
+
 (defn monitor-project [should-growl test-paths]
-  (loop [tracker (make-change-tracker)]
-    (let [new-tracker (scan-for-changes tracker)]
-      (try
-        (when (something-changed? new-tracker tracker)
-          (binding [*growl* should-growl]
-            (run-tests test-paths)))
-        (Thread/sleep 200)
-        (catch Exception ex (.printStackTrace ex)))
-      (recur new-tracker))))
+  (let [keystroke-pressed (atom nil)]
+    (monitor-keystrokes keystroke-pressed)
+    (loop [tracker (make-change-tracker)]
+      (let [new-tracker (scan-for-changes tracker)]
+        (try
+          (when (or @keystroke-pressed
+                    (something-changed? new-tracker tracker))
+            (reset! keystroke-pressed nil)
+            (binding [*growl* should-growl]
+              (run-tests test-paths)))
+          (Thread/sleep 200)
+          (catch Exception ex (.printStackTrace ex)))
+        (recur new-tracker)))))
