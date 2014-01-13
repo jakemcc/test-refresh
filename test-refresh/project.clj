@@ -9,5 +9,8 @@
                  [leinjacker "0.4.1" :exclusions [org.clojure/clojure]]
                  [jakemcc/clojure-gntp "0.1.1" :exclusions [org.clojure/clojure]]]
   :profiles {:dev {:plugins [[lein-release/lein-release "1.0.4"]]}}
+  :repositories [["releases" {:url "http://clojars.org/repo"
+                              :creds :gpg}]]
+  :scm {:url "git@github.com:jakemcc/lein-test-refresh.git"}
   :lein-release {:scm :git
                  :deploy-via :lein-deploy})
