@@ -11,7 +11,7 @@ Here is what using it looks like.
     *************** Running tests ***************
     (standard clojure.test output here)
 
-Your terminal will just stay like that. Every half second `lein-test-refresh`
+Your terminal will just stay like that. Fairly often `lein-test-refresh`
 polls the file system to see if anything has changed. When there is a
 change your code is tested again.
 
