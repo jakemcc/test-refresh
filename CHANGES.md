@@ -1,5 +1,9 @@
 # Changes
 
+## 0.3.0
+
+- Hitting enter causes tests to be run.
+
 ## 0.2.2
 
 - Adds support for reporting test results using Growl. Use `lein
