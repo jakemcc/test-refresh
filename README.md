@@ -21,21 +21,24 @@ for [OS X](http://growl.info/),
 [Linux](http://mattn.github.com/growl-for-linux/), and
 [Windows](http://growlforwindows.com/).
 
+
+`lein-test-refresh` also will run your tests if you hit the enter key.
+
 ### Latest version
 
 ![Latest version](https://clojars.org/com.jakemccrary/lein-test-refresh/latest-version.svg)
 
 ### Leiningen 2.0
 
-Add whatever is shown above to your to your `~/.lein/profiles.clj`. An example using version `0.1.2` is shown below.
+Add whatever is shown above to your to your `~/.lein/profiles.clj`. An example using version `0.3.0` is shown below.
 
-    {:user {:plugins [[com.jakemccrary/lein-test-refresh "0.1.2"]]}}
+    {:user {:plugins [[com.jakemccrary/lein-test-refresh "0.3.0"]]}}
     
 Alternatively add to your `:plugins` vector in your project.clj file.
    
     (defproject sample
       :dependencies [[org.clojure/clojure "1.5.1"]]
-      :profiles {:dev {:plugins [[com.jakemccrary/lein-test-refresh "0.1.2"]]}})
+      :profiles {:dev {:plugins [[com.jakemccrary/lein-test-refresh "0.3.0"]]}})
 
 This project has not been tested with versions of Leiningen 1. This
 project is heavily based of `lein-autoexpect` which has been tested
