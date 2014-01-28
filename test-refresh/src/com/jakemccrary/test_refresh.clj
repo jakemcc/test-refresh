@@ -45,7 +45,7 @@
 
 (defn- report [results]
   (let [{:keys [pass test error fail]} results]
-    (if (< 0 (+ fail error))
+    (if (pos? (+ fail error))
       (growl "Failed" (format "Failed %s of %s tests."
                               (+ fail error)
                               test))
