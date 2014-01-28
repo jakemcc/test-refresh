@@ -4,10 +4,9 @@
             clojure.tools.namespace.find
             clojure.tools.namespace.track
             clojure.tools.namespace.repl
-            jakemcc.clojure-gntp.gntp)
+            jakemcc.clojure-gntp.gntp
+            [io.aviso.ansi :as ansi])
   (:import [java.text SimpleDateFormat]))
-
-(def ^:private ^:dynamic *growl* nil)
 
 (defn- make-change-tracker []
   (clojure.tools.namespace.track/tracker))
@@ -34,38 +33,44 @@
   (println top-stars)
   (println side-stars "Running tests" side-stars))
 
+(defn- print-end-message []
+  (let [date-str (.format (java.text.SimpleDateFormat. "HH:mm:ss.SSS")
+                          (java.util.Date.))]
+    (println "Finished at" date-str)))
+
+(defn status->color [status]
+  (condp = status
+    "Failed" (comp ansi/bold-red-bg ansi/black)
+    "Passed" (comp ansi/bold-green-bg ansi/black)
+    "Error"  (comp ansi/yellow-bg ansi/black)
+    str))
+
+(defn- print-to-console [report]
+  (println)
+  (println ((status->color (:status report)) (:message report)))
+  (print-end-message))
+
 (defn- growl [title-postfix message]
   (try
-    (when *growl*
-      (jakemcc.clojure-gntp.gntp/message
-       (str "AutoTest - " title-postfix)
-       message))
+    (jakemcc.clojure-gntp.gntp/message
+     (str "AutoTest - " title-postfix)
+     message)
     (catch Exception ex
       (println "Problem communicating with growl, exception:" (.getMessage ex)))))
 
 (defn- report [results]
   (let [{:keys [pass test error fail]} results]
     (if (pos? (+ fail error))
-      (growl "Failed" (format "Failed %s of %s tests."
-                              (+ fail error)
-                              test))
-      (growl "Passed" (format "Passed %s tests" test)))))
-
-(defn- print-end-message []
-  (let [date-str (.format (java.text.SimpleDateFormat. "HH:mm:ss.SSS")
-                          (java.util.Date.))]
-    (println "Finished at" date-str)))
+      {:status "Failed" :message (format "Failed %s of %s tests."
+                                         (+ fail error)
+                                         test)}
+      {:status "Passed" :message (format "Passed %s tests" test)})))
 
 (defn- run-tests [test-paths]
   (let [result (suppress-stdout (refresh-environment))]
     (if (= :ok result)
-      (do
-        (print-banner)
-        (report (apply clojure.test/run-tests (namespaces-in-directories test-paths)))
-        (print-end-message))
-      (let [message (str "Error refreshing environment: " clojure.core/*e)]
-        (println message)
-        (growl "Error" message )))))
+      (report (apply clojure.test/run-tests (namespaces-in-directories test-paths)))
+      {:status "Error" :message (str "Error refreshing environment: " clojure.core/*e)})))
 
 (defn- something-changed? [x y]
   (not= x y))
@@ -76,6 +81,7 @@
       (.read System/in)
       (reset! keystroke-pressed true))))
 
+
 (defn monitor-project [should-growl test-paths]
   (let [keystroke-pressed (atom nil)]
     (monitor-keystrokes keystroke-pressed)
@@ -85,8 +91,11 @@
           (when (or @keystroke-pressed
                     (something-changed? new-tracker tracker))
             (reset! keystroke-pressed nil)
-            (binding [*growl* should-growl]
-              (run-tests test-paths)))
+            (print-banner)
+            (let [result (run-tests test-paths)]
+              (print-to-console result)
+              (when should-growl
+                (growl (:status result) (:message result)))))
           (Thread/sleep 200)
           (catch Exception ex (.printStackTrace ex)))
         (recur new-tracker)))))

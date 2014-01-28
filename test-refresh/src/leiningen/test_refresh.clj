@@ -4,8 +4,9 @@
 
 (defn- add-deps [project]
   (-> project
-      (deps/add-if-missing '[com.jakemccrary/lein-test-refresh "0.3.0"])
-      (deps/add-if-missing '[org.clojure/tools.namespace "0.2.4"])))
+      (deps/add-if-missing '[com.jakemccrary/lein-test-refresh "0.3.1-SNAPSHOT"])
+      (deps/add-if-missing '[org.clojure/tools.namespace "0.2.4"])
+      (deps/add-if-missing '[io.aviso/pretty "0.1.8"])))
 
 (defn- clojure-test-directories [project]
   (vec (concat (:test-path project [])
