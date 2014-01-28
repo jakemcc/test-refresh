@@ -1,5 +1,9 @@
 # Changes
 
+## 0.3.1-SNAPSHOT
+
+- Colorized output in terminal.
+
 ## 0.3.0
 
 - Hitting enter causes tests to be run.
