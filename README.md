@@ -58,7 +58,7 @@ you may see occasional exceptions.
 
 ## License
 
-Copyright (C) 2011-2013 [Jake McCrary](http://jakemccrary.com)
+Copyright (C) 2011-2014 [Jake McCrary](http://jakemccrary.com)
 
 Distributed under the Eclipse Public License, the same as Clojure.
 
