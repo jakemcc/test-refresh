@@ -32,7 +32,7 @@ which specifies this feature.
 
 ### Latest version
 
-![Latest version](https://clojars.org/com.jakemccrary/lein-test-refresh/latest-version.svg)
+![Latest version](http://clojars.org/com.jakemccrary/lein-test-refresh/latest-version.svg)
 
 ### Leiningen 2.0
 
