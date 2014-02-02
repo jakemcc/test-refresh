@@ -30,15 +30,15 @@ for [OS X](http://growl.info/),
 
 ### Leiningen 2.0
 
-Add whatever is shown above to your to your `~/.lein/profiles.clj`. An example using version `0.3.2` is shown below.
+Add whatever is shown above to your to your `~/.lein/profiles.clj`. An example using version `0.3.4` is shown below.
 
-    {:user {:plugins [[com.jakemccrary/lein-test-refresh "0.3.2"]]}}
+    {:user {:plugins [[com.jakemccrary/lein-test-refresh "0.3.4"]]}}
     
 Alternatively add to your `:plugins` vector in your project.clj file.
    
     (defproject sample
       :dependencies [[org.clojure/clojure "1.5.1"]]
-      :profiles {:dev {:plugins [[com.jakemccrary/lein-test-refresh "0.3.2"]]}})
+      :profiles {:dev {:plugins [[com.jakemccrary/lein-test-refresh "0.3.4"]]}})
 
 This project has not been tested with versions of Leiningen 1. This
 project is heavily based of `lein-autoexpect` which has been tested
