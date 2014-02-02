@@ -28,5 +28,6 @@ sed() {
 
 for f in $(find . -name '*.clj' -o -name '*.md' | grep -v 'project.clj' | grep -v 'CHANGES.md'); do
     sed "s/$previous_version/$next_version/g" $f
+    sed "s/$next_version-SNAPSHOT/$next_version/g" $f
 done
 
