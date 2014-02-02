@@ -5,8 +5,7 @@
             clojure.tools.namespace.track
             clojure.tools.namespace.repl
             clojure.java.shell
-            jakemcc.clojure-gntp.gntp
-            [io.aviso.ansi :as ansi])
+            jakemcc.clojure-gntp.gntp)
   (:import [java.text SimpleDateFormat]))
 
 (defn- make-change-tracker []
@@ -39,16 +38,9 @@
                           (java.util.Date.))]
     (println "Finished at" date-str)))
 
-(defn status->color [status]
-  (condp = status
-    "Failed" (comp ansi/bold-red-bg ansi/black)
-    "Passed" (comp ansi/bold-green-bg ansi/black)
-    "Error"  (comp ansi/yellow-bg ansi/black)
-    str))
-
 (defn- print-to-console [report]
   (println)
-  (println ((status->color (:status report)) (:message report)))
+  (println (:status report) (:message report))
   (print-end-message))
 
 (defn- growl [title-postfix message]
@@ -76,13 +68,13 @@
 (defn- something-changed? [x y]
   (not= x y))
 
-(defn monitor-keystrokes [keystroke-pressed]
+(defn- monitor-keystrokes [keystroke-pressed]
   (future
     (while true
       (.read System/in)
       (reset! keystroke-pressed true))))
 
-(defn create-user-notifier [notify-command]
+(defn- create-user-notifier [notify-command]
   (let [notify-command (if (string? notify-command) [notify-command] notify-command)]
     (fn [message]
       (when (seq notify-command)
