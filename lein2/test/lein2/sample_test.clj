@@ -4,6 +4,9 @@
 (deftest passes
   (is (= 1 1)))
 
+(deftest passes-again
+  (is (= 2 2)))
+
 ;;uncomment to test failures
 ;; (deftest fails
 ;;   (is (= 3 4)))

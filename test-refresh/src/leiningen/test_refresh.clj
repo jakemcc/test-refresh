@@ -25,8 +25,9 @@ Runs tests whenever code changes.
 Reports results to growl and STDOUT."
   [project & args]
   (let [should-growl (some #{:growl ":growl" "growl"} args)
+        notify-command (get-in project [:test-refresh :notify-command])
         tests (clojure-test-directories project)]
     (eval/eval-in-project
      (add-deps project)
-     `(com.jakemccrary.test-refresh/monitor-project ~should-growl ~tests)
+     `(com.jakemccrary.test-refresh/monitor-project ~tests ~should-growl ~notify-command)
      `(require 'com.jakemccrary.test-refresh))))

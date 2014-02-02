@@ -2,7 +2,8 @@
 
 ## 0.3.1-SNAPSHOT
 
-- Colorized output in terminal.
+- If `:test-refresh {:notify-command ["command" "arguments"]}` is in
+  your project.clj then a summary message is passed into that command.
 
 ## 0.3.0
 

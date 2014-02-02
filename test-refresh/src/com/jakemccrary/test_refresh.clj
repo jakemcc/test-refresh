@@ -4,6 +4,7 @@
             clojure.tools.namespace.find
             clojure.tools.namespace.track
             clojure.tools.namespace.repl
+            clojure.java.shell
             jakemcc.clojure-gntp.gntp
             [io.aviso.ansi :as ansi])
   (:import [java.text SimpleDateFormat]))
@@ -82,7 +83,7 @@
       (reset! keystroke-pressed true))))
 
 
-(defn monitor-project [should-growl test-paths]
+(defn monitor-project [test-paths should-growl notify-command]
   (let [keystroke-pressed (atom nil)]
     (monitor-keystrokes keystroke-pressed)
     (loop [tracker (make-change-tracker)]
@@ -95,7 +96,9 @@
             (let [result (run-tests test-paths)]
               (print-to-console result)
               (when should-growl
-                (growl (:status result) (:message result)))))
+                (growl (:status result) (:message result)))
+              (when (seq notify-command)
+                (apply clojure.java.shell/sh (concat notify-command [(:message result)])))))
           (Thread/sleep 200)
           (catch Exception ex (.printStackTrace ex)))
         (recur new-tracker)))))
