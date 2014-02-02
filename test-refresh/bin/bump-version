@@ -1,0 +1,32 @@
+#!/usr/bin/env bash
+
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+pushd "$DIR/../.." >/dev/null
+
+set -e
+
+if [ -z "$1" ]; then
+    echo "Usage: $0 <current_version> <next_version>"
+    exit 1
+fi
+
+if [ -z "$2" ]; then
+    echo "Usage: $0 <current_version> <next_version>"
+    exit 1
+fi
+
+previous_version=$1
+next_version=$2
+
+sed() {
+    if command -v gsed >/dev/null 2>&1; then
+       gsed -i "$@"
+    else
+       sed -i "$@"
+    fi
+}
+
+for f in $(find . -name '*.clj' -o -name '*.md' | grep -v 'project.clj' | grep -v 'CHANGES.md'); do
+    sed "s/$previous_version/$next_version/g" $f
+done
+
