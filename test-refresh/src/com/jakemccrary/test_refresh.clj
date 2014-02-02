@@ -5,6 +5,7 @@
             clojure.tools.namespace.track
             clojure.tools.namespace.repl
             clojure.java.shell
+            clojure.string
             jakemcc.clojure-gntp.gntp)
   (:import [java.text SimpleDateFormat]))
 
@@ -78,7 +79,12 @@
   (let [notify-command (if (string? notify-command) [notify-command] notify-command)]
     (fn [message]
       (when (seq notify-command)
-        (apply clojure.java.shell/sh (concat notify-command [message]))))))
+        (let [command (concat notify-command [message])]
+          (try
+            (apply clojure.java.shell/sh command)
+            (catch Exception e
+              (println (str "Problem running shell command `" (clojure.string/join " " command) "`"))
+              (println "Exception:" (.getMessage e)))))))))
 
 (defn monitor-project [test-paths should-growl notify-command]
   (let [users-notifier (create-user-notifier notify-command)
