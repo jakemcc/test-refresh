@@ -82,9 +82,15 @@
       (.read System/in)
       (reset! keystroke-pressed true))))
 
+(defn create-user-notifier [notify-command]
+  (let [notify-command (if (string? notify-command) [notify-command] notify-command)]
+    (fn [message]
+      (when (seq notify-command)
+        (apply clojure.java.shell/sh (concat notify-command [message]))))))
 
 (defn monitor-project [test-paths should-growl notify-command]
-  (let [keystroke-pressed (atom nil)]
+  (let [users-notifier (create-user-notifier notify-command)
+        keystroke-pressed (atom nil)]
     (monitor-keystrokes keystroke-pressed)
     (loop [tracker (make-change-tracker)]
       (let [new-tracker (scan-for-changes tracker)]
@@ -97,8 +103,7 @@
               (print-to-console result)
               (when should-growl
                 (growl (:status result) (:message result)))
-              (when (seq notify-command)
-                (apply clojure.java.shell/sh (concat notify-command [(:message result)])))))
+              (users-notifier (:message result))))
           (Thread/sleep 200)
           (catch Exception ex (.printStackTrace ex)))
         (recur new-tracker)))))
