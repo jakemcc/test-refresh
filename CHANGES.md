@@ -1,9 +1,14 @@
 # Changes
 
-## 0.3.1
+## 0.3.2
 
 - If `:test-refresh {:notify-command ["command" "arguments"]}` is in
   your project.clj then a summary message is passed into that command.
+- Output is colorized
+
+## 0.3.1
+
+Ignore 0.3.1
 
 ## 0.3.0
 
