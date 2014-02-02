@@ -40,7 +40,7 @@
 
 (defn- print-to-console [report]
   (println)
-  (println (:status report) (:message report))
+  (println (:message report))
   (print-end-message))
 
 (defn- growl [title-postfix message]
