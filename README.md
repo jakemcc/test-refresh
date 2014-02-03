@@ -30,9 +30,10 @@ which specifies this feature.
 
 `lein-test-refresh` also will run your tests if you hit the enter key.
 
-### Latest version
+### Latest version & Change log
 
-![Latest version](https://clojars.org/com.jakemccrary/lein-test-refresh/latest-version.svg)
+The latest version is the highest non-snapshot version found in
+[CHANGES.md](CHANGES.md).
 
 ### Leiningen 2.0
 
