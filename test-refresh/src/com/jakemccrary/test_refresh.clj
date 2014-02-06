@@ -55,10 +55,10 @@
 (defn- report [results]
   (let [{:keys [pass test error fail]} results]
     (if (pos? (+ fail error))
-      {:status "Failed" :message (format "Failed %s of %s tests."
+      {:status "Failed" :message (format "Failed %s of %s assertions"
                                          (+ fail error)
-                                         test)}
-      {:status "Passed" :message (format "Passed %s tests" test)})))
+                                         (+ fail error pass))}
+      {:status "Passed" :message (format "Passed %s assertions in %s tests" pass test)})))
 
 (defn- run-tests [test-paths]
   (let [result (suppress-stdout (refresh-environment))]
