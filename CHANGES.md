@@ -1,5 +1,9 @@
 # Changes
 
+## 0.3.6
+
+- Bug fix for language around number of failing assertions.
+
 ## 0.3.4
 
 - If `:test-refresh {:notify-command ["command" "arguments"]}` is in
