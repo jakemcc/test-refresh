@@ -1,0 +1,24 @@
+#!/usr/bin/env bash
+
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+pushd "$DIR/../.." >/dev/null
+
+set -e
+
+if [ -z "$1" ]; then
+    echo "Usage: $0 <current_version> <next_version>"
+    exit 1
+fi
+
+if [ -z "$2" ]; then
+    echo "Usage: $0 <current_version> <next_version>"
+    exit 1
+fi
+
+previous_version=$1
+next_version=$2
+
+./bin/bump-version $1 $2
+
+lein clojars release
+
