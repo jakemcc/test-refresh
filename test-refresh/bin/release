@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-pushd "$DIR/../.." >/dev/null
+pushd "$DIR/.." >/dev/null
 
 set -e
 
@@ -19,7 +19,7 @@ current_version=$1
 next_version=$2
 
 ./bin/bump-version ${current_version} ${current_version}
-git commit -av "Preparing for release ${current_version}"
+git commit -avm "Preparing for release ${current_version}"
 git tag -a "v${current_version}" -m "Release v${current_version}"
 
 lein deploy clojars
