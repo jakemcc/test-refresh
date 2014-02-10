@@ -1,5 +1,10 @@
 # Changes
 
+## 0.3.9
+
+- Can specify `:test-refresh {:growl true}` in `project.clj` or
+`.lein/profiles.clj` to turn on growl notifications.
+
 ## 0.3.8
 
 - Nothing. This was an accidental release due to testing the release
