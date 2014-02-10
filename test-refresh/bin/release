@@ -20,5 +20,5 @@ next_version=$2
 
 ./bin/bump-version $1 $2
 
-lein clojars release
+lein deploy clojars
 
