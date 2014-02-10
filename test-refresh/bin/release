@@ -15,10 +15,15 @@ if [ -z "$2" ]; then
     exit 1
 fi
 
-previous_version=$1
+current_version=$1
 next_version=$2
 
-./bin/bump-version $1 $2
+./bin/bump-version ${current_version} ${current_version}
+git commit -av "Preparing for release ${current_version}"
+git tag -a "v${current_version}" -m "Release v${current_version}"
 
 lein deploy clojars
+
+./bin/bump-version ${current_version} "${next_version}-SNAPSHOT"
+git commit -avm "Starting development on ${next_version}-SNAPSHOT"
 
