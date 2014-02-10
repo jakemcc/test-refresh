@@ -58,7 +58,7 @@
       {:status "Failed" :message (format "Failed %s of %s assertions"
                                          (+ fail error)
                                          (+ fail error pass))}
-      {:status "Passed" :message (format "Passed %s assertions in %s tests" pass test)})))
+      {:status "Passed" :message (format "Passed all tests")})))
 
 (defn- run-tests [test-paths]
   (let [result (suppress-stdout (refresh-environment))]
