@@ -24,7 +24,8 @@ USAGE: lein test-refresh :growl
 Runs tests whenever code changes.
 Reports results to growl and STDOUT."
   [project & args]
-  (let [should-growl (some #{:growl ":growl" "growl"} args)
+  (let [should-growl (or (some #{:growl ":growl" "growl"} args)
+                         (get-in project [:test-refresh :growl]))
         notify-command (get-in project [:test-refresh :notify-command])
         tests (clojure-test-directories project)]
     (eval/eval-in-project
