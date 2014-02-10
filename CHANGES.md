@@ -1,5 +1,9 @@
 # Changes
 
+## 0.3.7
+
+- Change success message to 'Passed all tests'
+
 ## 0.3.6
 
 - Bug fix for language around number of failing assertions.
