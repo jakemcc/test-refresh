@@ -1,5 +1,10 @@
 # Changes
 
+## 0.3.8
+
+- Nothing. This was an accidental release due to testing the release
+  script.
+  
 ## 0.3.7
 
 - Change success message to 'Passed all tests'
