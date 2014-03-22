@@ -1,5 +1,10 @@
 # Changes
 
+## 0.3.10
+
+- Can specify `:test-refresh {:notify-on-success false}` in `project.clj` or
+`.lein/profiles.clj` to disable notifications and growl alerts if all tests pass.
+
 ## 0.3.9
 
 - Can specify `:test-refresh {:growl true}` in `project.clj` or
