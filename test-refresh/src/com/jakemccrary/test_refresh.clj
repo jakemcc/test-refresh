@@ -86,8 +86,13 @@
               (println (str "Problem running shell command `" (clojure.string/join " " command) "`"))
               (println "Exception:" (.getMessage e)))))))))
 
+(defn should-notify? [notify-on-success result]
+  (not (and (not notify-on-success)
+            (= "Passed" (:status result)))))
+
 (defn monitor-project [test-paths should-growl notify-command notify-on-success]
   (let [users-notifier (create-user-notifier notify-command)
+        should-notify? (partial should-notify? notify-on-success)
         keystroke-pressed (atom nil)]
     (monitor-keystrokes keystroke-pressed)
     (loop [tracker (make-change-tracker)]
@@ -99,7 +104,7 @@
             (print-banner)
             (let [result (run-tests test-paths)]
               (print-to-console result)
-              (when (or (= "Failed" (:status result)) notify-on-success)
+              (when (should-notify? result)
                (when should-growl
                  (growl (:status result) (:message result)))
                (users-notifier (:message result)))
