@@ -26,6 +26,7 @@ Reports results to growl and STDOUT."
   [project & args]
   (let [{:keys [notify-command notify-on-success growl]} (:test-refresh project)
         should-growl (or (some #{:growl ":growl" "growl"} args) growl)        
+        notify-on-success (or (nil? notify-on-success) notify-on-success)
         tests (clojure-test-directories project)]
     (eval/eval-in-project
      (add-deps project)
