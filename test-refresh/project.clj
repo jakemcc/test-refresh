@@ -1,4 +1,4 @@
-(defproject com.jakemccrary/lein-test-refresh "0.3.10"
+(defproject com.jakemccrary/lein-test-refresh "0.3.11-SNAPSHOT"
   :description "Automatically reload code and run clojure.test tests when files change"
   :url "https://github.com/jakemcc/lein-test-refresh"
   :developer "Jake McCrary"
