@@ -7,6 +7,9 @@
 (deftest passes-again
   (is (= 2 2)))
 
+(deftest ^:integration integration
+  (is (= 4 4)))
+
 ;;uncomment to test failures
 ;; (deftest fails
 ;;   (is (= 3 4)))
