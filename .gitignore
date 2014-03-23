@@ -9,3 +9,4 @@ target
 pom.xml.asc
 .lein-repl-history
 .nrepl-port
+.cider-repl-history
