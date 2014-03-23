@@ -4,7 +4,7 @@
 (deftest passes
   (is (= 1 1)))
 
-(deftest passes-again
+(deftest ^:integration passes-again
   (is (= 2 2)))
 
 (deftest ^:integration integration
