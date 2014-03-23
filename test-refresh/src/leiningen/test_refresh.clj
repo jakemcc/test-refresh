@@ -38,7 +38,6 @@ USAGE: lein test-refresh :growl
 Runs tests whenever code changes.
 Reports results to growl and STDOUT."
   [project & args]
-  (pprint (parse-commandline project args))
   (let [{:keys [growl notify-on-success notify-command nses-and-selectors test-paths]} (parse-commandline project args)]
     (eval/eval-in-project
      (add-deps project)
