@@ -20,6 +20,16 @@
     (flatten (for [file as-files]
                (clojure.tools.namespace.find/find-namespaces-in-dir file)))))
 
+(defn vars-in-namespaces [nses]
+  (mapcat (comp vals ns-interns) nses))
+
+(defn select-vars [selector-fn vars]
+  (filter (comp selector-fn meta) vars))
+
+(defn copy-metadata! [var from-key to-key]
+  (if-let [x (get (meta var) from-key)]
+    (alter-meta! var #(-> % (assoc to-key x) (dissoc from-key)))))
+
 (defmacro suppress-stdout [& forms]
   `(binding [*out* (java.io.StringWriter.)]
      ~@forms))
@@ -60,10 +70,22 @@
                                          (+ fail error pass))}
       {:status "Passed" :message (format "Passed all tests")})))
 
-(defn- run-tests [test-paths]
+(defn- run-tests [test-paths selectors]
   (let [result (suppress-stdout (refresh-environment))]
     (if (= :ok result)
-      (report (apply clojure.test/run-tests (namespaces-in-directories test-paths)))
+      (do (let [all-vars (vars-in-namespaces (namespaces-in-directories test-paths))
+                tests (select-vars :test all-vars)]
+            (println "Count vars" (count all-vars))
+            (println "Count tests:" (count tests))
+            (doseq [[s-fn args] selectors]
+              (println s-fn args)
+              
+              (doseq [to-disable (remove #(apply (eval s-fn) (meta %) args) tests)]
+                (copy-metadata! to-disable :test :test-refresh/skipped)))
+            (let [result (report (apply clojure.test/run-tests (namespaces-in-directories test-paths)))]
+              (doseq [test tests]
+                (copy-metadata! test :test-refresh/skipped :test))
+              result)))
       {:status "Error" :message (str "Error refreshing environment: " clojure.core/*e)})))
 
 (defn- something-changed? [x y]
@@ -90,10 +112,11 @@
   (not (and (not notify-on-success)
             (= "Passed" (:status result)))))
 
-(defn monitor-project [test-paths should-growl notify-command notify-on-success]
+(defn monitor-project [test-paths should-growl notify-command notify-on-success nses-and-selectors]
   (let [users-notifier (create-user-notifier notify-command)
         should-notify? (partial should-notify? notify-on-success)
-        keystroke-pressed (atom nil)]
+        keystroke-pressed (atom nil)
+        selectors (second nses-and-selectors)]
     (monitor-keystrokes keystroke-pressed)
     (loop [tracker (make-change-tracker)]
       (let [new-tracker (scan-for-changes tracker)]
@@ -102,12 +125,12 @@
                     (something-changed? new-tracker tracker))
             (reset! keystroke-pressed nil)
             (print-banner)
-            (let [result (run-tests test-paths)]
+            (let [result (run-tests test-paths selectors)]
               (print-to-console result)
               (when (should-notify? result)
-               (when should-growl
-                 (growl (:status result) (:message result)))
-               (users-notifier (:message result)))
+                (when should-growl
+                  (growl (:status result) (:message result)))
+                (users-notifier (:message result)))
               (Thread/sleep 200)))
           (catch Exception ex (.printStackTrace ex)))
         (recur new-tracker)))))
