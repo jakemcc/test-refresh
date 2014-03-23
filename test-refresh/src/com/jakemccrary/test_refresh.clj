@@ -70,7 +70,7 @@
                                          (+ fail error pass))}
       {:status "Passed" :message (format "Passed all tests")})))
 
-(defn oh-god [test-paths selectors]
+(defn run-selected-tests [test-paths selectors]
   (let [test-namespaces (namespaces-in-directories test-paths)
         tests-in-namespaces (select-vars :test (vars-in-namespaces test-namespaces))
         disabled-tests (remove (fn [var] (some (fn [[selector args]]
@@ -86,11 +86,10 @@
       (doseq [t disabled-tests] (copy-metadata! test :test-refresh/skipped :test))
       result)))
 
-
 (defn- run-tests [test-paths selectors]
   (let [result (suppress-stdout (refresh-environment))]
     (if (= :ok result)
-      (oh-god test-paths selectors)
+      (run-selected-tests test-paths selectors)
       {:status "Error" :message (str "Error refreshing environment: " clojure.core/*e)})))
 
 (defn- something-changed? [x y]
