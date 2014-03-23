@@ -1,5 +1,28 @@
 # Changes
 
+## 0.4.0
+
+- First cut of supporting a subset of leiningen test-selectors.
+
+Pretend you have a `project.clj` that looks like the one below.
+
+    (defproject example "0.1.0-SNAPSHOT"
+      :dependencies [[org.clojure/clojure "1.5.1"]]
+      :plugins [[com.jakemccrary/lein-test-refresh "0.4.0"]]
+      :test-selectors {:default (constantly nil)
+                       :integration :integration
+                       :unit (complement :integration)
+                       :fast (complement :slow)})
+
+If you run `lein test-refresh` then the `:default` entry the value of
+`:test-selectors` will be used. In this example that would cause no
+tests to run. If you run `lein test-refresh :integration` it will only
+run tests that have a truthy value for `:integration` in either the
+test's metadata or in the metadata of the containing namespace.
+
+This version does not support either `lein test :only namespace` or `lein
+test namespace`.
+
 ## 0.3.10
 
 - Can specify `:test-refresh {:notify-on-success false}` in `project.clj` or
