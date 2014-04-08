@@ -135,6 +135,6 @@
                 (when should-growl
                   (growl (:status result) (:message result)))
                 (users-notifier (:message result)))))
-          (catch Exception ex (.printStackTrace ex))
-          (Thread/sleep 200))
+          (catch Exception ex (.printStackTrace ex)))
+        (Thread/sleep 200)
         (recur new-tracker)))))
