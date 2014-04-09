@@ -37,15 +37,15 @@ The latest version is the highest non-snapshot version found in
 
 ### Leiningen 2.0
 
-Add whatever is shown above to your to your `~/.lein/profiles.clj`. An example using version `0.3.10` is shown below.
+Add whatever is shown above to your to your `~/.lein/profiles.clj`. An example using version `0.4.1` is shown below.
 
-    {:user {:plugins [[com.jakemccrary/lein-test-refresh "0.3.10"]]}}
+    {:user {:plugins [[com.jakemccrary/lein-test-refresh "0.4.1"]]}}
     
 Alternatively add to your `:plugins` vector in your project.clj file.
    
     (defproject sample
       :dependencies [[org.clojure/clojure "1.5.1"]]
-      :profiles {:dev {:plugins [[com.jakemccrary/lein-test-refresh "0.3.10"]]}})
+      :profiles {:dev {:plugins [[com.jakemccrary/lein-test-refresh "0.4.1"]]}})
 
 ### Leiningen 1.0
 
