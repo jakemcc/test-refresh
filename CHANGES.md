@@ -1,5 +1,10 @@
 # Changes
 
+## 0.4.1
+
+- Fixes bug where `lein-test-refresh` continuously polled filesystem
+for changes.
+
 ## 0.4.0
 
 - First cut of supporting a subset of leiningen test-selectors.
