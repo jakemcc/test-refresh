@@ -44,15 +44,16 @@
   (println top-stars)
   (println side-stars "Running tests" side-stars))
 
-(defn- print-end-message []
+(defn- print-end-message [run-time]
   (let [date-str (.format (java.text.SimpleDateFormat. "HH:mm:ss.SSS")
                           (java.util.Date.))]
-    (println "Finished at" date-str)))
+    (println (format "Finished at %s (run time: %.3fs)" date-str
+               (float (/ run-time 1000))))))
 
 (defn- print-to-console [report]
   (println)
   (println (:message report))
-  (print-end-message))
+  (print-end-message (:run-time report)))
 
 (defn- growl [title-postfix message]
   (try
@@ -87,10 +88,13 @@
       result)))
 
 (defn- run-tests [test-paths selectors]
-  (let [result (suppress-stdout (refresh-environment))]
-    (if (= :ok result)
-      (run-selected-tests test-paths selectors)
-      {:status "Error" :message (str "Error refreshing environment: " clojure.core/*e)})))
+  (let [started (System/currentTimeMillis)
+        result (suppress-stdout (refresh-environment))]
+    (assoc
+        (if (= :ok result)
+          (run-selected-tests test-paths selectors)
+          {:status "Error" :message (str "Error refreshing environment: " clojure.core/*e)})
+      :run-time (- (System/currentTimeMillis) started))))
 
 (defn- something-changed? [x y]
   (not= x y))
