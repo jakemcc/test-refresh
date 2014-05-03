@@ -1,5 +1,9 @@
 # Changes
 
+## 0.4.2
+
+- Prints how long tests took to run to console.
+
 ## 0.4.1
 
 - Fixes bug where `lein-test-refresh` continuously polled filesystem
