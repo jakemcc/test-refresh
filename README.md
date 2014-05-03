@@ -4,13 +4,17 @@ Leiningen plug-in for automatically running `clojure.test` tests whenever your C
 
 ## Usage
 
-Here is what using it looks like. 
+Here is what using it looks like.
 
     $ lein test-refresh
     *********************************************
     *************** Running tests ***************
-    (standard clojure.test output here)
 
+    (standard clojure.test output)
+    
+    Failed 1 of 215 assertions
+    Finished at 08:25:20.619 (run time: 9.691s)
+    
 Your terminal will just stay like that. Fairly often `lein-test-refresh`
 polls the file system to see if anything has changed. When there is a
 change your code is tested again.
