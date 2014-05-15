@@ -43,7 +43,7 @@ Reports results to growl and STDOUT."
      (add-deps project)
      `(com.jakemccrary.test-refresh/monitor-project ~test-paths
                                                     ~growl
-                                                    ~notify-command
+                                                    '~notify-command
                                                     ~notify-on-success
                                                     '~nses-and-selectors
                                                     )

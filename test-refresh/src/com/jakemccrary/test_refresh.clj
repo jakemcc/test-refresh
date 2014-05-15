@@ -26,9 +26,10 @@
 (defn select-vars [selector-fn vars]
   (filter (comp selector-fn meta) vars))
 
-(defn copy-metadata! [var from-key to-key]
-  (if-let [x (get (meta var) from-key)]
-    (alter-meta! var #(-> % (assoc to-key x) (dissoc from-key)))))
+(defn move-metadata! [vars from-key to-key]
+  (doseq [var vars]
+    (if-let [x (get (meta var) from-key)]
+      (alter-meta! var #(-> % (assoc to-key x) (dissoc from-key))))))
 
 (defmacro suppress-stdout [& forms]
   `(binding [*out* (java.io.StringWriter.)]
@@ -63,7 +64,7 @@
     (catch Exception ex
       (println "Problem communicating with growl, exception:" (.getMessage ex)))))
 
-(defn- report [results]
+(defn- summary [results]
   (let [{:keys [pass test error fail]} results]
     (if (pos? (+ fail error))
       {:status "Failed" :message (format "Failed %s of %s assertions"
@@ -71,30 +72,50 @@
                                          (+ fail error pass))}
       {:status "Passed" :message (format "Passed all tests")})))
 
+(def failed-tests (atom nil))
+
+(def capture-report clojure.test/report)
+(let [fail (get-method clojure.test/report :fail)]
+  (defmethod capture-report :fail [x]
+    (reset! failed-tests (set clojure.test/*testing-vars*))
+    (fail x)))
+
+(defn match [test-var [selector args]]
+  (let [form (if (vector? selector)
+               (second selector)
+               selector)
+        selector-fn (eval form)]
+    (apply selector-fn
+      (merge (-> test-var meta :ns meta)
+             (assoc (meta test-var) :leiningen.test/var test-var))
+      args)))
+
+(defn selected? [selectors test-var]
+  (some #(match test-var %) selectors))
+
 (defn run-selected-tests [test-paths selectors]
   (let [test-namespaces (namespaces-in-directories test-paths)
         tests-in-namespaces (select-vars :test (vars-in-namespaces test-namespaces))
-        disabled-tests (remove (fn [var] (some (fn [[selector args]]
-                                                (let [sfn (eval (if (vector? selector) (second selector) selector))]
-                                                  (apply sfn
-                                                         (merge (-> var meta :ns meta)
-                                                                (assoc (meta var) :leiningen.test/var var))
-                                                         args)))
-                                              selectors))
-                               tests-in-namespaces)]
-    (doseq [t disabled-tests] (copy-metadata! t :test :test-refresh/skipped))
-    (let [result (report (apply clojure.test/run-tests test-namespaces))]
-      (doseq [t disabled-tests] (copy-metadata! test :test-refresh/skipped :test))
-      result)))
+        disabled-tests (if @failed-tests
+                          (remove @failed-tests tests-in-namespaces)
+                          (remove #(selected? selectors %) tests-in-namespaces))]
+    (println "SELECTORS" selectors)
+    (move-metadata! disabled-tests :test :test-refresh/skipped)
+    (binding [clojure.test/report capture-report]
+      (reset! failed-tests nil)
+      (let [result (summary (apply clojure.test/run-tests test-namespaces))]
+        (move-metadata! disabled-tests :test-refresh/skipped :test)
+        result))))
 
 (defn- run-tests [test-paths selectors]
   (let [started (System/currentTimeMillis)
-        result (suppress-stdout (refresh-environment))]
-    (assoc
-        (if (= :ok result)
-          (run-selected-tests test-paths selectors)
-          {:status "Error" :message (str "Error refreshing environment: " clojure.core/*e)})
-      :run-time (- (System/currentTimeMillis) started))))
+        refresh #_(suppress-stdout) (refresh-environment)
+        result (if (= :ok refresh)
+                 (run-selected-tests test-paths selectors)
+                 {:status "Error"
+                  :message (str "Error refreshing environment: " clojure.core/*e)
+                  :exception clojure.core/*e})]
+    (assoc result :run-time (- (System/currentTimeMillis) started))))
 
 (defn- something-changed? [x y]
   (not= x y))
@@ -106,7 +127,9 @@
       (reset! keystroke-pressed true))))
 
 (defn- create-user-notifier [notify-command]
-  (let [notify-command (if (string? notify-command) [notify-command] notify-command)]
+  (let [notify-command (if (string? notify-command)
+                         [notify-command]
+                         notify-command)]
     (fn [message]
       (when (seq notify-command)
         (let [command (concat notify-command [message])]
@@ -116,9 +139,12 @@
               (println (str "Problem running shell command `" (clojure.string/join " " command) "`"))
               (println "Exception:" (.getMessage e)))))))))
 
+(defn passed? [test-run-result]
+  (= "Passed" (:status test-run-result)))
+
 (defn should-notify? [notify-on-success result]
   (not (and (not notify-on-success)
-            (= "Passed" (:status result)))))
+            (passed? result))))
 
 (defn monitor-project [test-paths should-growl notify-command notify-on-success nses-and-selectors]
   (let [users-notifier (create-user-notifier notify-command)
@@ -133,7 +159,13 @@
                     (something-changed? new-tracker tracker))
             (reset! keystroke-pressed nil)
             (print-banner)
-            (let [result (run-tests test-paths selectors)]
+
+            (let [was-failed @failed-tests
+                  result (run-tests test-paths selectors)
+                  ; tests need to be run once a failed test is resolved
+                  result (if (and was-failed (passed? result))
+                           (run-tests test-paths selectors)
+                           result)]
               (print-to-console result)
               (when (should-notify? result)
                 (when should-growl

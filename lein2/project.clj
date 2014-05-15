@@ -8,5 +8,5 @@
                    :integration :integration
                    :unit (complement :integration)
                    :fast (complement :slow)}
-  :test-refresh {:notify-command ["say" "-v" "Whisper"]
+  :test-refresh {:notify-command ["say" "-v" "Agnes"]
                  :notify-on-success false})

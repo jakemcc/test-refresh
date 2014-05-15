@@ -23,3 +23,6 @@
       (let [vs [#'a-fn #'another-fn]]
         (= [#'a-fn] (select-vars :integration vs))
         (= [] (select-vars :no-match vs))))))
+
+(deftest test-notification
+  (testing "lololol"))
