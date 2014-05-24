@@ -1,11 +1,11 @@
 (ns com.jakemccrary.test-refresh
-  (:require clojure.test
+  (:require clojure.java.shell
+            [clojure.string :as str]
+            clojure.test
             clojure.tools.namespace.dir
             clojure.tools.namespace.find
-            clojure.tools.namespace.track
             clojure.tools.namespace.repl
-            clojure.java.shell
-            clojure.string
+            clojure.tools.namespace.track
             jakemcc.clojure-gntp.gntp)
   (:import [java.text SimpleDateFormat]))
 
@@ -72,12 +72,19 @@
                                          (+ fail error pass))}
       {:status "Passed" :message (format "Passed all tests")})))
 
-(def failed-tests (atom nil))
+(def failed-tests (atom #{}))
+(add-watch failed-tests :failed-tests
+           (fn [key ref old-state new-state]
+             (println "old:" old-state)
+             (println "new:" new-state)))
 
 (def capture-report clojure.test/report)
 (let [fail (get-method clojure.test/report :fail)]
   (defmethod capture-report :fail [x]
-    (reset! failed-tests (set clojure.test/*testing-vars*))
+    (swap! failed-tests
+           (fn [all-failed just-failed]
+             (apply conj all-failed just-failed))
+           clojure.test/*testing-vars*)
     (fail x)))
 
 (defn match [test-var [selector args]]
@@ -96,15 +103,17 @@
 (defn run-selected-tests [test-paths selectors]
   (let [test-namespaces (namespaces-in-directories test-paths)
         tests-in-namespaces (select-vars :test (vars-in-namespaces test-namespaces))
-        disabled-tests (if @failed-tests
+        disabled-tests (if (seq @failed-tests)
                           (remove @failed-tests tests-in-namespaces)
                           (remove #(selected? selectors %) tests-in-namespaces))]
+    (println "Previously failed tests:" (str/join " "  @failed-tests))
     (println "SELECTORS" selectors)
     (move-metadata! disabled-tests :test :test-refresh/skipped)
     (binding [clojure.test/report capture-report]
-      (reset! failed-tests nil)
+      (reset! failed-tests #{})
       (let [result (summary (apply clojure.test/run-tests test-namespaces))]
         (move-metadata! disabled-tests :test-refresh/skipped :test)
+        (println "Just failed tests:" (str/join " "  @failed-tests))        
         result))))
 
 (defn- run-tests [test-paths selectors]
