@@ -11,9 +11,9 @@
   (is (= 4 4)))
 
 ;;uncomment to test failures
-;; (deftest fails
-;;   (is (= 3 4)))
-
+(deftest fails
+  (is (= 33 4)))
+ 
 ;; uncomment to test failures to reload code
 ;; (deftest bad-code
 ;;   (is (= 3 (what))))

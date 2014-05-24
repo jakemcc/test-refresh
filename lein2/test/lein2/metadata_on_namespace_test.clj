@@ -1,5 +1,5 @@
-(ns ^:slow lein2.bad-namespace-test
+(ns ^:slow lein2.metadata-on-namespace-test
   (:require [clojure.test :refer :all]))
 
 (deftest a-fake-slow-test
-  (is (= 1 2)))
+  (is (= 32 2)))
