@@ -1,5 +1,9 @@
 # Changes
 
+## 0.5.0-SNAPSHOT
+
+- Failed tests are run first. If they pass then all of your tests are run.
+
 ## 0.4.2
 
 - Prints how long tests took to run to console.
