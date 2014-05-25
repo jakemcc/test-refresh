@@ -5,8 +5,7 @@ Leiningen plug-in for automatically running `clojure.test` tests whenever your C
 ## Features
 
 - Allows you to have a quick feedback cycle by automatically
-  [refreshing](https://github.com/clojure/tools.namespace) your code
-  and running your tests.
+  refreshing your code and running your tests.
 - Runs previously failing tests first, giving you feedback even quicker.
 - Can pass result running your tests to a notification command of your
   choice.
