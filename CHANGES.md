@@ -1,6 +1,6 @@
 # Changes
 
-## 0.5.0-SNAPSHOT
+## 0.5.0
 
 - Failed tests are run first. If they pass then all of your tests are run.
 

@@ -37,19 +37,24 @@ which specifies this feature.
 ### Latest version & Change log
 
 The latest version is the highest non-snapshot version found in
-[CHANGES.md](CHANGES.md).
+[CHANGES.md](CHANGES.md) or whatever the below images says (sometimes
+image doesn't seem to load).
+
+![https://clojars.org/com.jakemccrary/lein-test-refresh/latest-version.svg](Latest
+ version)
+
 
 ### Leiningen 2.0
 
-Add whatever is shown above to your to your `~/.lein/profiles.clj`. An example using version `0.4.1` is shown below.
+Add whatever is shown above to your to your `~/.lein/profiles.clj`. An example using version `0.5.0` is shown below.
 
-    {:user {:plugins [[com.jakemccrary/lein-test-refresh "0.4.1"]]}}
+    {:user {:plugins [[com.jakemccrary/lein-test-refresh "0.5.0"]]}}
     
 Alternatively add to your `:plugins` vector in your project.clj file.
    
     (defproject sample
       :dependencies [[org.clojure/clojure "1.5.1"]]
-      :profiles {:dev {:plugins [[com.jakemccrary/lein-test-refresh "0.4.1"]]}})
+      :profiles {:dev {:plugins [[com.jakemccrary/lein-test-refresh "0.5.0"]]}})
 
 ### Leiningen 1.0
 
@@ -75,6 +80,4 @@ Copyright (C) 2011-2014 [Jake McCrary](http://jakemccrary.com)
 
 Distributed under the Eclipse Public License, the same as Clojure.
 
-
-[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/jakemcc/lein-test-refresh/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
 
