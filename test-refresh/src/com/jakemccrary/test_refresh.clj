@@ -73,10 +73,6 @@
       {:status "Passed" :message (format "Passed all tests")})))
 
 (def failed-tests (atom #{}))
-(add-watch failed-tests :failed-tests
-           (fn [key ref old-state new-state]
-             (println "old:" old-state)
-             (println "new:" new-state)))
 
 (def capture-report clojure.test/report)
 (let [fail (get-method clojure.test/report :fail)]
@@ -84,7 +80,7 @@
     (swap! failed-tests
            (fn [all-failed just-failed]
              (apply conj all-failed just-failed))
-           clojure.test/*testing-vars*)
+           (map str clojure.test/*testing-vars*))
     (fail x)))
 
 (defn match [test-var [selector args]]
@@ -104,16 +100,13 @@
   (let [test-namespaces (namespaces-in-directories test-paths)
         tests-in-namespaces (select-vars :test (vars-in-namespaces test-namespaces))
         disabled-tests (if (seq @failed-tests)
-                          (remove @failed-tests tests-in-namespaces)
-                          (remove #(selected? selectors %) tests-in-namespaces))]
-    (println "Previously failed tests:" (str/join " "  @failed-tests))
-    (println "SELECTORS" selectors)
+                         (remove (comp @failed-tests str) tests-in-namespaces)
+                         (remove #(selected? selectors %) tests-in-namespaces))]
     (move-metadata! disabled-tests :test :test-refresh/skipped)
     (binding [clojure.test/report capture-report]
       (reset! failed-tests #{})
       (let [result (summary (apply clojure.test/run-tests test-namespaces))]
         (move-metadata! disabled-tests :test-refresh/skipped :test)
-        (println "Just failed tests:" (str/join " "  @failed-tests))        
         result))))
 
 (defn- run-tests [test-paths selectors]
