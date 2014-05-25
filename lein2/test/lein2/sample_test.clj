@@ -12,7 +12,7 @@
 
 ;;uncomment to test failures
 (deftest fails
-  (is (= 33 4)))
+  (is (= 3 4)))
  
 ;; uncomment to test failures to reload code
 ;; (deftest bad-code

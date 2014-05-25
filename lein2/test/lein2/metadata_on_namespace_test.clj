@@ -2,4 +2,4 @@
   (:require [clojure.test :refer :all]))
 
 (deftest a-fake-slow-test
-  (is (= 32 2)))
+  (is (= 2 2)))
