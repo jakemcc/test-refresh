@@ -2,6 +2,18 @@
 
 Leiningen plug-in for automatically running `clojure.test` tests whenever your Clojure project's source changes.
 
+## Features
+
+- Allows you to have a quick feedback cycle by automatically
+  [refreshing](https://github.com/clojure/tools.namespace) your code
+  and running your tests.
+- Runs previously failing tests first, giving you feedback even quicker.
+- Can pass result running your tests to a notification command of your
+  choice.
+- Has built in Growl notification support.
+- Can be configured to only notify you on failures.
+- Supports subset of Leiningen test selectors.
+
 ## Usage
 
 Here is what using it looks like.
@@ -42,7 +54,6 @@ image doesn't seem to load).
 
 ![Latest version](https://clojars.org/com.jakemccrary/lein-test-refresh/latest-version.svg)
 
-
 ### Leiningen 2.0
 
 Add whatever is shown above to your to your `~/.lein/profiles.clj`. An example using version `0.5.0` is shown below.
@@ -64,8 +75,8 @@ I'm not going to bother testing it nor do I plan on supporting it.
 
 ## Compatibility
 
-lein-test-refresh has been tested to work with Clojure 1.5.1 and
-Leiningen 2.3.[24].
+lein-test-refresh has been tested to work with Clojure 1.5.1 and 1.6
+with Leiningen 2.3.[24].
 
 Because of
 [tools.namespace](https://github.com/clojure/tools.namespace) changes
