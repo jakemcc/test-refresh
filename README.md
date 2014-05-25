@@ -7,7 +7,7 @@ Leiningen plug-in for automatically running `clojure.test` tests whenever your C
 - Allows you to have a quick feedback cycle by automatically
   refreshing your code and running your tests.
 - Runs previously failing tests first, giving you feedback even quicker.
-- Can pass result running your tests to a notification command of your
+- Can pass result of running your tests to a notification command of your
   choice.
 - Has built in Growl notification support.
 - Can be configured to only notify you on failures.
