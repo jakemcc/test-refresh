@@ -40,8 +40,7 @@ The latest version is the highest non-snapshot version found in
 [CHANGES.md](CHANGES.md) or whatever the below images says (sometimes
 image doesn't seem to load).
 
-![https://clojars.org/com.jakemccrary/lein-test-refresh/latest-version.svg](Latest
- version)
+![Latest version](https://clojars.org/com.jakemccrary/lein-test-refresh/latest-version.svg)
 
 
 ### Leiningen 2.0
