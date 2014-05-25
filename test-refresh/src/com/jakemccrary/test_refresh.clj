@@ -162,7 +162,7 @@
             (reset! keystroke-pressed nil)
             (print-banner)
 
-            (let [was-failed @failed-tests
+            (let [was-failed (seq @failed-tests)
                   result (run-tests test-paths selectors)
                   ; tests need to be run once a failed test is resolved
                   result (if (and was-failed (passed? result))
