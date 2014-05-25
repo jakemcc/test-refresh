@@ -74,13 +74,19 @@
 
 (def failed-tests (atom #{}))
 
+(defn tracking-failed-tests? []
+  (seq @failed-tests))
+
+(defn previously-failing-test? [test-var]
+  (@failed-tests (str test-var)))
+
+(defn update-tracked-failing-tests [tracked-tests new-tests]
+  (reduce conj tracked-tests (map str new-tests)))
+
 (def capture-report clojure.test/report)
 (let [fail (get-method clojure.test/report :fail)]
   (defmethod capture-report :fail [x]
-    (swap! failed-tests
-           (fn [all-failed just-failed]
-             (apply conj all-failed just-failed))
-           (map str clojure.test/*testing-vars*))
+    (swap! failed-tests update-tracked-failing-tests clojure.test/*testing-vars*)
     (fail x)))
 
 (defn match [test-var [selector args]]
@@ -99,8 +105,8 @@
 (defn run-selected-tests [test-paths selectors]
   (let [test-namespaces (namespaces-in-directories test-paths)
         tests-in-namespaces (select-vars :test (vars-in-namespaces test-namespaces))
-        disabled-tests (if (seq @failed-tests)
-                         (remove (comp @failed-tests str) tests-in-namespaces)
+        disabled-tests (if (tracking-failed-tests?)
+                         (remove previously-failing-test? tests-in-namespaces)
                          (remove #(selected? selectors %) tests-in-namespaces))]
     (move-metadata! disabled-tests :test :test-refresh/skipped)
     (binding [clojure.test/report capture-report]
@@ -162,7 +168,7 @@
             (reset! keystroke-pressed nil)
             (print-banner)
 
-            (let [was-failed (seq @failed-tests)
+            (let [was-failed (tracking-failed-tests?)
                   result (run-tests test-paths selectors)
                   ; tests need to be run once a failed test is resolved
                   result (if (and was-failed (passed? result))
