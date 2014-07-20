@@ -1,5 +1,9 @@
 # Changes
 
+## 0.5.1
+
+- test-refresh quits when ctrl+d pressed.
+
 ## 0.5.0
 
 - Failed tests are run first. If they pass then all of your tests are run.

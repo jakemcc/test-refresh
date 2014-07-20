@@ -130,9 +130,11 @@
 
 (defn- monitor-keystrokes [keystroke-pressed]
   (future
-    (while true
-      (.read System/in)
-      (reset! keystroke-pressed true))))
+    (loop [c (.read System/in)]
+      (if (= c -1)
+        (System/exit 0)
+        (do (reset! keystroke-pressed true)
+            (recur (.read System/in)))))))
 
 (defn- create-user-notifier [notify-command]
   (let [notify-command (if (string? notify-command)
