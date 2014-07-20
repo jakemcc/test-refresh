@@ -2,6 +2,7 @@
   :description "Automatically reload code and run clojure.test tests when files change"
   :url "https://github.com/jakemcc/lein-test-refresh"
   :developer "Jake McCrary"
+  :min-lein-version "2.4"
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
   :dependencies [[org.clojure/clojure "1.5.1"]

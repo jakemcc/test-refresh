@@ -4,26 +4,31 @@ DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 pushd "$DIR/.." >/dev/null
 
 set -e
+set -x
 
-if [ -z "$1" ]; then
-    echo "Usage: $0 <current_version> <next_version>"
-    exit 1
-fi
+function version {
+    grep defproject project.clj | cut -f 3 -d ' ' | sed 's/"//g'
+}
 
-if [ -z "$2" ]; then
-    echo "Usage: $0 <current_version> <next_version>"
-    exit 1
-fi
+function project_name {
+    grep defproject project.clj | cut -f 2 -d ' '
+}
 
-current_version=$1
-next_version=$2
 
-./bin/bump-version ${current_version} ${current_version}
-git commit -avm "Preparing for release ${current_version}"
-git tag -a "v${current_version}" -m "Release v${current_version}"
+lein change version leiningen.release/bump-version release
+release_version=$(version)
+tag_name="$(project_name)-v${release_version}"
 
-lein deploy clojars
+echo "committing + tagging"
+git commit -avm "Preparing for release $(project_name) ${release_version}"
+git tag -a $tag_name -m "Release $(project_name) v${release_version}"
+git push --tags
 
-./bin/bump-version ${current_version} "${next_version}-SNAPSHOT"
-git commit -avm "Starting development on ${next_version}-SNAPSHOT"
+lein change version leiningen.release/bump-version
+echo "Starting development on $(version)"
+git commit -avm "Starting development on $(project_name) $(version)"
+git push
 
+git checkout $tag_name
+lein deploy
+git checkout master
