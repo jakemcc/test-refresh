@@ -9,5 +9,9 @@
                  [org.clojure/tools.namespace "0.2.4" :exclusions [org.clojure/clojure]]
                  [leinjacker "0.4.1" :exclusions [org.clojure/clojure]]
                  [jakemcc/clojure-gntp "0.1.1" :exclusions [org.clojure/clojure]]]
+  :deploy-repositories [["snapshots" {:url "https://clojars.org/repo"
+                                      :username :gpg :password :gpg}]
+                        ["releases" {:url "https://clojars.org/repo"
+                                     :username :gpg :password :gpg}]]
   :scm {:name "git"
         :url "git@github.com:jakemcc/lein-test-refresh.git"})
