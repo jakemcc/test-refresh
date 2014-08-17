@@ -11,7 +11,7 @@ Leiningen plug-in for automatically running `clojure.test` tests whenever your C
   choice.
 - Has built in Growl notification support.
 - Can be configured to only notify you on failures.
-- Supports subset of Leiningen test selectors.
+- [Supports](https://github.com/jakemcc/lein-test-refresh/blob/master/CHANGES.md#040) subset of Leiningen test selectors.
 - Times how long it takes to run your tests.
 
 ## Usage
