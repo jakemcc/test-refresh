@@ -76,7 +76,7 @@ I'm not going to bother testing it nor do I plan on supporting it.
 ## Compatibility
 
 lein-test-refresh has been tested to work with Clojure 1.5.1 and 1.6
-with Leiningen 2.3.[24].
+with Leiningen 2.3+.
 
 Because of
 [tools.namespace](https://github.com/clojure/tools.namespace) changes
