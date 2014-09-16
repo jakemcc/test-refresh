@@ -1,5 +1,10 @@
 # Changes
 
+## 0.5.2
+
+- Upgrade to `org.clojure/tools.namespace` 0.2.6.
+- Upgrade to `leinjakcer` 0.4.2
+
 ## 0.5.1
 
 - test-refresh quits when ctrl+d pressed.

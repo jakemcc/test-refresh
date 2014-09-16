@@ -8,7 +8,7 @@
   (let [test-refresh-plugin (first (filter (fn [[name version]] (= name 'com.jakemccrary/lein-test-refresh)) (:plugins project)))]
     (-> project
         (deps/add-if-missing test-refresh-plugin)
-        (deps/add-if-missing '[org.clojure/tools.namespace "0.2.4"]))))
+        (deps/add-if-missing '[org.clojure/tools.namespace "0.2.6"]))))
 
 (defn- clojure-test-directories [project]
   (vec (concat (:test-path project [])

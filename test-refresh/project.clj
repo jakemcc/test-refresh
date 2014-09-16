@@ -6,8 +6,8 @@
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
   :dependencies [[org.clojure/clojure "1.5.1"]
-                 [org.clojure/tools.namespace "0.2.4" :exclusions [org.clojure/clojure]]
-                 [leinjacker "0.4.1" :exclusions [org.clojure/clojure]]
+                 [org.clojure/tools.namespace "0.2.6" :exclusions [org.clojure/clojure]]
+                 [leinjacker "0.4.2" :exclusions [org.clojure/clojure]]
                  [jakemcc/clojure-gntp "0.1.1" :exclusions [org.clojure/clojure]]]
   :deploy-repositories [["snapshots" {:url "https://clojars.org/repo"
                                       :username :gpg :password :gpg}]
