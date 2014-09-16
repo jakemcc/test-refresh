@@ -63,7 +63,7 @@ Add whatever is shown above to your to your `~/.lein/profiles.clj`. An example u
 Alternatively add to your `:plugins` vector in your project.clj file.
    
     (defproject sample
-      :dependencies [[org.clojure/clojure "1.5.1"]]
+      :dependencies [[org.clojure/clojure "1.6.0"]]
       :profiles {:dev {:plugins [[com.jakemccrary/lein-test-refresh "0.5.2"]]}})
 
 ### Leiningen 1.0
