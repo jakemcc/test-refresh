@@ -2,7 +2,8 @@
   (:require [clojure.pprint :refer [pprint]]
             [leinjacker.deps :as deps]
             [leinjacker.eval :as eval]
-            [leiningen.test :as test]))
+            [leiningen.test :as test]
+            [leiningen.core.project :as project]))
 
 (defn- add-deps [project]
   (let [test-refresh-plugin (first (filter (fn [[name version]] (= name 'com.jakemccrary/lein-test-refresh)) (:plugins project)))]
@@ -28,19 +29,22 @@
 
 (defn test-refresh
   "Autoruns clojure.test tests on source change or
-on the ENTER key being pressed.
+  on the ENTER key being pressed.
 
-USAGE: lein test-refresh
-Runs tests whenever there is a change to code in classpath.
-Reports test successes and failures to STDOUT.
+  USAGE: lein test-refresh
+  Runs tests whenever there is a change to code in classpath.
+  Reports test successes and failures to STDOUT.
 
-USAGE: lein test-refresh :growl
-Runs tests whenever code changes.
-Reports results to growl and STDOUT."
+  USAGE: lein test-refresh :growl
+  Runs tests whenever code changes.
+  Reports results to growl and STDOUT."
   [project & args]
-  (let [{:keys [growl notify-on-success notify-command nses-and-selectors test-paths]} (parse-commandline project args)]
+  (let [project (-> project
+                    (project/merge-profiles [:test])
+                    add-deps)
+        {:keys [growl notify-on-success notify-command nses-and-selectors test-paths]} (parse-commandline project args)]
     (eval/eval-in-project
-     (add-deps project)
+     project
      `(com.jakemccrary.test-refresh/monitor-project ~test-paths
                                                     ~growl
                                                     '~notify-command
