@@ -1,5 +1,10 @@
 # Changes
 
+## 0.5.3
+
+- `lein test-refresh` now includes the `:test` profile. (same behavior
+as `lein test`)
+
 ## 0.5.2
 
 - Upgrade to `org.clojure/tools.namespace` 0.2.6.
