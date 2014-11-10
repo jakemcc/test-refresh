@@ -1,6 +1,6 @@
 # Changes
 
-## 0.5.3
+## 0.5.4
 
 - Upgrade to `org.clojure/tools.namespace` 0.2.7.
 
