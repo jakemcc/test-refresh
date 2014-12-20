@@ -1,5 +1,9 @@
 # Changes
 
+## 0.5.5
+
+- Upgrade to `org.clojure/tools.namespace` 0.2.8.
+
 ## 0.5.4
 
 - Upgrade to `org.clojure/tools.namespace` 0.2.7.
