@@ -1,6 +1,6 @@
 (defproject sample "1.2.3"
-  :dependencies [[org.clojure/clojure "1.5.1"]]
-  :profiles {:dev {:plugins [[com.jakemccrary/lein-test-refresh "0.3.10"]]}}
+  :dependencies [[org.clojure/clojure "1.6.0"]]
+  :profiles {:dev {:plugins [[com.jakemccrary/lein-test-refresh "0.5.5"]]}}
 
   :test-refresh {
                  ;; Specifies a command to run on test
