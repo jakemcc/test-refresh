@@ -56,15 +56,15 @@ image doesn't seem to load).
 
 ### Leiningen 2.0
 
-Add whatever is shown above to your to your `~/.lein/profiles.clj`. An example using version `0.5.2` is shown below.
+Add whatever is shown above to your to your `~/.lein/profiles.clj`. An example using version `0.5.5` is shown below.
 
-    {:user {:plugins [[com.jakemccrary/lein-test-refresh "0.5.2"]]}}
+    {:user {:plugins [[com.jakemccrary/lein-test-refresh "0.5.5"]]}}
     
 Alternatively add to your `:plugins` vector in your project.clj file.
    
     (defproject sample
       :dependencies [[org.clojure/clojure "1.6.0"]]
-      :profiles {:dev {:plugins [[com.jakemccrary/lein-test-refresh "0.5.2"]]}})
+      :profiles {:dev {:plugins [[com.jakemccrary/lein-test-refresh "0.5.5"]]}})
 
 ### Leiningen 1.0
 
@@ -86,7 +86,7 @@ you may see occasional exceptions.
 
 ## License
 
-Copyright (C) 2011-2014 [Jake McCrary](http://jakemccrary.com)
+Copyright (C) 2011-2015 [Jake McCrary](http://jakemccrary.com)
 
 Distributed under the Eclipse Public License, the same as Clojure.
 
