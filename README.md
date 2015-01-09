@@ -46,7 +46,7 @@ polls the file system to see if anything has changed. When there is a
 change your code is tested again.
 
 If you need to rerun your tests without changing a file then hit
-`Enter` when focused on a running `lein-test-refresh`.
+`Enter` when focused on a running `lein test-refresh`.
 
 ## Notifications
 
