@@ -65,12 +65,12 @@ with modern versions of Growl for [OS X](http://growl.info/),
 [Linux](http://mattn.github.com/growl-for-linux/), and
 [Windows](http://growlforwindows.com/). You can also always set this
 to true by setting `:test-refresh {:growl true}}`. An example can be
-found in the [sample.project.clj](sample.project.clj).
+found in the [sample project.clj](sample.project.clj).
 
 `:notify-on-success` is another available option. It can be used to
 turn off notifications when your tests are successful. Set
 `:notify-on-success false` to turn off success notifications. An
-example can be found in the [sample.project.clj](sample.project.clj).
+example can be found in the [sample project.clj](sample.project.clj).
 
 ### Latest version & Change log
 
