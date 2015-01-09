@@ -1,6 +1,7 @@
 # lein-test-refresh
 
-Leiningen plug-in for automatically running `clojure.test` tests whenever your Clojure project's source changes.
+This is a Leiningen plug-in that automatically refreshes and then runs
+your `clojure.test` tests when a file in your project changes
 
 ## Features
 
@@ -16,13 +17,26 @@ Leiningen plug-in for automatically running `clojure.test` tests whenever your C
 
 ## Usage
 
-Here is what using it looks like.
+![Latest version](https://clojars.org/com.jakemccrary/lein-test-refresh/latest-version.svg)
+
+Add the above to your `~/.lein/profiles.clj`. It should look similar to below.
+
+    {:user {:plugins [[com.jakemccrary/lein-test-refresh "0.5.5"]]}}
+
+Alternatively you may add it to your `project.clj`.
+
+    (defproject sample
+      :dependencies [[org.clojure/clojure "1.6.0"]]
+      :profiles {:dev {:plugins [[com.jakemccrary/lein-test-refresh "0.5.5"]]}})
+
+Enter your project's root directory and run `lein test-refresh`. The
+output will look something like this.
 
     $ lein test-refresh
     *********************************************
     *************** Running tests ***************
 
-    (standard clojure.test output)
+    <standard clojure.test output>
     
     Failed 1 of 215 assertions
     Finished at 08:25:20.619 (run time: 9.691s)
@@ -31,20 +45,32 @@ Your terminal will just stay like that. Fairly often `lein-test-refresh`
 polls the file system to see if anything has changed. When there is a
 change your code is tested again.
 
-If you want to receive notifications using growl then run `lein
-test-refresh :growl`. This has been tested with modern versions of Growl
-for [OS X](http://growl.info/),
+If you need to rerun your tests without changing a file then hit
+`Enter` when focused on a running `lein-test-refresh`.
+
+## Notifications
+
+`lein-test-refresh` supports specifying a notification command. This
+command is passed a short message after your tests have run. This
+command is configured through your `project.clj` or `profiles.clj`.
+For example, if you want to send OSX notifications using
+[terminal-notifier](https://github.com/alloy/terminal-notifier) then
+you would add the following to your `project.clj` or `profiles.clj`
+
+    :test-refresh {:notify-command ["terminal-notifier" "-title" "Tests" "-message"]} 
+
+`lein-test-refresh` also has built-in Growl support. To receive Growl
+notifications run `lein test-refresh :growl`. This has been tested
+with modern versions of Growl for [OS X](http://growl.info/),
 [Linux](http://mattn.github.com/growl-for-linux/), and
-[Windows](http://growlforwindows.com/).
+[Windows](http://growlforwindows.com/). You can also always set this
+to true by setting `:test-refresh {:growl true}}`. An example can be
+found in the [sample.project.clj](sample.project.clj).
 
-If you want to receive notifications using some other notification
-program then you can add `:test-refresh {:notify-command
-["command" "arg1"]}` to your `project.clj` file. `lein-test-refresh`
-will pass a short message to the command specified indicating success
-or failure. There is a sample [project.clj](sample.project.clj) file
-which specifies this feature.
-
-`lein-test-refresh` also will run your tests if you hit the enter key.
+`:notify-on-success` is another available option. It can be used to
+turn off notifications when your tests are successful. Set
+`:notify-on-success false` to turn off success notifications. An
+example can be found in the [sample.project.clj](sample.project.clj).
 
 ### Latest version & Change log
 
@@ -53,18 +79,6 @@ The latest version is the highest non-snapshot version found in
 image doesn't seem to load).
 
 ![Latest version](https://clojars.org/com.jakemccrary/lein-test-refresh/latest-version.svg)
-
-### Leiningen 2.0
-
-Add whatever is shown above to your to your `~/.lein/profiles.clj`. An example using version `0.5.5` is shown below.
-
-    {:user {:plugins [[com.jakemccrary/lein-test-refresh "0.5.5"]]}}
-    
-Alternatively add to your `:plugins` vector in your project.clj file.
-   
-    (defproject sample
-      :dependencies [[org.clojure/clojure "1.6.0"]]
-      :profiles {:dev {:plugins [[com.jakemccrary/lein-test-refresh "0.5.5"]]}})
 
 ### Leiningen 1.0
 
