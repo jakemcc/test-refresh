@@ -102,18 +102,57 @@
 (defn selected? [selectors test-var]
   (some #(match test-var %) selectors))
 
+(def suppress-unselected-tests
+  "A function that figures out which vars need to be suppressed based on the
+  given selectors, moves their :test metadata to :leiningen/skipped-test (so
+  that clojure.test won't think they are tests), runs the given function, and
+  then sets the metadata back."
+  (fn [namespaces selectors func]
+    (let [copy-meta (fn [var from-key to-key]
+                      (if-let [x (get (meta var) from-key)]
+                        (alter-meta! var #(-> % (assoc to-key x) (dissoc from-key)))))
+          vars (if (seq selectors)
+                 (->> namespaces
+                      (mapcat (comp vals ns-interns))
+                      (remove (fn [var]
+                                (some (fn [[selector args]]
+                                        (let [sfn (if (vector? selector)
+                                                    (second selector)
+                                                    selector)]
+                                          (apply (eval sfn)
+                                                 (merge (-> var meta :ns meta)
+                                                        (assoc (meta var) :leiningen.test/var var))
+                                                 args)))
+                                      selectors)))))
+          copy #(doseq [v vars] (copy-meta v %1 %2))]
+      (copy :test :test-refresh/skipped)
+      (try (func)
+           (finally
+             (copy :test-refresh/skipped :test))))))
+
+(defn- nses-selectors-match [selectors ns-sym]
+  (distinct
+    (for [ns ns-sym
+          [_ var] (ns-publics ns)
+          :when (some (fn [[selector args]]
+                        (apply (eval (if (vector? selector)
+                                       (second selector)
+                                       selector))
+                               (merge (-> var meta :ns meta)
+                                      (assoc (meta var) :leiningen.test/var var))
+                               args))
+                      selectors)]
+      ns)))
+
 (defn run-selected-tests [test-paths selectors]
   (let [test-namespaces (namespaces-in-directories test-paths)
-        tests-in-namespaces (select-vars :test (vars-in-namespaces test-namespaces))
-        disabled-tests (if (tracking-failed-tests?)
-                         (remove previously-failing-test? tests-in-namespaces)
-                         (remove #(selected? selectors %) tests-in-namespaces))]
-    (move-metadata! disabled-tests :test :test-refresh/skipped)
+        selected-test-namespaces (nses-selectors-match selectors test-namespaces)]
     (binding [clojure.test/report capture-report]
       (reset! failed-tests #{})
-      (let [result (summary (apply clojure.test/run-tests test-namespaces))]
-        (move-metadata! disabled-tests :test-refresh/skipped :test)
-        result))))
+      (summary 
+        (suppress-unselected-tests selected-test-namespaces 
+                                   selectors
+                                   #(apply clojure.test/run-tests selected-test-namespaces))))))
 
 (defn- run-tests [test-paths selectors]
   (let [started (System/currentTimeMillis)
