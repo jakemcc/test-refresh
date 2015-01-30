@@ -89,19 +89,6 @@
     (swap! failed-tests update-tracked-failing-tests clojure.test/*testing-vars*)
     (fail x)))
 
-(defn match [test-var [selector args]]
-  (let [form (if (vector? selector)
-               (second selector)
-               selector)
-        selector-fn (eval form)]
-    (apply selector-fn
-      (merge (-> test-var meta :ns meta)
-             (assoc (meta test-var) :leiningen.test/var test-var))
-      args)))
-
-(defn selected? [selectors test-var]
-  (some #(match test-var %) selectors))
-
 (def suppress-unselected-tests
   "A function that figures out which vars need to be suppressed based on the
   given selectors, moves their :test metadata to :leiningen/skipped-test (so
