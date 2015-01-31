@@ -26,10 +26,6 @@
 (defn select-vars [selector-fn vars]
   (filter (comp selector-fn meta) vars))
 
-(defn move-metadata! [vars from-key to-key]
-  (doseq [var vars]
-    (if-let [x (get (meta var) from-key)]
-      (alter-meta! var #(-> % (assoc to-key x) (dissoc from-key))))))
 
 (defmacro suppress-stdout [& forms]
   `(binding [*out* (java.io.StringWriter.)]
@@ -95,7 +91,7 @@
   that clojure.test won't think they are tests), runs the given function, and
   then sets the metadata back."
   [namespaces selectors func]
-  (let [copy-meta (fn [var from-key to-key]
+  (let [move-meta! (fn [var from-key to-key]
                     (if-let [x (get (meta var) from-key)]
                       (alter-meta! var #(-> % (assoc to-key x) (dissoc from-key)))))
         vars (if (seq selectors)
@@ -111,11 +107,13 @@
                                                       (assoc (meta var) :leiningen.test/var var))
                                                args)))
                                     selectors)))))
-        copy #(doseq [v vars] (copy-meta v %1 %2))]
-    (copy :test :test-refresh/skipped)
+        move-all-meta! (fn [from-key to-key]
+                         (doseq [v vars]
+                           (move-meta! v from-key to-key)))]
+    (move-all-meta! :test :test-refresh/skipped)
     (try (func)
          (finally
-           (copy :test-refresh/skipped :test)))))
+           (move-all-meta! :test-refresh/skipped :test)))))
 
 (defn- nses-selectors-match [selectors ns-sym]
   (distinct
