@@ -55,7 +55,7 @@
 (defn- growl [title-postfix message]
   (try
     (jakemcc.clojure-gntp.gntp/message
-     (str "AutoTest - " title-postfix)
+     (str "TestRefresh - " title-postfix)
      message)
     (catch Exception ex
       (println "Problem communicating with growl, exception:" (.getMessage ex)))))
