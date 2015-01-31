@@ -27,10 +27,6 @@
   (filter (comp selector-fn meta) vars))
 
 
-(defmacro suppress-stdout [& forms]
-  `(binding [*out* (java.io.StringWriter.)]
-     ~@forms))
-
 (defn- refresh-environment []
   (clojure.tools.namespace.repl/refresh))
 
@@ -141,7 +137,7 @@
 
 (defn- run-tests [test-paths selectors]
   (let [started (System/currentTimeMillis)
-        refresh #_(suppress-stdout) (refresh-environment)
+        refresh (refresh-environment)
         result (if (= :ok refresh)
                  (run-selected-tests test-paths selectors)
                  {:status "Error"
