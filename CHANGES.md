@@ -1,5 +1,10 @@
 # Changes
 
+## 0.6.0
+
+- Fixtures associated with tests in ignore namespaces no longer run.
+  Thanks [lbradstreet](https://github.com/jakemcc/lein-test-refresh/pull/24)!
+
 ## 0.5.5
 
 - Upgrade to `org.clojure/tools.namespace` 0.2.8.
