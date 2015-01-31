@@ -49,7 +49,7 @@
   (let [date-str (.format (java.text.SimpleDateFormat. "HH:mm:ss.SSS")
                           (java.util.Date.))]
     (println (format "Finished at %s (run time: %.3fs)" date-str
-               (float (/ run-time 1000))))))
+                     (float (/ run-time 1000))))))
 
 (defn- print-to-console [report]
   (println)
@@ -119,27 +119,27 @@
 
 (defn- nses-selectors-match [selectors ns-sym]
   (distinct
-    (for [ns ns-sym
-          [_ var] (ns-publics ns)
-          :when (some (fn [[selector args]]
-                        (apply (eval (if (vector? selector)
-                                       (second selector)
-                                       selector))
-                               (merge (-> var meta :ns meta)
-                                      (assoc (meta var) :leiningen.test/var var))
-                               args))
-                      selectors)]
-      ns)))
+   (for [ns ns-sym
+         [_ var] (ns-publics ns)
+         :when (some (fn [[selector args]]
+                       (apply (eval (if (vector? selector)
+                                      (second selector)
+                                      selector))
+                              (merge (-> var meta :ns meta)
+                                     (assoc (meta var) :leiningen.test/var var))
+                              args))
+                     selectors)]
+     ns)))
 
 (defn run-selected-tests [test-paths selectors]
   (let [test-namespaces (namespaces-in-directories test-paths)
         selected-test-namespaces (nses-selectors-match selectors test-namespaces)]
     (binding [clojure.test/report capture-report]
       (reset! failed-tests #{})
-      (summary 
-        (suppress-unselected-tests selected-test-namespaces 
-                                   selectors
-                                   #(apply clojure.test/run-tests selected-test-namespaces))))))
+      (summary
+       (suppress-unselected-tests selected-test-namespaces
+                                  selectors
+                                  #(apply clojure.test/run-tests selected-test-namespaces))))))
 
 (defn- run-tests [test-paths selectors]
   (let [started (System/currentTimeMillis)
@@ -198,7 +198,7 @@
 
             (let [was-failed (tracking-failed-tests?)
                   result (run-tests test-paths selectors)
-                  ; tests need to be run once a failed test is resolved
+                                        ; tests need to be run once a failed test is resolved
                   result (if (and was-failed (passed? result))
                            (run-tests test-paths selectors)
                            result)]
