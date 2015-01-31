@@ -20,13 +20,6 @@
     (flatten (for [file as-files]
                (clojure.tools.namespace.find/find-namespaces-in-dir file)))))
 
-(defn vars-in-namespaces [nses]
-  (mapcat (comp vals ns-interns) nses))
-
-(defn select-vars [selector-fn vars]
-  (filter (comp selector-fn meta) vars))
-
-
 (defn- refresh-environment []
   (clojure.tools.namespace.repl/refresh))
 
