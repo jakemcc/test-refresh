@@ -1,5 +1,10 @@
 # Changes
 
+## 0.7.0
+
+- `lein-test-refresh` releases no longer have a Clojure dependency.
+- No longer explicitly adds tools.namespace dependency.
+
 ## 0.6.0
 
 - Fixtures associated with tests in ignore namespaces no longer run.
