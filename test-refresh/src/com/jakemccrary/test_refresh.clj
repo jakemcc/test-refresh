@@ -185,7 +185,7 @@
 
             (let [was-failed (tracking-failed-tests?)
                   result (run-tests test-paths selectors)
-                                        ; tests need to be run once a failed test is resolved
+                  ;; tests need to be run once a failed test is resolved
                   result (if (and was-failed (passed? result))
                            (run-tests test-paths selectors)
                            result)]
