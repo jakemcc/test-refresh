@@ -47,6 +47,5 @@
                                                     ~growl
                                                     '~notify-command
                                                     ~notify-on-success
-                                                    '~nses-and-selectors
-                                                    )
+                                                    '~nses-and-selectors)
      `(require 'com.jakemccrary.test-refresh))))
