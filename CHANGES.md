@@ -1,5 +1,9 @@
 # Changes
 
+## 0.8.0
+
+- Upgrade `org.clojure/tools.namespace` dependency to 0.2.10.
+
 ## 0.7.0
 
 - `lein-test-refresh` releases no longer have a Clojure dependency.

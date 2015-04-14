@@ -5,7 +5,7 @@
   :min-lein-version "2.4"
   :license {:name "Eclipse Public License"
             :url "http://www.eclipse.org/legal/epl-v10.html"}
-  :dependencies [[org.clojure/tools.namespace "0.2.8" :exclusions [org.clojure/clojure]]
+  :dependencies [[org.clojure/tools.namespace "0.2.10" :exclusions [org.clojure/clojure]]
                  [leinjacker "0.4.2" :exclusions [org.clojure/clojure]]
                  [jakemcc/clojure-gntp "0.1.1" :exclusions [org.clojure/clojure]]]
   :deploy-repositories [["snapshots" {:url "https://clojars.org/repo"
