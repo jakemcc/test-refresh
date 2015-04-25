@@ -5,13 +5,13 @@
             [clojure.test.check.properties :as prop]
             [clojure.test :refer :all]))
 
-(defspec double-sort-works
-  100
-  (prop/for-all [v (gen/vector gen/int)]
-                (= (sort v) (sort (sort v)))))
+;; (defspec double-sort-works
+;;   100
+;;   (prop/for-all [v (gen/vector gen/int)]
+;;                 (= (sort v) (sort (sort v)))))
 
 
-(defspec not-42
-  100
-  (prop/for-all [v (gen/vector gen/int)]
-    (not (some #{42} v))))
+;; (defspec not-42
+;;   100
+;;   (prop/for-all [v (gen/vector gen/int)]
+;;     (not (some #{42} v))))

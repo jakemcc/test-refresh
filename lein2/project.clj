@@ -7,5 +7,6 @@
   :test-selectors {:integration :integration
                    :ns-metadata :ns-metadata
                    :unit (complement :integration)}
-  :test-refresh {:notify-command ["say" "-v" "Agnes"]
-                 :notify-on-success false})
+  :test-refresh {;;:notify-command ["say" "-v" "Agnes"]
+                 :notify-on-success false
+                 :quiet true})
