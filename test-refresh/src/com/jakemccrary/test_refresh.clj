@@ -169,11 +169,16 @@
   (not (and (not notify-on-success)
             (passed? result))))
 
-(defn monitor-project [test-paths should-growl notify-command notify-on-success nses-and-selectors]
-  (let [users-notifier (create-user-notifier notify-command)
-        should-notify? (partial should-notify? notify-on-success)
+(defn monitor-project [test-paths options]
+  (let [should-growl (:growl options)
+        users-notifier (create-user-notifier (:notify-command options))
+        should-notify? (partial should-notify? (:notify-on-success options))
         keystroke-pressed (atom nil)
-        selectors (second nses-and-selectors)]
+        selectors (second (:nses-and-selectors options))]
+
+    (when (:quiet options)
+      (defmethod capture-report :begin-test-ns [m]))
+
     (monitor-keystrokes keystroke-pressed)
     (loop [tracker (make-change-tracker)]
       (let [new-tracker (scan-for-changes tracker)]

@@ -14,7 +14,7 @@
                (:test-paths project []))))
 
 (defn parse-commandline [project args]
-  (let [{:keys [notify-command notify-on-success growl]} (:test-refresh project)
+  (let [{:keys [notify-command notify-on-success growl silence quiet]} (:test-refresh project)
         should-growl (or (some #{:growl ":growl" "growl"} args) growl)
         args (remove #{:growl ":growl" "growl"} args)
         notify-on-success (or (nil? notify-on-success) notify-on-success)
@@ -23,7 +23,8 @@
      :notify-on-success notify-on-success
      :notify-command notify-command
      :nses-and-selectors (#'test/read-args args project)
-     :test-paths (clojure-test-directories project)}))
+     :test-paths (clojure-test-directories project)
+     :quiet quiet}))
 
 (defn test-refresh
   "Autoruns clojure.test tests on source change or
@@ -40,12 +41,9 @@
   (let [project (-> project
                     (project/merge-profiles [:test])
                     add-deps)
-        {:keys [growl notify-on-success notify-command nses-and-selectors test-paths]} (parse-commandline project args)]
+        {:keys [test-paths] :as options} (parse-commandline project args)]
     (eval/eval-in-project
      project
      `(com.jakemccrary.test-refresh/monitor-project ~test-paths
-                                                    ~growl
-                                                    '~notify-command
-                                                    ~notify-on-success
-                                                    '~nses-and-selectors)
+                                                    '~options)
      `(require 'com.jakemccrary.test-refresh))))
