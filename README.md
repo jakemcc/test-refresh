@@ -14,6 +14,9 @@ your `clojure.test` tests when a file in your project changes
 - Can be configured to only notify you on failures.
 - [Supports](https://github.com/jakemcc/lein-test-refresh/blob/master/CHANGES.md#040) subset of Leiningen test selectors.
 - Times how long it takes to run your tests.
+- Can optionally suppress `clojure.test`'s _Testing namespace_ output.
+  Very useful on codebases with many test namespaces for reducing
+  output to terminal.
 
 ## Usage
 
@@ -48,7 +51,16 @@ change your code is tested again.
 If you need to rerun your tests without changing a file then hit
 `Enter` when focused on a running `lein test-refresh`.
 
-## Notifications
+## Configuration Features
+
+A [sample.project.clj](sample.project.clj) contains the definitive
+example of configuring `lein-test-refresh` features. Configuration can
+appear in any file that Leiningen uses to merge into your project's
+configuration when running commands. Often `lein-test-refresh`
+configuration is a personal preference and should be configured in
+your personal `~/.lein/profiles.clj`.
+
+### Notifications
 
 `lein-test-refresh` supports specifying a notification command. This
 command is passed a short message after your tests have run. This
@@ -72,20 +84,20 @@ turn off notifications when your tests are successful. Set
 `:notify-on-success false` to turn off success notifications. An
 example can be found in the [sample project.clj](sample.project.clj).
 
-### Latest version & Change log
+### Reduced terminal output
+
+`lein-test-refresh` can be configured to suppress `clojure.test`'s
+_Testing namespace_ output. Add `:quiet true` to your `:test-refresh`
+configuration map to supporess `clojure.test`'s noisy output. This is
+particularly useful on codebases with a large number of test namespaces.
+
+## Latest version & Change log
 
 The latest version is the highest non-snapshot version found in
 [CHANGES.md](CHANGES.md) or whatever the below images says (sometimes
 image doesn't seem to load).
 
 ![Latest version](https://clojars.org/com.jakemccrary/lein-test-refresh/latest-version.svg)
-
-### Leiningen 1.0
-
-This project has not been tested with versions of Leiningen 1. This
-project is heavily based of `lein-autoexpect` which has been tested
-against Leiningen 1. I would expect this project to work as well but
-I'm not going to bother testing it nor do I plan on supporting it.
 
 ## Compatibility
 
@@ -97,6 +109,13 @@ Because of
 `lein-test-refresh` requires that your project use Clojure >= 1.3.0. If
 your project also depends on a version of `tools.namespace` < 0.2.1
 you may see occasional exceptions.
+
+## Leiningen 1.0
+
+This project has not been tested with versions of Leiningen 1. This
+project is heavily based of `lein-autoexpect` which has been tested
+against Leiningen 1. I would expect this project to work as well but
+I'm not going to bother testing it nor do I plan on supporting it.
 
 ## License
 

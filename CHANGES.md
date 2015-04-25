@@ -1,5 +1,11 @@
 # Changes
 
+## 0.9.0
+
+- `lein-test-refresh` can suppress `clojure.test`'s _Testing
+namespace_ output. Very useful on projects with a large number of test
+namespaces for keeping the terminal useful.
+
 ## 0.8.0
 
 - Upgrade `org.clojure/tools.namespace` dependency to 0.2.10.
