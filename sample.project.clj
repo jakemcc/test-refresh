@@ -6,7 +6,7 @@
                  ;; failure/success. Short message is passed as the
                  ;; last argument to the command.
                  ;; Defaults to no command.
-                 :notify-command ["say"]
+                 :notify-command ["terminal-notifier" "-title" "Tests" "-message"]
 
                  ;; set to true to send notifications to growl
                  ;; Defaults to false.
