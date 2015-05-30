@@ -24,13 +24,17 @@ your `clojure.test` tests when a file in your project changes
 
 Add the above to your `~/.lein/profiles.clj`. It should look similar to below.
 
-    {:user {:plugins [[com.jakemccrary/lein-test-refresh "0.9.0"]]}}
+```clojure
+{:user {:plugins [[com.jakemccrary/lein-test-refresh "0.9.0"]]}}
+```
 
 Alternatively you may add it to your `project.clj`.
 
-    (defproject sample
-      :dependencies [[org.clojure/clojure "1.6.0"]]
-      :profiles {:dev {:plugins [[com.jakemccrary/lein-test-refresh "0.9.0"]]}})
+```clojure
+(defproject sample
+  :dependencies [[org.clojure/clojure "1.6.0"]]
+  :profiles {:dev {:plugins [[com.jakemccrary/lein-test-refresh "0.9.0"]]}})
+```
 
 Enter your project's root directory and run `lein test-refresh`. The
 output will look something like this.
@@ -69,7 +73,9 @@ For example, if you want to send OSX notifications using
 [terminal-notifier](https://github.com/alloy/terminal-notifier) then
 you would add the following to your `project.clj` or `profiles.clj`
 
-    :test-refresh {:notify-command ["terminal-notifier" "-title" "Tests" "-message"]} 
+```clojure
+:test-refresh {:notify-command ["terminal-notifier" "-title" "Tests" "-message"]} 
+```
 
 `lein-test-refresh` also has built-in Growl support. To receive Growl
 notifications run `lein test-refresh :growl`. This has been tested
