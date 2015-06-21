@@ -1,5 +1,9 @@
 # Changes
 
+## 0.10.0
+
+- Upgrades `org.clojure/tools.namespace` to 0.2.11. This improves cljc support.
+
 ## 0.9.0
 
 - `lein-test-refresh` can suppress `clojure.test`'s _Testing
