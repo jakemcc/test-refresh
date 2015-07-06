@@ -25,7 +25,7 @@ your `clojure.test` tests when a file in your project changes
 Add the above to your `~/.lein/profiles.clj`. It should look similar to below.
 
 ```clojure
-{:user {:plugins [[com.jakemccrary/lein-test-refresh "0.9.0"]]}}
+{:user {:plugins [[com.jakemccrary/lein-test-refresh "0.10.0"]]}}
 ```
 
 Alternatively you may add it to your `project.clj`.
@@ -33,7 +33,7 @@ Alternatively you may add it to your `project.clj`.
 ```clojure
 (defproject sample
   :dependencies [[org.clojure/clojure "1.6.0"]]
-  :profiles {:dev {:plugins [[com.jakemccrary/lein-test-refresh "0.9.0"]]}})
+  :profiles {:dev {:plugins [[com.jakemccrary/lein-test-refresh "0.10.0"]]}})
 ```
 
 Enter your project's root directory and run `lein test-refresh`. The
