@@ -15,8 +15,7 @@ your `clojure.test` tests when a file in your project changes
 - [Supports](https://github.com/jakemcc/lein-test-refresh/blob/master/CHANGES.md#040) subset of Leiningen test selectors.
 - Times how long it takes to run your tests.
 - Can optionally suppress `clojure.test`'s _Testing namespace_ output.
-  Very useful on codebases with many test namespaces for reducing
-  output to terminal.
+  This is extremely useful in making test output with larger codebases readable again.
 
 ## Usage
 
