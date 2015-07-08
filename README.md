@@ -7,6 +7,7 @@ your `clojure.test` tests when a file in your project changes
 
 - Allows you to have a quick feedback cycle by automatically
   refreshing your code and running your tests.
+- Can hit `enter` in terminal to force tests to rerun.
 - Runs previously failing tests first, giving you feedback even quicker.
 - Can pass result of running your tests to a notification command of your
   choice.
