@@ -21,7 +21,8 @@
                (clojure.tools.namespace.find/find-namespaces-in-dir file)))))
 
 (defn- refresh-environment []
-  (clojure.tools.namespace.repl/refresh))
+  (clojure.tools.namespace.repl/refresh)
+  )
 
 (def ^:private top-stars (apply str (repeat 45 "*")))
 (def ^:private side-stars (apply str (repeat 15 "*")))
@@ -118,21 +119,25 @@
                      selectors)]
      ns)))
 
-(defn run-selected-tests [test-paths selectors]
+(defn run-selected-tests [test-paths selectors report-symbol]
   (let [test-namespaces (namespaces-in-directories test-paths)
-        selected-test-namespaces (nses-selectors-match selectors test-namespaces)]
-    (binding [clojure.test/report capture-report]
+        selected-test-namespaces (nses-selectors-match selectors test-namespaces)
+        used-report (if report-symbol (symbol report-symbol) capture-report)
+        ]
+    (if report-symbol (require (symbol (namespace used-report)) :verbose))
+    (println "Used report: " used-report)
+    (binding [clojure.test/report used-report]
       (reset! failed-tests #{})
       (summary
        (suppress-unselected-tests selected-test-namespaces
                                   selectors
                                   #(apply clojure.test/run-tests selected-test-namespaces))))))
 
-(defn- run-tests [test-paths selectors]
+(defn- run-tests [test-paths selectors report-symbol]
   (let [started (System/currentTimeMillis)
         refresh (refresh-environment)
         result (if (= :ok refresh)
-                 (run-selected-tests test-paths selectors)
+                 (run-selected-tests test-paths selectors report-symbol)
                  {:status "Error"
                   :message (str "Error refreshing environment: " clojure.core/*e)
                   :exception clojure.core/*e})]
@@ -174,8 +179,13 @@
         users-notifier (create-user-notifier (:notify-command options))
         should-notify? (partial should-notify? (:notify-on-success options))
         keystroke-pressed (atom nil)
-        selectors (second (:nses-and-selectors options))]
+        selectors (second (:nses-and-selectors options))
+        report-symbol (:report options)]
 
+    (println test-paths)
+
+    (when report-symbol
+      (println "Using reporter:" report-symbol))
     (when (:quiet options)
       (defmethod capture-report :begin-test-ns [m]))
 
@@ -189,10 +199,10 @@
             (print-banner)
 
             (let [was-failed (tracking-failed-tests?)
-                  result (run-tests test-paths selectors)
+                  result (run-tests test-paths selectors report-symbol)
                   ;; tests need to be run once a failed test is resolved
                   result (if (and was-failed (passed? result))
-                           (run-tests test-paths selectors)
+                           (run-tests test-paths selectors report-symbol)
                            result)]
               (print-to-console result)
               (when (should-notify? result)
