@@ -119,25 +119,26 @@
                      selectors)]
      ns)))
 
-(defn run-selected-tests [test-paths selectors report-symbol]
+(defn run-selected-tests [test-paths selectors report]
   (let [test-namespaces (namespaces-in-directories test-paths)
-        selected-test-namespaces (nses-selectors-match selectors test-namespaces)
-        used-report (if report-symbol (symbol report-symbol) capture-report)
-        ]
-    (if report-symbol (require (symbol (namespace used-report)) :verbose))
-    (println "Used report: " used-report)
-    (binding [clojure.test/report used-report]
-      (reset! failed-tests #{})
-      (summary
-       (suppress-unselected-tests selected-test-namespaces
-                                  selectors
-                                  #(apply clojure.test/run-tests selected-test-namespaces))))))
+        selected-test-namespaces (nses-selectors-match selectors test-namespaces)]
+    (if report (require (symbol (namespace (symbol report)))))
+    (let [resolved-report (when report (let [rr (resolve (symbol report))]
+                                         (if rr rr (println "Unable to locate report method:" report))
+                                         ))
+          used-report (if resolved-report resolved-report capture-report)]
+      (binding [clojure.test/report used-report]
+        (reset! failed-tests #{})
+        (summary
+          (suppress-unselected-tests selected-test-namespaces
+                                     selectors
+                                     #(apply clojure.test/run-tests selected-test-namespaces)))))))
 
-(defn- run-tests [test-paths selectors report-symbol]
+(defn- run-tests [test-paths selectors report]
   (let [started (System/currentTimeMillis)
         refresh (refresh-environment)
         result (if (= :ok refresh)
-                 (run-selected-tests test-paths selectors report-symbol)
+                 (run-selected-tests test-paths selectors report)
                  {:status "Error"
                   :message (str "Error refreshing environment: " clojure.core/*e)
                   :exception clojure.core/*e})]
@@ -180,12 +181,12 @@
         should-notify? (partial should-notify? (:notify-on-success options))
         keystroke-pressed (atom nil)
         selectors (second (:nses-and-selectors options))
-        report-symbol (:report options)]
+        report (:report options)]
 
     (println test-paths)
 
-    (when report-symbol
-      (println "Using reporter:" report-symbol))
+    (when report
+      (println "Using reporter:" report))
     (when (:quiet options)
       (defmethod capture-report :begin-test-ns [m]))
 
@@ -199,10 +200,10 @@
             (print-banner)
 
             (let [was-failed (tracking-failed-tests?)
-                  result (run-tests test-paths selectors report-symbol)
+                  result (run-tests test-paths selectors report)
                   ;; tests need to be run once a failed test is resolved
                   result (if (and was-failed (passed? result))
-                           (run-tests test-paths selectors report-symbol)
+                           (run-tests test-paths selectors report)
                            result)]
               (print-to-console result)
               (when (should-notify? result)
