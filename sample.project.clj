@@ -21,4 +21,11 @@
                  ;; "Testing namespace.being.tested". Very useful on
                  ;; codebases with many test namespaces.
                  ;; Defaults to false.
-                 :quiet true})
+                 :quiet true
+
+                 ;; specifiy a custom clojure.test report method
+                 ;; Specify the namespace and multimethod that will handle reporting
+                 ;; from test-refresh.  The namespace must be available to the project dependencies.
+                 ;; Defaults to no custom reporter
+                 :report  myreport.namespace/my-report
+                 })

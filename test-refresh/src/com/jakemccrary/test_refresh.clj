@@ -118,21 +118,30 @@
                      selectors)]
      ns)))
 
-(defn run-selected-tests [test-paths selectors]
+
+(defn- select-reporting-fn
+       "Selects the reporting function based on user specified configuration"
+       [report]
+       (when report (require (symbol (namespace (symbol report)))))
+       (let [resolved-report (when report (let [rr (resolve (symbol report))]
+                                               (if rr rr (println "Unable to locate report method:" report))))]
+            (if resolved-report resolved-report capture-report)))
+
+(defn run-selected-tests [test-paths selectors report]
   (let [test-namespaces (namespaces-in-directories test-paths)
         selected-test-namespaces (nses-selectors-match selectors test-namespaces)]
-    (binding [clojure.test/report capture-report]
-      (reset! failed-tests #{})
-      (summary
-       (suppress-unselected-tests selected-test-namespaces
-                                  selectors
-                                  #(apply clojure.test/run-tests selected-test-namespaces))))))
+       (binding [clojure.test/report (select-reporting-fn report)]
+        (reset! failed-tests #{})
+        (summary
+          (suppress-unselected-tests selected-test-namespaces
+                                     selectors
+                                     #(apply clojure.test/run-tests selected-test-namespaces))))))
 
-(defn- run-tests [test-paths selectors]
+(defn- run-tests [test-paths selectors report]
   (let [started (System/currentTimeMillis)
         refresh (refresh-environment)
         result (if (= :ok refresh)
-                 (run-selected-tests test-paths selectors)
+                 (run-selected-tests test-paths selectors report)
                  {:status "Error"
                   :message (str "Error refreshing environment: " clojure.core/*e)
                   :exception clojure.core/*e})]
@@ -174,8 +183,13 @@
         users-notifier (create-user-notifier (:notify-command options))
         should-notify? (partial should-notify? (:notify-on-success options))
         keystroke-pressed (atom nil)
-        selectors (second (:nses-and-selectors options))]
+        selectors (second (:nses-and-selectors options))
+        report (:report options)]
 
+    (println test-paths)
+
+    (when report
+      (println "Using reporter:" report))
     (when (:quiet options)
       (defmethod capture-report :begin-test-ns [m]))
 
@@ -189,10 +203,10 @@
             (print-banner)
 
             (let [was-failed (tracking-failed-tests?)
-                  result (run-tests test-paths selectors)
+                  result (run-tests test-paths selectors report)
                   ;; tests need to be run once a failed test is resolved
                   result (if (and was-failed (passed? result))
-                           (run-tests test-paths selectors)
+                           (run-tests test-paths selectors report)
                            result)]
               (print-to-console result)
               (when (should-notify? result)

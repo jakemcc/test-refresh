@@ -9,4 +9,5 @@
                    :unit (complement :integration)}
   :test-refresh {;;:notify-command ["say" "-v" "Agnes"]
                  :notify-on-success false
-                 :quiet true})
+                 ;:quiet true
+                 :report lein2.sample-report/my-report})
