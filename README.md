@@ -17,6 +17,7 @@ your `clojure.test` tests when a file in your project changes
 - Can optionally suppress `clojure.test`'s _Testing namespace_ output.
   This is extremely useful in making test output with larger codebases readable again.
 - You can hit `enter` in terminal to force tests to rerun.
+- Supports `clojure.test`'s custom reports.
 
 ## Usage
 
@@ -98,6 +99,7 @@ configuration map to supporess `clojure.test`'s noisy output. This is
 particularly useful on codebases with a large number of test namespaces.
 
 ### Custom Clojure.test report
+
 `lein-test-refresh` can be configured to use a custom `clojure.test`
 output report. Add `:report myreport.namespace/myreport` to your `:test-refresh`
 configuration map to use your own reporter for `clojure.test`'s  output. An

@@ -25,8 +25,7 @@
      :nses-and-selectors (#'test/read-args args project)
      :test-paths (clojure-test-directories project)
      :quiet quiet
-     :report report
-     }))
+     :report report}))
 
 (defn test-refresh
   "Autoruns clojure.test tests on source change or

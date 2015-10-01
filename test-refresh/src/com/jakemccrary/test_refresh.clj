@@ -21,8 +21,7 @@
                (clojure.tools.namespace.find/find-namespaces-in-dir file)))))
 
 (defn- refresh-environment []
-  (clojure.tools.namespace.repl/refresh)
-  )
+  (clojure.tools.namespace.repl/refresh))
 
 (def ^:private top-stars (apply str (repeat 45 "*")))
 (def ^:private side-stars (apply str (repeat 15 "*")))
@@ -119,20 +118,24 @@
                      selectors)]
      ns)))
 
+
+(defn- select-reporting-fn
+       "Sects the reporting function based on user specified configuration"
+       [report]
+       (when report (require (symbol (namespace (symbol report)))))
+       (let [resolved-report (when report (let [rr (resolve (symbol report))]
+                                               (if rr rr (println "Unable to locate report method:" report))))]
+            (if resolved-report resolved-report capture-report)))
+
 (defn run-selected-tests [test-paths selectors report]
   (let [test-namespaces (namespaces-in-directories test-paths)
         selected-test-namespaces (nses-selectors-match selectors test-namespaces)]
-    (if report (require (symbol (namespace (symbol report)))))
-    (let [resolved-report (when report (let [rr (resolve (symbol report))]
-                                         (if rr rr (println "Unable to locate report method:" report))
-                                         ))
-          used-report (if resolved-report resolved-report capture-report)]
-      (binding [clojure.test/report used-report]
+       (binding [clojure.test/report (select-reporting-fn report)]
         (reset! failed-tests #{})
         (summary
           (suppress-unselected-tests selected-test-namespaces
                                      selectors
-                                     #(apply clojure.test/run-tests selected-test-namespaces)))))))
+                                     #(apply clojure.test/run-tests selected-test-namespaces))))))
 
 (defn- run-tests [test-paths selectors report]
   (let [started (System/currentTimeMillis)
