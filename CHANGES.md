@@ -1,5 +1,10 @@
 # Changes
 
+## 0.11.0
+
+- Adds support for specifying a custom test reporter. See
+  sample.project.clj and `lein2` directory for example.
+
 ## 0.10.0
 
 - Upgrades `org.clojure/tools.namespace` to 0.2.11. This improves cljc support.
