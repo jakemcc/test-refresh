@@ -120,7 +120,7 @@
 
 
 (defn- select-reporting-fn
-       "Sects the reporting function based on user specified configuration"
+       "Selects the reporting function based on user specified configuration"
        [report]
        (when report (require (symbol (namespace (symbol report)))))
        (let [resolved-report (when report (let [rr (resolve (symbol report))]
