@@ -81,8 +81,8 @@
   then sets the metadata back."
   [namespaces selectors func]
   (let [move-meta! (fn [var from-key to-key]
-                    (if-let [x (get (meta var) from-key)]
-                      (alter-meta! var #(-> % (assoc to-key x) (dissoc from-key)))))
+                     (if-let [x (get (meta var) from-key)]
+                       (alter-meta! var #(-> % (assoc to-key x) (dissoc from-key)))))
         vars (if (seq selectors)
                (->> namespaces
                     (mapcat (comp vals ns-interns))
@@ -120,22 +120,22 @@
 
 
 (defn- select-reporting-fn
-       "Selects the reporting function based on user specified configuration"
-       [report]
-       (when report (require (symbol (namespace (symbol report)))))
-       (let [resolved-report (when report (let [rr (resolve (symbol report))]
-                                               (if rr rr (println "Unable to locate report method:" report))))]
-            (if resolved-report resolved-report capture-report)))
+  "Selects the reporting function based on user specified configuration"
+  [report]
+  (when report (require (symbol (namespace (symbol report)))))
+  (let [resolved-report (when report (let [rr (resolve (symbol report))]
+                                       (if rr rr (println "Unable to locate report method:" report))))]
+    (if resolved-report resolved-report capture-report)))
 
 (defn run-selected-tests [test-paths selectors report]
   (let [test-namespaces (namespaces-in-directories test-paths)
         selected-test-namespaces (nses-selectors-match selectors test-namespaces)]
-       (binding [clojure.test/report (select-reporting-fn report)]
-        (reset! failed-tests #{})
-        (summary
-          (suppress-unselected-tests selected-test-namespaces
-                                     selectors
-                                     #(apply clojure.test/run-tests selected-test-namespaces))))))
+    (binding [clojure.test/report (select-reporting-fn report)]
+      (reset! failed-tests #{})
+      (summary
+       (suppress-unselected-tests selected-test-namespaces
+                                  selectors
+                                  #(apply clojure.test/run-tests selected-test-namespaces))))))
 
 (defn- run-tests [test-paths selectors report]
   (let [started (System/currentTimeMillis)
@@ -185,8 +185,6 @@
         keystroke-pressed (atom nil)
         selectors (second (:nses-and-selectors options))
         report (:report options)]
-
-    (println test-paths)
 
     (when report
       (println "Using reporter:" report))
