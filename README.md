@@ -112,6 +112,39 @@ output report. Add `:report myreport.namespace/myreport` to your `:test-refresh`
 configuration map to use your own reporter for `clojure.test`'s  output. An
 example can be found in the [sample project.clj](sample.project.clj).
 
+## Contributing
+
+I encourage pull requests. If you're making a large change it is
+probably a good idea to create an issue and run it by me first. If you
+open a pull request you should expect me to review the code and
+potentially suggest improvements.
+
+Working on `lein-test-refresh` can be a bit tricky. Despite being a
+tool to enhance testing it has very few tests itself. As a result its
+sort of a pain to work on. My typical work flow is outlined below. I
+encourage you to do the following as well (or better yet, add some
+useful tests!).
+
+1. Open two terminals, one in the `./test-refresh` directory and one
+   in `./lein2`.
+1. In `./test-refresh` run `lein install` to put a version built from
+   your local `lein-test-refresh` checkout into your `~/.m2` directory.
+1. The project in `./lein2` is setup to use whatever version is
+   specified in `./test-refresh/project.clj`. As a result it will use
+   the recently `lein install`ed version from the above step. Use the
+   project in `./lein2` to test out your local version of
+   `lein-test-refresh`. Toggle settings in `./lein/project.clj` to
+   test various features. Make tests fail and pass.
+1. Make your changes to the project in `./test-refresh` and `lein
+install`.
+1. Repeat manual testing in `./lein2`. Add sample code or
+   configuration to `./lein2` project to show your changes.
+
+Its a bit painful but it works. If there were more active changes
+happening to the project I'd invest the time to figure out how to test
+it but given the stability of `lein-test-refresh` I haven't bothered.
+They would be a welcome addition.
+
 ## Latest version & Change log
 
 The latest version is the highest non-snapshot version found in
