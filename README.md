@@ -37,6 +37,13 @@ Alternatively you may add it to your `project.clj`.
   :profiles {:dev {:plugins [[com.jakemccrary/lein-test-refresh "0.11.0"]]}})
 ```
 
+> In my personal setup I also include
+> [humane-test-output](https://github.com/pjstadig/humane-test-output)
+> which changes clojure.test's output to be more readable. Other users
+> include [ultra](https://github.com/venantius/ultra) instead which
+> does even more to the output (color, prettifying exceptions and
+> diffs, etc).
+
 Enter your project's root directory and run `lein test-refresh`. The
 output will look something like this.
 
@@ -95,7 +102,7 @@ example can be found in the [sample project.clj](sample.project.clj).
 
 `lein-test-refresh` can be configured to suppress `clojure.test`'s
 _Testing namespace_ output. Add `:quiet true` to your `:test-refresh`
-configuration map to supporess `clojure.test`'s noisy output. This is
+configuration map to suppress `clojure.test`'s noisy output. This is
 particularly useful on codebases with a large number of test namespaces.
 
 ### Custom Clojure.test report
@@ -115,13 +122,13 @@ image doesn't seem to load).
 
 ## Compatibility
 
-lein-test-refresh has been tested to work with Clojure 1.5.1 and 1.6
-with Leiningen 2.3+.
+lein-test-refresh has been tested to work with Clojure 1.5.1, 1.6, and
+1.7 with Leiningen 2.3+.
 
 Because of
 [tools.namespace](https://github.com/clojure/tools.namespace) changes
-`lein-test-refresh` requires that your project use Clojure >= 1.3.0. If
-your project also depends on a version of `tools.namespace` < 0.2.1
+`lein-test-refresh` requires that your project use Clojure >= 1.3.0.
+If your project also depends on a version of `tools.namespace` < 0.2.1
 you may see occasional exceptions.
 
 ## Leiningen 1.0
