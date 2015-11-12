@@ -27,5 +27,4 @@
                  ;; Specify the namespace and multimethod that will handle reporting
                  ;; from test-refresh.  The namespace must be available to the project dependencies.
                  ;; Defaults to no custom reporter
-                 :report  myreport.namespace/my-report
-                 })
+                 :report  myreport.namespace/my-report})
