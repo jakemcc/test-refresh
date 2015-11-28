@@ -13,8 +13,3 @@
     (is (should-notify? false {:status "Failed" :message "Testing"}))
     (is (should-notify? false {:status "Error" :message "Testing"}))))
 
-(defn a-fn [& _] nil)
-(defn another-fn [& _] nil)
-
-(deftest test-notification
-  (testing "lololol"))
