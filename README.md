@@ -1,3 +1,5 @@
+[![Build Status](https://api.travis-ci.org/jakemcc/lein-test-refresh.png?branch=master)](http://travis-ci.org/jakemcc/lein-test-refresh)
+
 # lein-test-refresh
 
 This is a Leiningen plug-in that automatically refreshes and then runs
