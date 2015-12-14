@@ -1,13 +1,15 @@
 (ns com.jakemccrary.test-refresh
   (:require clojure.java.shell
+            clojure.pprint
             [clojure.string :as str]
             clojure.test
             clojure.tools.namespace.dir
             clojure.tools.namespace.find
+            clojure.tools.namespace.reload
             clojure.tools.namespace.repl
             clojure.tools.namespace.track
             jakemcc.clojure-gntp.gntp)
-  (:import [java.text SimpleDateFormat]))
+  (:import java.text.SimpleDateFormat))
 
 (defn- make-change-tracker []
   (clojure.tools.namespace.track/tracker))
@@ -21,6 +23,7 @@
                (clojure.tools.namespace.find/find-namespaces-in-dir file)))))
 
 (defn- refresh-environment []
+  ;; (clojure.tools.namespace.reload/track-reload tracker)
   (clojure.tools.namespace.repl/refresh))
 
 (def ^:private top-stars (apply str (repeat 45 "*")))
@@ -127,25 +130,35 @@
                                        (if rr rr (println "Unable to locate report method:" report))))]
     (if resolved-report resolved-report capture-report)))
 
-(defn run-selected-tests [test-paths selectors report]
+(defn run-selected-tests [test-paths selectors report namespaces-to-run]
   (let [test-namespaces (namespaces-in-directories test-paths)
-        selected-test-namespaces (nses-selectors-match selectors test-namespaces)]
+        _ (println "test namespacse" (pr-str test-namespaces))
+        selected-test-namespaces (nses-selectors-match selectors test-namespaces)
+        _ (println "selected namespacess" (pr-str selected-test-namespaces))
+        _ (println "nameses to run" (pr-str namespaces-to-run))
+        filtered-test-namespaces (if (seq namespaces-to-run)
+                                   (filter namespaces-to-run selected-test-namespaces)
+                                   selected-test-namespaces)
+        _ (println "filtered namespaces" (pr-str filtered-test-namespaces))]
     (binding [clojure.test/report (select-reporting-fn report)]
       (reset! failed-tests #{})
       (summary
-       (suppress-unselected-tests selected-test-namespaces
+       (suppress-unselected-tests filtered-test-namespaces
                                   selectors
-                                  #(apply clojure.test/run-tests selected-test-namespaces))))))
+                                  #(apply clojure.test/run-tests filtered-test-namespaces))))))
 
-(defn- run-tests [test-paths selectors report]
-  (let [started (System/currentTimeMillis)
-        refresh (refresh-environment)
-        result (if (= :ok refresh)
-                 (run-selected-tests test-paths selectors report)
-                 {:status "Error"
-                  :message (str "Error refreshing environment: " clojure.core/*e)
-                  :exception clojure.core/*e})]
-    (assoc result :run-time (- (System/currentTimeMillis) started))))
+(defn- run-tests
+  ([test-paths selectors report]
+   (run-tests test-paths selectors report #{}))
+  ([test-paths selectors report namespaces-to-run]
+   (let [started (System/currentTimeMillis)
+         refresh (refresh-environment)
+         result (if (= :ok refresh)
+                  (run-selected-tests test-paths selectors report namespaces-to-run)
+                  {:status "Error"
+                   :message (str "Error refreshing environment: " clojure.core/*e)
+                   :exception clojure.core/*e})]
+     (assoc result :run-time (- (System/currentTimeMillis) started)))))
 
 (defn- something-changed? [x y]
   (not= x y))
@@ -201,7 +214,10 @@
             (print-banner)
 
             (let [was-failed (tracking-failed-tests?)
-                  result (run-tests test-paths selectors report)
+                  changed-namespaces (if (:changes-only options)
+                                       (set (:clojure.tools.namespace.track/load new-tracker))
+                                       #{})
+                  result (run-tests test-paths selectors report changed-namespaces)
                   ;; tests need to be run once a failed test is resolved
                   result (if (and was-failed (passed? result))
                            (run-tests test-paths selectors report)
@@ -213,4 +229,6 @@
                 (users-notifier (:message result)))))
           (catch Exception ex (.printStackTrace ex)))
         (Thread/sleep 200)
-        (recur new-tracker)))))
+        (recur (dissoc new-tracker
+                       :clojure.tools.namespace.track/load
+                       :clojure.tools.namespace.track/unload))))))
