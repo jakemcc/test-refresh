@@ -148,6 +148,10 @@
                                   #(apply clojure.test/run-tests filtered-test-namespaces))))))
 
 (defn- run-tests
+  "Refreshes project and runs tests. Tests can be restricted by
+  test-selectors or namespaces in namespaces-to-run. When
+  namespaces-to-run is empty then it does not cause any namespaces to
+  be filtered out."
   ([test-paths selectors report]
    (run-tests test-paths selectors report #{}))
   ([test-paths selectors report namespaces-to-run]
