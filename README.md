@@ -9,7 +9,9 @@ your `clojure.test` tests when a file in your project changes
 
 - Allows you to have a quick feedback cycle by automatically
   refreshing your code and running your tests.
-- Runs previously failing tests first, giving you feedback even quicker.
+- Runs previously failing tests first, giving you feedback even
+  quicker.
+- Optionally only automatically runs tests in changed namespaces.
 - Can pass result of running your tests to a notification command of your
   choice.
 - Has built in Growl notification support.
@@ -20,6 +22,10 @@ your `clojure.test` tests when a file in your project changes
   This is extremely useful in making test output with larger codebases readable again.
 - You can hit `enter` in terminal to force tests to rerun.
 - Supports `clojure.test`'s custom reports.
+
+[sample.project.clj](sample.project.clj) show optional configuration.
+It and the rest of this readme should be used as documentation as to
+how `lein-test-refresh` can be used.
 
 ## Usage
 
@@ -106,6 +112,19 @@ example can be found in the [sample project.clj](sample.project.clj).
 _Testing namespace_ output. Add `:quiet true` to your `:test-refresh`
 configuration map to suppress `clojure.test`'s noisy output. This is
 particularly useful on codebases with a large number of test namespaces.
+
+### Only run changes in changed namespaces.
+
+`lein-test-refresh` can be configured to only automatically run tests
+in changed namespaces. This can be used to get even faster feedback
+since only tests where something has changed will be run. You can
+toggle this mode by adding a `:changes-only true` entry in your
+`:test-refresh` configuration or by passing it as a command line
+option `lein test-refresh :changes-only`.
+
+If you are in this mode and want to run all your tests you can trigger
+them by hitting `enter` in the terminal where `lein-test-refresh` is
+running.
 
 ### Custom Clojure.test report
 

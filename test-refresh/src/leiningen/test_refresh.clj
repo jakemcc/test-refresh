@@ -14,12 +14,14 @@
                (:test-paths project []))))
 
 (defn parse-commandline [project args]
-  (let [{:keys [notify-command notify-on-success growl silence quiet report]} (:test-refresh project)
+  (let [{:keys [notify-command notify-on-success growl silence quiet report changes-only]} (:test-refresh project)
         should-growl (or (some #{:growl ":growl" "growl"} args) growl)
-        args (remove #{:growl ":growl" "growl"} args)
+        changes-only (or (some #{:changes-only ":changes-only" "chnages-only"} args) changes-only)
+        args (remove #{:growl ":growl" "growl" :changes-only ":changes-only" "changes-only"} args)
         notify-on-success (or (nil? notify-on-success) notify-on-success)
         selectors (filter keyword? args)]
     {:growl should-growl
+     :changes-only changes-only
      :notify-on-success notify-on-success
      :notify-command notify-command
      :nses-and-selectors (#'test/read-args args project)

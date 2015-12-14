@@ -1,5 +1,11 @@
 # Changes
 
+## 0.12.0
+
+- Adds support for only running tests in changed namespaces by setting
+  the `:changes-only` flag in your configuration or at the command
+  line. See [sample.project.clj](sample.project.clj) for details.
+
 ## 0.11.0
 
 - Adds support for specifying a custom test reporter. See

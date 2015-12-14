@@ -1,5 +1,6 @@
 (ns lein2.sample-test
-  (:use clojure.test))
+  (:require [clojure.test :refer :all]
+            [lein2.core :as core]))
 
 (deftest passes
   (is (= 1 1)))
