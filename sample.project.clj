@@ -23,6 +23,13 @@
                  ;; Defaults to false.
                  :quiet true
 
+                 ;; If this is specified then only tests in namespaces
+                 ;; that were just reloaded by tools.namespace
+                 ;; (namespaces where a change was detected in it or a
+                 ;; dependent namespace) are run. This can also be
+                 ;; passed as a command line option (lein test-refresh :changes-only).
+                 :changes-only true
+
                  ;; specifiy a custom clojure.test report method
                  ;; Specify the namespace and multimethod that will handle reporting
                  ;; from test-refresh.  The namespace must be available to the project dependencies.

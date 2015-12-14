@@ -132,14 +132,10 @@
 
 (defn run-selected-tests [test-paths selectors report namespaces-to-run]
   (let [test-namespaces (namespaces-in-directories test-paths)
-        _ (println "test namespacse" (pr-str test-namespaces))
         selected-test-namespaces (nses-selectors-match selectors test-namespaces)
-        _ (println "selected namespacess" (pr-str selected-test-namespaces))
-        _ (println "nameses to run" (pr-str namespaces-to-run))
         filtered-test-namespaces (if (seq namespaces-to-run)
                                    (filter namespaces-to-run selected-test-namespaces)
-                                   selected-test-namespaces)
-        _ (println "filtered namespaces" (pr-str filtered-test-namespaces))]
+                                   selected-test-namespaces)]
     (binding [clojure.test/report (select-reporting-fn report)]
       (reset! failed-tests #{})
       (summary
