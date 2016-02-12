@@ -197,14 +197,15 @@
         should-notify? (partial should-notify? (:notify-on-success options))
         keystroke-pressed (atom nil)
         selectors (second (:nses-and-selectors options))
-        report (:report options)]
+        report (:report options)
+        once? (:once options)]
 
     (when report
       (println "Using reporter:" report))
     (when (:quiet options)
       (defmethod capture-report :begin-test-ns [m]))
 
-    (monitor-keystrokes keystroke-pressed)
+    (when-not once? (monitor-keystrokes keystroke-pressed))
     (loop [tracker (make-change-tracker)]
       (let [new-tracker (scan-for-changes tracker)]
         (try
@@ -229,6 +230,10 @@
                 (users-notifier (:message result)))))
           (catch Exception ex (.printStackTrace ex)))
         (Thread/sleep 200)
-        (recur (dissoc new-tracker
-                       :clojure.tools.namespace.track/load
-                       :clojure.tools.namespace.track/unload))))))
+        (if-not once?
+          (recur (dissoc new-tracker
+                        :clojure.tools.namespace.track/load
+                        :clojure.tools.namespace.track/unload))
+          (do
+            (println "K THX BYE")
+            (System/exit 0)))))))

@@ -14,12 +14,13 @@
                (:test-paths project []))))
 
 (defn parse-commandline [project args]
-  (let [{:keys [notify-command notify-on-success growl silence quiet report changes-only]} (:test-refresh project)
+  (let [{:keys [notify-command notify-on-success growl silence quiet report changes-only once]} (:test-refresh project)
         should-growl (or (some #{:growl ":growl" "growl"} args) growl)
         changes-only (or (some #{:changes-only ":changes-only" "chnages-only"} args) changes-only)
         args (remove #{:growl ":growl" "growl" :changes-only ":changes-only" "changes-only"} args)
         notify-on-success (or (nil? notify-on-success) notify-on-success)
-        selectors (filter keyword? args)]
+        selectors (filter keyword? args)
+        once? (or (some #{:once ":once" "once"} args) once)]
     {:growl should-growl
      :changes-only changes-only
      :notify-on-success notify-on-success
@@ -27,7 +28,8 @@
      :nses-and-selectors (#'test/read-args args project)
      :test-paths (clojure-test-directories project)
      :quiet quiet
-     :report report}))
+     :report report
+     :once once?}))
 
 (defn test-refresh
   "Autoruns clojure.test tests on source change or
