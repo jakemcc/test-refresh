@@ -30,5 +30,5 @@ git commit -avm "Starting development on $(project_name) $(version)"
 git push
 
 git checkout $tag_name
-lein deploy
+lein deploy clojars
 git checkout master
