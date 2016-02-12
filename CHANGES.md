@@ -1,5 +1,9 @@
 # Changes
 
+## 0.13.0
+
+- Adds support for running tests once with the flag `:run-once`.
+
 ## 0.12.0
 
 - Adds support for only running tests in changed namespaces by setting

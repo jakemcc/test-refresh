@@ -27,11 +27,18 @@
                  ;; that were just reloaded by tools.namespace
                  ;; (namespaces where a change was detected in it or a
                  ;; dependent namespace) are run. This can also be
-                 ;; passed as a command line option (lein test-refresh :changes-only).
+                 ;; passed as a command line option: lein test-refresh :changes-only.
                  :changes-only true
 
                  ;; specifiy a custom clojure.test report method
                  ;; Specify the namespace and multimethod that will handle reporting
                  ;; from test-refresh.  The namespace must be available to the project dependencies.
                  ;; Defaults to no custom reporter
-                 :report  myreport.namespace/my-report})
+                 :report  myreport.namespace/my-report
+
+                 ;; If set to a truthy value, then lein test-refresh
+                 ;; will only run your tests once. Also supported as a
+                 ;; command line option. Reasoning for feature can be
+                 ;; found in PR:
+                 ;; https://github.com/jakemcc/lein-test-refresh/pull/48
+                 :run-once true})

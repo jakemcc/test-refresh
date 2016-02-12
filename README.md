@@ -22,6 +22,8 @@ your `clojure.test` tests when a file in your project changes
   This is extremely useful in making test output with larger codebases readable again.
 - You can hit `enter` in terminal to force tests to rerun.
 - Supports `clojure.test`'s custom reports.
+- Supports running your tests once! Useful for taking advantage of
+  custom test reporters or quiet output in CI systems.
 
 [sample.project.clj](sample.project.clj) show optional configuration.
 It and the rest of this readme should be used as documentation as to
@@ -132,6 +134,21 @@ running.
 output report. Add `:report myreport.namespace/myreport` to your `:test-refresh`
 configuration map to use your own reporter for `clojure.test`'s  output. An
 example can be found in the [sample project.clj](sample.project.clj).
+
+### Running your tests once
+
+At first this seems like a weird feature for a refreshing test runner
+to support but because of the other features `lein-test-refresh`
+supports, such as custom test runners, being able to just run tests
+once can be useful. See
+[this](https://github.com/jakemcc/lein-test-refresh/pull/48) pull
+request for discussion.
+
+You can either configure this option in your project.clj (or
+profiles.clj) or pass it as a command line option. Check out
+`sample.project.clj` for an example of project configuration.
+
+Using it at the command line looks like `lein test-refresh :run-once`.
 
 ## Contributing
 
