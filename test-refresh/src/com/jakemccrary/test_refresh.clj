@@ -163,25 +163,26 @@
 (defn- something-changed? [x y]
   (not= x y))
 
-(defn print-repl-prompt []
-  (print "test-refresh/repl=>")
-  (flush))
+(def printing (atom false))
 
 (defn- monitor-keystrokes [keystroke-pressed with-repl?]
   (future
-    (let [read-eval #(try (prn (eval (read-string %)))
-                          (flush)
-                          (catch Throwable t
-                            (println "read-eval failed on '" % "'")
-                            (println t)))]
-      (loop [line (read-line)]
-        (let [empty-line? (empty? (clojure.string/trim line))]
+    (let [run-test-refresh! #(do (reset! keystroke-pressed true)
+                                 (reset! printing true))]
+      (if with-repl?
+        (clojure.main/repl
+          :prompt #(do (while @printing (Thread/sleep 100))
+                       (clojure.main/repl-prompt))
+          :read (fn [request-prompt request-exit]
+                  (if-let [line (read-line)]
+                    (if-not (empty? (clojure.string/trim line))
+                      (read-string line)
+                      (do (run-test-refresh!) :run-tests))
+                    (System/exit 0))))
+        (loop [line (read-line)]
           (if-not line
             (System/exit 0)
-            (if (and with-repl? (not empty-line?))
-              (do (read-eval line)
-                  (print-repl-prompt))
-              (reset! keystroke-pressed true)))
+            (run-test-refresh!))
           (recur (read-line)))))))
 
 (defn- create-user-notifier [notify-command]
@@ -212,20 +213,23 @@
         selectors (second (:nses-and-selectors options))
         report (:report options)
         run-once? (:run-once options)
-        with-repl? (:with-repl options)]
+        with-repl? (:with-repl options)
+        monitoring? (atom false)]
 
     (when report
       (println "Using reporter:" report))
     (when (:quiet options)
       (defmethod capture-report :begin-test-ns [m]))
 
-    (when-not run-once? (monitor-keystrokes keystroke-pressed with-repl?))
     (loop [tracker (make-change-tracker)]
-      (let [new-tracker (scan-for-changes tracker)]
+      (let [new-tracker (scan-for-changes tracker)
+            something-changed? (something-changed? new-tracker tracker)]
         (try
-          (when (or @keystroke-pressed
-                    (something-changed? new-tracker tracker))
+          (when (or @keystroke-pressed something-changed?)
             (reset! keystroke-pressed nil)
+            (reset! printing true)
+
+            (when (and with-repl? @monitoring? something-changed?) (println))
             (print-banner)
 
             (let [was-failed (tracking-failed-tests?)
@@ -238,11 +242,20 @@
                            (run-tests test-paths selectors report)
                            result)]
               (print-to-console result)
-              (when with-repl? (print-repl-prompt))
               (when (should-notify? result)
                 (when should-growl
                   (growl (:status result) (:message result)))
-                (users-notifier (:message result)))))
+                (users-notifier (:message result))))
+            (reset! printing false)
+
+            (when (and with-repl? @monitoring? something-changed?)
+              (clojure.main/repl-prompt)
+              (flush))
+
+            (when (and (not run-once?)
+                       (not @monitoring?))
+              (monitor-keystrokes keystroke-pressed with-repl?)
+              (reset! monitoring? true)))
           (catch Exception ex (.printStackTrace ex)))
         (Thread/sleep 200)
         (if-not run-once?
