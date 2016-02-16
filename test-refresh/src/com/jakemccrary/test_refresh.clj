@@ -163,13 +163,26 @@
 (defn- something-changed? [x y]
   (not= x y))
 
-(defn- monitor-keystrokes [keystroke-pressed]
+(defn print-repl-prompt []
+  (print "test-refresh/repl=>")
+  (flush))
+
+(defn- monitor-keystrokes [keystroke-pressed with-repl?]
   (future
-    (loop [c (.read System/in)]
-      (if (= c -1)
-        (System/exit 0)
-        (do (reset! keystroke-pressed true)
-            (recur (.read System/in)))))))
+    (let [read-eval #(try (prn (eval (read-string %)))
+                          (flush)
+                          (catch Throwable t
+                            (println "read-eval failed on '" % "'")
+                            (println t)))]
+      (loop [line (read-line)]
+        (let [empty-line? (empty? (clojure.string/trim line))]
+          (if-not line
+            (System/exit 0)
+            (if (and with-repl? (not empty-line?))
+              (do (read-eval line)
+                  (print-repl-prompt))
+              (reset! keystroke-pressed true)))
+          (recur (read-line)))))))
 
 (defn- create-user-notifier [notify-command]
   (let [notify-command (if (string? notify-command)
@@ -198,14 +211,15 @@
         keystroke-pressed (atom nil)
         selectors (second (:nses-and-selectors options))
         report (:report options)
-        run-once? (:run-once options)]
+        run-once? (:run-once options)
+        with-repl? (:with-repl options)]
 
     (when report
       (println "Using reporter:" report))
     (when (:quiet options)
       (defmethod capture-report :begin-test-ns [m]))
 
-    (when-not run-once? (monitor-keystrokes keystroke-pressed))
+    (when-not run-once? (monitor-keystrokes keystroke-pressed with-repl?))
     (loop [tracker (make-change-tracker)]
       (let [new-tracker (scan-for-changes tracker)]
         (try
@@ -224,6 +238,7 @@
                            (run-tests test-paths selectors report)
                            result)]
               (print-to-console result)
+              (when with-repl? (print-repl-prompt))
               (when (should-notify? result)
                 (when should-growl
                   (growl (:status result) (:message result)))
