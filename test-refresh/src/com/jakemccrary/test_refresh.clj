@@ -179,11 +179,11 @@
                       (read-string line)
                       (do (run-test-refresh!) :run-tests))
                     (System/exit 0))))
-        (loop [line (read-line)]
-          (if-not line
+        (loop [c (.read System/in)]
+          (if (= c -1)
             (System/exit 0)
-            (run-test-refresh!))
-          (recur (read-line)))))))
+            (do (run-test-refresh!)
+                (recur (.read System/in)))))))))
 
 (defn- create-user-notifier [notify-command]
   (let [notify-command (if (string? notify-command)

@@ -21,6 +21,7 @@
         with-repl? (or (some #{:with-repl ":with-repl" "with-repl"} args) with-repl)
         args (remove #{:growl ":growl" "growl"
                        :changes-only ":changes-only" "changes-only"
+                       :with-repl ":with-repl" "with-repl"
                        :run-once ":run-once" "run-once"} args)
         notify-on-success (or (nil? notify-on-success) notify-on-success)
         selectors (filter keyword? args)]
