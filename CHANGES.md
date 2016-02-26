@@ -1,5 +1,9 @@
 # Changes
 
+## NEXT
+
+- Can now use the `:with-repl` flag to start a REPL for interacting with your project.
+
 ## 0.13.0
 
 - Adds support for running tests once with the flag `:run-once`.
@@ -111,7 +115,7 @@ test namespace`.
 
 - Nothing. This was an accidental release due to testing the release
   script.
-  
+
 ## 0.3.7
 
 - Change success message to 'Passed all tests'
