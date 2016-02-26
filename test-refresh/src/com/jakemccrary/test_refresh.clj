@@ -163,13 +163,27 @@
 (defn- something-changed? [x y]
   (not= x y))
 
-(defn- monitor-keystrokes [keystroke-pressed]
+(def printing (atom false))
+
+(defn- monitor-keystrokes [keystroke-pressed with-repl?]
   (future
-    (loop [c (.read System/in)]
-      (if (= c -1)
-        (System/exit 0)
-        (do (reset! keystroke-pressed true)
-            (recur (.read System/in)))))))
+    (let [run-test-refresh! #(do (reset! keystroke-pressed true)
+                                 (reset! printing true))]
+      (if with-repl?
+        (clojure.main/repl
+          :prompt #(do (while @printing (Thread/sleep 100))
+                       (clojure.main/repl-prompt))
+          :read (fn [request-prompt request-exit]
+                  (if-let [line (read-line)]
+                    (if-not (empty? (clojure.string/trim line))
+                      (read-string line)
+                      (do (run-test-refresh!) :run-tests))
+                    (System/exit 0))))
+        (loop [c (.read System/in)]
+          (if (= c -1)
+            (System/exit 0)
+            (do (run-test-refresh!)
+                (recur (.read System/in)))))))))
 
 (defn- create-user-notifier [notify-command]
   (let [notify-command (if (string? notify-command)
@@ -198,20 +212,24 @@
         keystroke-pressed (atom nil)
         selectors (second (:nses-and-selectors options))
         report (:report options)
-        run-once? (:run-once options)]
+        run-once? (:run-once options)
+        with-repl? (:with-repl options)
+        monitoring? (atom false)]
 
     (when report
       (println "Using reporter:" report))
     (when (:quiet options)
       (defmethod capture-report :begin-test-ns [m]))
 
-    (when-not run-once? (monitor-keystrokes keystroke-pressed))
     (loop [tracker (make-change-tracker)]
-      (let [new-tracker (scan-for-changes tracker)]
+      (let [new-tracker (scan-for-changes tracker)
+            something-changed? (something-changed? new-tracker tracker)]
         (try
-          (when (or @keystroke-pressed
-                    (something-changed? new-tracker tracker))
+          (when (or @keystroke-pressed something-changed?)
             (reset! keystroke-pressed nil)
+            (reset! printing true)
+
+            (when (and with-repl? @monitoring? something-changed?) (println))
             (print-banner)
 
             (let [was-failed (tracking-failed-tests?)
@@ -227,7 +245,17 @@
               (when (should-notify? result)
                 (when should-growl
                   (growl (:status result) (:message result)))
-                (users-notifier (:message result)))))
+                (users-notifier (:message result))))
+            (reset! printing false)
+
+            (when (and with-repl? @monitoring? something-changed?)
+              (clojure.main/repl-prompt)
+              (flush))
+
+            (when (and (not run-once?)
+                       (not @monitoring?))
+              (monitor-keystrokes keystroke-pressed with-repl?)
+              (reset! monitoring? true)))
           (catch Exception ex (.printStackTrace ex)))
         (Thread/sleep 200)
         (if-not run-once?

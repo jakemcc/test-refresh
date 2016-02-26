@@ -24,6 +24,7 @@ your `clojure.test` tests when a file in your project changes
 - Supports `clojure.test`'s custom reports.
 - Supports running your tests once! Useful for taking advantage of
   custom test reporters or quiet output in CI systems.
+- Has optional repl support for changing global state, such as timbre logging levels
 
 [sample.project.clj](sample.project.clj) show optional configuration.
 It and the rest of this readme should be used as documentation as to
@@ -62,10 +63,10 @@ output will look something like this.
     *************** Running tests ***************
 
     <standard clojure.test output>
-    
+
     Failed 1 of 215 assertions
     Finished at 08:25:20.619 (run time: 9.691s)
-    
+
 Your terminal will just stay like that. Fairly often `lein-test-refresh`
 polls the file system to see if anything has changed. When there is a
 change your code is tested again.
@@ -92,7 +93,7 @@ For example, if you want to send OSX notifications using
 you would add the following to your `project.clj` or `profiles.clj`
 
 ```clojure
-:test-refresh {:notify-command ["terminal-notifier" "-title" "Tests" "-message"]} 
+:test-refresh {:notify-command ["terminal-notifier" "-title" "Tests" "-message"]}
 ```
 
 `lein-test-refresh` also has built-in Growl support. To receive Growl
@@ -149,6 +150,16 @@ profiles.clj) or pass it as a command line option. Check out
 `sample.project.clj` for an example of project configuration.
 
 Using it at the command line looks like `lein test-refresh :run-once`.
+
+### Running with a REPL
+
+`lein-test-refresh` can be run with `:with-repl` which will start up a repl
+that you can interact with inbetween test runs. The main reason for this option
+is that sometimes you want to affect global state in your application.
+An example is when you see a test failure, you can call
+`(taoensso.timbre/set-level! :debug)` and see more information.
+
+See [this](https://github.com/jakemcc/lein-test-refresh/pull/50) pull request for details.
 
 ## Contributing
 

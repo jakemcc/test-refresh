@@ -12,6 +12,6 @@
                                       :username :gpg :password :gpg}]
                         ["releases" {:url "https://clojars.org/repo"
                                      :username :gpg :password :gpg}]]
-  :profiles {:dev {:dependencies [[org.clojure/clojure "1.6.0"]]}}
+  :profiles {:dev {:dependencies [[org.clojure/clojure "1.7.0"]]}}
   :scm {:name "git"
         :url "git@github.com:jakemcc/lein-test-refresh.git"})
