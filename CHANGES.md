@@ -2,7 +2,12 @@
 
 ## NEXT
 
-- Can now use the `:with-repl` flag to start a REPL for interacting with your project.
+## 0.14.0
+
+- Can now use the `:with-repl` flag to start a REPL for interacting
+  with your project. More details in README.md and
+  [this](https://github.com/jakemcc/lein-test-refresh/pull/50) pull
+  request.
 
 ## 0.13.0
 
