@@ -205,7 +205,7 @@ image doesn't seem to load).
 ## Compatibility
 
 lein-test-refresh has been tested to work with Clojure 1.5.1, 1.6, and
-1.7 with Leiningen 2.3+.
+1.7, 1.8 with Leiningen 2.3+.
 
 Because of
 [tools.namespace](https://github.com/clojure/tools.namespace) changes
