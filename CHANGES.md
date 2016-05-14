@@ -2,6 +2,11 @@
 
 ## NEXT
 
+## 0.15.0
+
+- Better handles when `org.clojure/tools.namespace` throws an
+  exception parsing a namespace declaration.
+
 ## 0.14.0
 
 - Can now use the `:with-repl` flag to start a REPL for interacting
