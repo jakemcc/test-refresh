@@ -14,8 +14,17 @@
 (defn- make-change-tracker []
   (clojure.tools.namespace.track/tracker))
 
-(defn- scan-for-changes [tracker]
-  (clojure.tools.namespace.dir/scan tracker))
+(let [prev-failed (atom nil)]
+  (defn- scan-for-changes [tracker]
+    (try (let [new-tracker (clojure.tools.namespace.dir/scan tracker)]
+           (reset! prev-failed false)
+           new-tracker)
+         (catch Exception e
+           (when-not @prev-failed
+             (println e))
+           (reset! prev-failed true)
+           ;; return the same tracker so we dont try to run tests
+           tracker))))
 
 (defn- namespaces-in-directories [dirs]
   (let [as-files (map clojure.java.io/file dirs)]
