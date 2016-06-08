@@ -32,7 +32,7 @@ how `lein-test-refresh` can be used.
 
 ## Usage
 
-![Latest version](https://clojars.org/com.jakemccrary/lein-test-refresh/latest-version.svg)
+[![Latest version](https://clojars.org/com.jakemccrary/lein-test-refresh/latest-version.svg)](https://clojars.org/com.jakemccrary/lein-test-refresh)
 
 Add the above to your `~/.lein/profiles.clj`. It should look similar to below.
 
