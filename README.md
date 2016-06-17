@@ -37,7 +37,7 @@ how `lein-test-refresh` can be used.
 Add the above to your `~/.lein/profiles.clj`. It should look similar to below.
 
 ```clojure
-{:user {:plugins [[com.jakemccrary/lein-test-refresh "0.15.0"]]}}
+{:user {:plugins [[com.jakemccrary/lein-test-refresh "0.16.0"]]}}
 ```
 
 Alternatively you may add it to your `project.clj`.
@@ -45,7 +45,7 @@ Alternatively you may add it to your `project.clj`.
 ```clojure
 (defproject sample
   :dependencies [[org.clojure/clojure "1.8.0"]]
-  :profiles {:dev {:plugins [[com.jakemccrary/lein-test-refresh "0.15.0"]]}})
+  :profiles {:dev {:plugins [[com.jakemccrary/lein-test-refresh "0.16.0"]]}})
 ```
 
 > In my personal setup I also include
@@ -222,7 +222,7 @@ I'm not going to bother testing it nor do I plan on supporting it.
 
 ## License
 
-Copyright (C) 2011-2015 [Jake McCrary](http://jakemccrary.com)
+Copyright (C) 2011-2016 [Jake McCrary](http://jakemccrary.com)
 
 Distributed under the Eclipse Public License, the same as Clojure.
 
