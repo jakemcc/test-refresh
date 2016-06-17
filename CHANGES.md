@@ -2,6 +2,11 @@
 
 ## NEXT
 
+## 0.16.0
+
+- Adds optional `:watch-dirs` flag to specify what directories to monitor for
+  changes.
+
 ## 0.15.0
 
 - Better handles when `org.clojure/tools.namespace` throws an
