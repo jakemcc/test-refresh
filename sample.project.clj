@@ -41,4 +41,9 @@
                  ;; command line option. Reasoning for feature can be
                  ;; found in PR:
                  ;; https://github.com/jakemcc/lein-test-refresh/pull/48
-                 :run-once true})
+                 :run-once true
+
+                 ;; If given, watch for changes only in the given
+                 ;; folders. By default, watches all source and
+                 ;; resources folders.
+                 :watch-dirs ["src"]})
