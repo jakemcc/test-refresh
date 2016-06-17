@@ -44,6 +44,6 @@
                  :run-once true
 
                  ;; If given, watch for changes only in the given
-                 ;; folders. By default, watches all source and
-                 ;; resources folders.
-                 :watch-dirs ["src"]})
+                 ;; folders. By default, watches for changes on entire
+                 ;; classpath.
+                 :watch-dirs ["src" "test"]})
