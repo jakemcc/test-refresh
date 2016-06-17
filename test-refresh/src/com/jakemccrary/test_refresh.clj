@@ -15,8 +15,8 @@
   (clojure.tools.namespace.track/tracker))
 
 (let [prev-failed (atom nil)]
-  (defn- scan-for-changes [tracker]
-    (try (let [new-tracker (clojure.tools.namespace.dir/scan tracker)]
+  (defn- scan-for-changes [tracker watch-dirs]
+    (try (let [new-tracker (apply clojure.tools.namespace.dir/scan tracker watch-dirs)]
            (reset! prev-failed false)
            new-tracker)
          (catch Exception e
@@ -223,6 +223,7 @@
         report (:report options)
         run-once? (:run-once options)
         with-repl? (:with-repl options)
+        watch-dirs (:watch-dirs options)
         monitoring? (atom false)]
 
     (when report
@@ -231,7 +232,7 @@
       (defmethod capture-report :begin-test-ns [m]))
 
     (loop [tracker (make-change-tracker)]
-      (let [new-tracker (scan-for-changes tracker)
+      (let [new-tracker (scan-for-changes tracker watch-dirs)
             something-changed? (something-changed? new-tracker tracker)]
         (try
           (when (or @keystroke-pressed something-changed?)
