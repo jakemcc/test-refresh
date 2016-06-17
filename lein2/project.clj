@@ -11,4 +11,5 @@
                  :notify-on-success false
                  ;; :quiet true
                  :changes-only true
+                 ;; :watch-dirs ["src" "test"]
                  :report lein2.sample-report/my-report})
