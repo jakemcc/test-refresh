@@ -13,8 +13,10 @@
   (vec (concat (:test-path project [])
                (:test-paths project []))))
 
-(defn parse-commandline [project args]
-  (let [{:keys [notify-command notify-on-success growl silence quiet report changes-only run-once with-repl watch-dirs]} (:test-refresh project)
+(defn project-options [project args]
+  (let [{:keys [notify-command notify-on-success growl
+                silence quiet report changes-only run-once
+                with-repl watch-dirs refresh-dirs]} (:test-refresh project)
         should-growl (or (some #{:growl ":growl" "growl"} args) growl)
         changes-only (or (some #{:changes-only ":changes-only" "changes-only"} args) changes-only)
         run-once? (or (some #{:run-once ":run-once" "run-once"} args) run-once)
@@ -25,7 +27,8 @@
                        :run-once ":run-once" "run-once"} args)
         notify-on-success (or (nil? notify-on-success) notify-on-success)
         selectors (filter keyword? args)
-        watch-dirs (or watch-dirs [])]
+        watch-dirs (or watch-dirs [])
+        refresh-dirs (or refresh-dirs [])]
     {:growl should-growl
      :changes-only changes-only
      :notify-on-success notify-on-success
@@ -36,7 +39,8 @@
      :report report
      :run-once run-once?
      :with-repl with-repl?
-     :watch-dirs watch-dirs}))
+     :watch-dirs watch-dirs
+     :refresh-dirs refresh-dirs}))
 
 (defn test-refresh
   "Autoruns clojure.test tests on source change or
@@ -53,7 +57,7 @@
   (let [project (-> project
                     (project/merge-profiles [:test])
                     add-deps)
-        {:keys [test-paths] :as options} (parse-commandline project args)]
+        {:keys [test-paths] :as options} (project-options project args)]
     (eval/eval-in-project
      project
      `(com.jakemccrary.test-refresh/monitor-project ~test-paths

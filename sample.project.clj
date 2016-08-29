@@ -46,4 +46,10 @@
                  ;; If given, watch for changes only in the given
                  ;; folders. By default, watches for changes on entire
                  ;; classpath.
-                 :watch-dirs ["src" "test"]})
+                 :watch-dirs ["src" "test"]
+
+                 ;; If given, only refresh code in the given
+                 ;; directories. By default every directory on the
+                 ;; classpath is refreshed. Value is passed through to clojure.tools.namespace.repl/set-refresh-dirs
+                 ;; https://github.com/clojure/tools.namespace/blob/f3f5b29689c2bda53b4977cf97f5588f82c9bd00/src/main/clojure/clojure/tools/namespace/repl.clj#L164
+                 :refresh-dirs ["src" "test"]})

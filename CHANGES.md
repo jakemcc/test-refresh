@@ -1,6 +1,11 @@
 # Changes
 
-## NEXT
+## NEXT (currently released as 0.16.1-SNAPSHOT)
+
+- Adds optional `:refresh-dirs` flag. The value is a sequence of
+  directories that should be refreshed when a refresh is
+  triggered. (Value is passed through to
+  clojure.tools.namespace.repl/set-refresh-dirs).
 
 ## 0.16.0
 

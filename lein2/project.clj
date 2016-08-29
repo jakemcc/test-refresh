@@ -12,4 +12,5 @@
                  ;; :quiet true
                  :changes-only true
                  ;; :watch-dirs ["src" "test"]
+                 :refresh-dirs ["src" "test"]
                  :report lein2.sample-report/my-report})
