@@ -1,6 +1,8 @@
 # Changes
 
-## NEXT (currently released as 0.16.1-SNAPSHOT)
+## NEXT 
+
+## 0.17.0
 
 - Adds optional `:refresh-dirs` flag. The value is a sequence of
   directories that should be refreshed when a refresh is
