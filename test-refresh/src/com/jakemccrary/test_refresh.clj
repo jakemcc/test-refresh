@@ -139,13 +139,14 @@
                                        (if rr rr (println "Unable to locate report method:" report))))]
     (if resolved-report resolved-report capture-report)))
 
-(defn run-selected-tests [test-paths selectors report namespaces-to-run]
+(defn run-selected-tests [stack-depth test-paths selectors report namespaces-to-run]
   (let [test-namespaces (namespaces-in-directories test-paths)
         selected-test-namespaces (nses-selectors-match selectors test-namespaces)
         filtered-test-namespaces (if (seq namespaces-to-run)
                                    (filter namespaces-to-run selected-test-namespaces)
                                    selected-test-namespaces)]
-    (binding [clojure.test/report (select-reporting-fn report)]
+    (binding [clojure.test/*stack-trace-depth* stack-depth
+              clojure.test/report (select-reporting-fn report)]
       (reset! failed-tests #{})
       (summary
        (suppress-unselected-tests filtered-test-namespaces
@@ -157,13 +158,13 @@
   test-selectors or namespaces in namespaces-to-run. When
   namespaces-to-run is empty then it does not cause any namespaces to
   be filtered out."
-  ([test-paths selectors report]
+  ([stack-depth test-paths selectors report]
    (run-tests test-paths selectors report #{}))
-  ([test-paths selectors report namespaces-to-run]
+  ([stack-depth test-paths selectors report namespaces-to-run]
    (let [started (System/currentTimeMillis)
          refresh (refresh-environment)
          result (if (= :ok refresh)
-                  (run-selected-tests test-paths selectors report namespaces-to-run)
+                  (run-selected-tests stack-depth test-paths selectors report namespaces-to-run)
                   {:status "Error"
                    :message (str "Error refreshing environment: " clojure.core/*e)
                    :exception clojure.core/*e})]
@@ -250,14 +251,15 @@
 
             (print-banner)
 
-            (let [was-failed (tracking-failed-tests?)
+            (let [stack-depth (:stack-trace-depth options) 
+                  was-failed (tracking-failed-tests?)
                   changed-namespaces (if (:changes-only options)
                                        (set (:clojure.tools.namespace.track/load new-tracker))
                                        #{})
-                  result (run-tests test-paths selectors report changed-namespaces)
+                  result (run-tests stack-depth test-paths selectors report changed-namespaces)
                   ;; tests need to be run once a failed test is resolved
                   result (if (and was-failed (passed? result))
-                           (run-tests test-paths selectors report)
+                           (run-tests stack-depth test-paths selectors report)
                            result)]
               (print-to-console result)
               (when (should-notify? result)

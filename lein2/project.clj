@@ -9,6 +9,7 @@
                    :unit (complement :integration)}
   :test-refresh {;;:notify-command ["say" "-v" "Agnes"]
                  :notify-on-success false
+                 ;; :stack-trace-depth nil
                  ;; :quiet true
                  :changes-only true
                  ;; :watch-dirs ["src" "test"]
