@@ -2,6 +2,10 @@
 
 ## NEXT 
 
+## 0.18.0
+
+- Adds optional `:stack-trace-depth` flag to configuration. Value is bound to `clojure.test/*stack-trace-depth*`.
+
 ## 0.17.0
 
 - Adds optional `:refresh-dirs` flag. The value is a sequence of

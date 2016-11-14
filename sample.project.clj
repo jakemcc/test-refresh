@@ -30,6 +30,9 @@
                  ;; passed as a command line option: lein test-refresh :changes-only.
                  :changes-only true
 
+                 ;; If specified, binds value to clojure.test/*stack-trace-depth*
+                 :stack-trace-depth nil
+
                  ;; specifiy a custom clojure.test report method
                  ;; Specify the namespace and multimethod that will handle reporting
                  ;; from test-refresh.  The namespace must be available to the project dependencies.
