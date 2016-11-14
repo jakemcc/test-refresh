@@ -16,7 +16,7 @@
 (defn project-options [project args]
   (let [{:keys [notify-command notify-on-success growl
                 silence quiet report changes-only run-once
-                with-repl watch-dirs refresh-dirs]} (:test-refresh project)
+                with-repl watch-dirs refresh-dirs stack-trace-depth]} (:test-refresh project)
         should-growl (or (some #{:growl ":growl" "growl"} args) growl)
         changes-only (or (some #{:changes-only ":changes-only" "changes-only"} args) changes-only)
         run-once? (or (some #{:run-once ":run-once" "run-once"} args) run-once)
@@ -30,6 +30,7 @@
         watch-dirs (or watch-dirs [])
         refresh-dirs (or refresh-dirs [])]
     {:growl should-growl
+     :stack-trace-depth stack-trace-depth
      :changes-only changes-only
      :notify-on-success notify-on-success
      :notify-command notify-command
