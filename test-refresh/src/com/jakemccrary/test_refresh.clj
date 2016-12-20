@@ -159,7 +159,7 @@
   namespaces-to-run is empty then it does not cause any namespaces to
   be filtered out."
   ([stack-depth test-paths selectors report]
-   (run-tests test-paths selectors report #{}))
+   (run-tests stack-depth test-paths selectors report #{}))
   ([stack-depth test-paths selectors report namespaces-to-run]
    (let [started (System/currentTimeMillis)
          refresh (refresh-environment)

@@ -2,6 +2,10 @@
 
 ## NEXT 
 
+## 0.18.1
+
+- Fixes bug introduced by previous change that resulted in a stackoverflow exception.
+
 ## 0.18.0
 
 - Adds optional `:stack-trace-depth` flag to configuration. Value is bound to `clojure.test/*stack-trace-depth*`.
