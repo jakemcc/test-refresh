@@ -3,7 +3,9 @@
 # lein-test-refresh
 
 This is a Leiningen plug-in that automatically refreshes and then runs
-your `clojure.test` tests when a file in your project changes
+your `clojure.test` tests when a file in your project changes.
+
+It also works with [expectations](https://github.com/clojure-expectations/expectations) [clojure.test compatible syntax](https://clojure-expectations.github.io/clojure-test.html).
 
 ## Features
 
