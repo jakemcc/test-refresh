@@ -226,6 +226,7 @@
         with-repl? (:with-repl options)
         watch-dirs (:watch-dirs options)
         refresh-dirs (:refresh-dirs options)
+        run-once-exit-code (atom 0)
         monitoring? (atom false)]
 
     (when (seq refresh-dirs)
@@ -262,6 +263,7 @@
                            (run-tests stack-depth test-paths selectors report)
                            result)]
               (print-to-console result)
+              (reset! run-once-exit-code (if (passed? result) 0 1))
               (when (should-notify? result)
                 (when should-growl
                   (growl (:status result) (:message result)))
@@ -282,4 +284,4 @@
           (recur (dissoc new-tracker
                          :clojure.tools.namespace.track/load
                          :clojure.tools.namespace.track/unload))
-          (System/exit 0))))))
+          (System/exit @run-once-exit-code))))))
