@@ -2,6 +2,10 @@
 
 ## NEXT 
 
+## 0.19.0
+
+- `lein test-refresh :run-once` exits with a non-zero (1) exit code when tests fail.
+
 ## 0.18.1
 
 - Fixes bug introduced by previous change that resulted in a stackoverflow exception.
