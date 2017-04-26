@@ -56,7 +56,7 @@
   Reports results to growl and STDOUT."
   [project & args]
   (let [project (-> project
-                    (project/merge-profiles [:test])
+                    (project/merge-profiles [:base :test])
                     add-deps)
         {:keys [test-paths] :as options} (project-options project args)]
     (eval/eval-in-project
