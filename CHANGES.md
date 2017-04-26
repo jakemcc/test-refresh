@@ -2,6 +2,12 @@
 
 ## NEXT 
 
+## 0.20.0
+
+- Merges in Leiningen's `:leiningen/test` profile before running
+  tests. Addresses
+  [PR](https://github.com/jakemcc/lein-test-refresh/pull/67).
+
 ## 0.19.0
 
 - `lein test-refresh :run-once` exits with a non-zero (1) exit code when tests fail.
