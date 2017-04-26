@@ -6,7 +6,7 @@
 
 - Merges in Leiningen's `:leiningen/test` profile before running
   tests. Addresses
-  [PR](https://github.com/jakemcc/lein-test-refresh/pull/67).
+  [PR #67](https://github.com/jakemcc/lein-test-refresh/pull/67).
 
 ## 0.19.0
 
