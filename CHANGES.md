@@ -1,6 +1,14 @@
 # Changes
 
-## NEXT 
+## NEXT
+
+## 0.21.1
+
+- Preemptively adds support for Leiningen 2.8.0 support
+  for
+  [string as dependency name](https://github.com/technomancy/leiningen/blob/master/NEWS.md#280--).
+
+## 0.21.0
 
 - Drops support for Leiningen 1. Leiningen 1 users can use version `0.20.0`
 - Fixes issue with Leiningen's managed dependencies from [issue #60](https://github.com/jakemcc/lein-test-refresh/issues/69).

@@ -3,7 +3,9 @@
             [leiningen.core.project :as project]
             [leiningen.core.eval :as eval]))
 
-(def is-test-refresh? (comp (partial = 'com.jakemccrary/lein-test-refresh) first))
+(def is-test-refresh? (comp (partial = 'com.jakemccrary/lein-test-refresh)
+                            symbol
+                            first))
 
 (defn- add-deps [project]
   (let [test-refresh-plugin (first (filter is-test-refresh? (:plugins project)))]
