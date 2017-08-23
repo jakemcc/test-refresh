@@ -1,13 +1,15 @@
 (ns leiningen.test-refresh
-  (:require [clojure.pprint :refer [pprint]]
-            [leinjacker.deps :as deps]
-            [leinjacker.eval :as eval]
-            [leiningen.test :as test]
-            [leiningen.core.project :as project]))
+  (:require [leiningen.test :as test]
+            [leiningen.core.project :as project]
+            [leiningen.core.eval :as eval]))
+
+(def is-test-refresh? (comp (partial = 'com.jakemccrary/lein-test-refresh) first))
 
 (defn- add-deps [project]
-  (let [test-refresh-plugin (first (filter (fn [[name version]] (= name 'com.jakemccrary/lein-test-refresh)) (:plugins project)))]
-    (deps/add-if-missing project test-refresh-plugin)))
+  (let [test-refresh-plugin (first (filter is-test-refresh? (:plugins project)))]
+    (if (some is-test-refresh? (:dependencies project))
+      project
+      (update-in project [:dependencies] (fnil conj []) test-refresh-plugin))))
 
 (defn- clojure-test-directories [project]
   (vec (concat (:test-path project [])

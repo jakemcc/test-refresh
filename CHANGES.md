@@ -2,6 +2,9 @@
 
 ## NEXT 
 
+- Drops support for Leiningen 1. Leiningen 1 users can use version `0.20.0`
+- Fixes issue with Leiningen's managed dependencies from [issue #60](https://github.com/jakemcc/lein-test-refresh/issues/69).
+
 ## 0.20.0
 
 - Merges in Leiningen's `:leiningen/test` profile before running
