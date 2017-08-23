@@ -39,7 +39,7 @@ how `lein-test-refresh` can be used.
 Add the above to your `~/.lein/profiles.clj`. It should look similar to below.
 
 ```clojure
-{:user {:plugins [[com.jakemccrary/lein-test-refresh "0.20.0"]]}}
+{:user {:plugins [[com.jakemccrary/lein-test-refresh "0.21.0"]]}}
 ```
 
 Alternatively you may add it to your `project.clj`.
@@ -47,7 +47,7 @@ Alternatively you may add it to your `project.clj`.
 ```clojure
 (defproject sample
   :dependencies [[org.clojure/clojure "1.8.0"]]
-  :profiles {:dev {:plugins [[com.jakemccrary/lein-test-refresh "0.20.0"]]}})
+  :profiles {:dev {:plugins [[com.jakemccrary/lein-test-refresh "0.21.0"]]}})
 ```
 
 > In my personal setup I also include
@@ -217,10 +217,10 @@ you may see occasional exceptions.
 
 ## Leiningen 1.0
 
-This project has not been tested with versions of Leiningen 1. This
-project is heavily based of `lein-autoexpect` which has been tested
-against Leiningen 1. I would expect this project to work as well but
-I'm not going to bother testing it nor do I plan on supporting it.
+If you are using Leiningen 1 this project is definitely broken
+starting on lein-test-refresh version 0.21.0. Try using 0.20.0 or
+earlier. These versions were not explicitly tested with Leiningen 1
+but they probably work. Leiningen 1 is not officially supported.
 
 ## License
 
