@@ -11,6 +11,17 @@
             jakemcc.clojure-gntp.gntp)
   (:import java.text.SimpleDateFormat))
 
+
+(try
+  (require 'circleci.test.report)
+  (require 'circleci.test)
+  (def capture-report (var-get (find-var 'circleci.test.report/report)))
+  (def test-runner (var-get (find-var 'circleci.test/run-tests)))
+  (catch Exception e
+    (println "couldn't find circleci.test")
+    (def capture-report (var-get (find-var 'clojure.test/report)))
+    (def test-runner (var-get (find-var 'clojure.test/run-tests)))))
+
 (defn- make-change-tracker []
   (clojure.tools.namespace.track/tracker))
 
@@ -80,8 +91,7 @@
 (defn update-tracked-failing-tests [tracked-tests new-tests]
   (reduce conj tracked-tests (map str new-tests)))
 
-(def capture-report clojure.test/report)
-(let [fail (get-method clojure.test/report :fail)]
+(let [fail (get-method capture-report :fail)]
   (defmethod capture-report :fail [x]
     (swap! failed-tests update-tracked-failing-tests clojure.test/*testing-vars*)
     (fail x)))
@@ -151,7 +161,7 @@
       (summary
        (suppress-unselected-tests filtered-test-namespaces
                                   selectors
-                                  #(apply clojure.test/run-tests filtered-test-namespaces))))))
+                                  #(apply test-runner filtered-test-namespaces))))))
 
 (defn- run-tests
   "Refreshes project and runs tests. Tests can be restricted by

@@ -2,6 +2,10 @@
 
 ## NEXT
 
+## 0.22.0
+
+- *EXPERIMENTAL* Detects if circleci.test runner is in project and uses that instead of clojure.test
+
 ## 0.21.1
 
 - Preemptively adds support for Leiningen 2.8.0 support
