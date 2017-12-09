@@ -27,6 +27,7 @@ It also works with [expectations](https://github.com/clojure-expectations/expect
 - Supports running your tests once! Useful for taking advantage of
   custom test reporters or quiet output in CI systems.
 - Has optional repl support for changing global state, such as timbre logging levels
+- **EXPERIMENTAL** Detects if your project uses [circleci.test](https://github.com/circleci/circleci.test) and uses that instead of clojure.test0
 
 [sample.project.clj](sample.project.clj) show optional configuration.
 It and the rest of this readme should be used as documentation as to
@@ -39,7 +40,7 @@ how `lein-test-refresh` can be used.
 Add the above to your `~/.lein/profiles.clj`. It should look similar to below.
 
 ```clojure
-{:user {:plugins [[com.jakemccrary/lein-test-refresh "0.21.1"]]}}
+{:user {:plugins [[com.jakemccrary/lein-test-refresh "0.22.0"]]}}
 ```
 
 Alternatively you may add it to your `project.clj`.
@@ -47,7 +48,7 @@ Alternatively you may add it to your `project.clj`.
 ```clojure
 (defproject sample
   :dependencies [[org.clojure/clojure "1.8.0"]]
-  :profiles {:dev {:plugins [[com.jakemccrary/lein-test-refresh "0.21.1"]]}})
+  :profiles {:dev {:plugins [[com.jakemccrary/lein-test-refresh "0.22.0"]]}})
 ```
 
 > In my personal setup I also include
