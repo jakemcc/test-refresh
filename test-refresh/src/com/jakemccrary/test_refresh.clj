@@ -78,7 +78,9 @@
       {:status "Failed" :message (format "Failed %s of %s assertions"
                                          (+ fail error)
                                          (+ fail error pass))}
-      {:status "Passed" :message (format "Passed all tests")})))
+      {:status "Passed" :message (format "Passed all %s tests with %s assertions"
+                                         test
+                                         (+ fail error pass))})))
 
 (def failed-tests (atom #{}))
 
