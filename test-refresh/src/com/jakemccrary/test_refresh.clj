@@ -120,9 +120,10 @@
                          (doseq [v vars]
                            (move-meta! v from-key to-key)))]
     (move-all-meta! :test :test-refresh/skipped)
-    (try (func)
-         (finally
-           (move-all-meta! :test-refresh/skipped :test)))))
+    (try
+      (func)
+      (finally
+        (move-all-meta! :test-refresh/skipped :test)))))
 
 (defn- nses-selectors-match [selectors ns-sym]
   (distinct
