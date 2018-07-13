@@ -8,7 +8,8 @@
             clojure.tools.namespace.reload
             clojure.tools.namespace.repl
             clojure.tools.namespace.track
-            jakemcc.clojure-gntp.gntp)
+            jakemcc.clojure-gntp.gntp
+            [clojure.set :as set])
   (:import java.text.SimpleDateFormat))
 
 
@@ -95,30 +96,40 @@
     (fail x)))
 
 (defn suppress-unselected-tests
-  "A function that figures out which vars need to be suppressed based on the
-  given selectors, moves their :test metadata to :leiningen/skipped-test (so
-  that clojure.test won't think they are tests), runs the given function, and
-  then sets the metadata back."
+  "A function that figures out which vars need to be suppressed based on
+  the given selectors, moves their :test metadata
+  to :leiningen/skipped-test (so that clojure.test won't think they
+  are tests), runs the given function, and then sets the metadata
+  back. Tests marked with :test-refresh/focused metadata are given
+  priority over other selectors."
   [namespaces selectors func]
   (let [move-meta! (fn [var from-key to-key]
                      (when-let [x (get (meta var) from-key)]
                        (alter-meta! var #(-> % (assoc to-key x) (dissoc from-key)))))
-        vars (when (seq selectors)
-               (->> namespaces
-                    (mapcat (comp vals ns-interns))
-                    (remove (fn [var]
-                              (some (fn [[selector args]]
-                                      (let [sfn (if (vector? selector)
-                                                  (second selector)
-                                                  selector)]
-                                        (apply (eval sfn)
-                                               (merge (-> var meta :ns meta)
-                                                      (assoc (meta var) :leiningen.test/var var))
-                                               args)))
-                                    selectors)))))
+        all-vars (mapcat (comp vals ns-interns) namespaces)
+        tests-to-skip (when (seq selectors)
+                        (remove (fn [var]
+                                  (some (fn [[selector args]]
+                                          (let [sfn (if (vector? selector)
+                                                      (second selector)
+                                                      selector)]
+                                            (apply (eval sfn)
+                                                   (merge (-> var meta :ns meta)
+                                                          (assoc (meta var) :leiningen.test/var var))
+                                                   args)))
+                                        selectors))
+                                all-vars))
+        test-refresh-focused (filter (fn [var]
+                                       (let [meta (merge (-> var meta :ns meta)
+                                                         (assoc (meta var) :leiningen.test/var var))]
+                                         (:test-refresh/focus meta)))
+                                     all-vars)
         move-all-meta! (fn [from-key to-key]
-                         (doseq [v vars]
-                           (move-meta! v from-key to-key)))]
+                         (if (seq test-refresh-focused)
+                           (doseq [v (set/difference (set all-vars) (set test-refresh-focused))]
+                             (move-meta! v from-key to-key))
+                           (doseq [v tests-to-skip]
+                             (move-meta! v from-key to-key))))]
     (move-all-meta! :test :test-refresh/skipped)
     (try
       (func)
@@ -130,12 +141,14 @@
    (for [ns ns-sym
          [_ var] (ns-publics ns)
          :when (some (fn [[selector args]]
-                       (apply (eval (if (vector? selector)
-                                      (second selector)
-                                      selector))
-                              (merge (-> var meta :ns meta)
-                                     (assoc (meta var) :leiningen.test/var var))
-                              args))
+                       (let [meta (merge (-> var meta :ns meta)
+                                         (assoc (meta var) :leiningen.test/var var))]
+                         (or (apply (eval (if (vector? selector)
+                                            (second selector)
+                                            selector))
+                                    meta
+                                    args)
+                             (:test-refresh/focus meta))))
                      selectors)]
      ns)))
 
@@ -261,7 +274,7 @@
 
             (print-banner)
 
-            (let [stack-depth (:stack-trace-depth options) 
+            (let [stack-depth (:stack-trace-depth options)
                   was-failed (tracking-failed-tests?)
                   changed-namespaces (if (:changes-only options)
                                        (set (:clojure.tools.namespace.track/load new-tracker))

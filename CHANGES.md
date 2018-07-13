@@ -2,6 +2,17 @@
 
 ## NEXT
 
+- Adds support for impromptu test selecting by adding
+  `:test-refresh/focus true` as metadata onto test or namespace. Vars
+  with this metadata on it are given priority and test-refresh will
+  only run them until all `:test-refresh/focus` markers are removed
+  from your project. Example below.
+
+```clojure
+(deftest ^:test-refresh/focus test-addition
+  (is (= 2 (+ 1 1))))
+```
+
 ## 0.22.0
 
 - **EXPERIMENTAL** Detects if circleci.test runner is in project and uses that instead of clojure.test
