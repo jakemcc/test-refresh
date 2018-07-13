@@ -71,7 +71,7 @@
       (println "Problem communicating with growl, exception:" (.getMessage ex)))))
 
 (defn- summary [results]
-  (let [{:keys [pass test error fail]} results]
+  (let [{:keys [pass error fail]} results]
     (if (pos? (+ fail error))
       {:status "Failed" :message (format "Failed %s of %s assertions"
                                          (+ fail error)
