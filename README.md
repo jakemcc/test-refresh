@@ -27,7 +27,7 @@ It also works with [expectations](https://github.com/clojure-expectations/expect
 - Supports running your tests once! Useful for taking advantage of
   custom test reporters or quiet output in CI systems.
 - Has optional repl support for changing global state, such as timbre logging levels
-- **EXPERIMENTAL** Detects if your project uses [circleci.test](https://github.com/circleci/circleci.test) and uses that instead of clojure.test0
+- **EXPERIMENTAL** Detects if your project uses [circleci.test](https://github.com/circleci/circleci.test) and uses that instead of clojure.test.
 
 [sample.project.clj](sample.project.clj) show optional configuration.
 It and the rest of this readme should be used as documentation as to
