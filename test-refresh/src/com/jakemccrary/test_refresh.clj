@@ -18,7 +18,6 @@
   (def capture-report (var-get (find-var 'circleci.test.report/report)))
   (def test-runner (var-get (find-var 'circleci.test/run-tests)))
   (catch Exception e
-    (println "couldn't find circleci.test")
     (def capture-report (var-get (find-var 'clojure.test/report)))
     (def test-runner (var-get (find-var 'clojure.test/run-tests)))))
 
