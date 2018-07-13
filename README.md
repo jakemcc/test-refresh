@@ -13,6 +13,8 @@ It also works with [expectations](https://github.com/clojure-expectations/expect
   refreshing your code and running your tests.
 - Runs previously failing tests first, giving you feedback even
   quicker.
+- Built-in test-selector that lets you narrow the scope of your
+  testing without restarting `lein-test-refresh`.
 - Optionally only automatically runs tests in changed namespaces.
 - Can pass result of running your tests to a notification command of your
   choice.
@@ -40,7 +42,7 @@ how `lein-test-refresh` can be used.
 Add the above to your `~/.lein/profiles.clj`. It should look similar to below.
 
 ```clojure
-{:user {:plugins [[com.jakemccrary/lein-test-refresh "0.22.0"]]}}
+{:user {:plugins [[com.jakemccrary/lein-test-refresh "0.23.0"]]}}
 ```
 
 Alternatively you may add it to your `project.clj`.
@@ -48,7 +50,7 @@ Alternatively you may add it to your `project.clj`.
 ```clojure
 (defproject sample
   :dependencies [[org.clojure/clojure "1.8.0"]]
-  :profiles {:dev {:plugins [[com.jakemccrary/lein-test-refresh "0.22.0"]]}})
+  :profiles {:dev {:plugins [[com.jakemccrary/lein-test-refresh "0.23.0"]]}})
 ```
 
 > In my personal setup I also include
@@ -76,6 +78,25 @@ change your code is tested again.
 
 If you need to rerun your tests without changing a file then hit
 `Enter` when focused on a running `lein test-refresh`.
+
+### Built-in test narrowing (test selector)
+
+Have you ever been running all of your tests and then want to only
+focus on one? Instead of commenting out the others or quitting
+lein-test-refresh and restarting with a test-selector you can add
+`:test-refresh/focused true` to your test(s) or namespace.
+
+With the below code, only `test-addition` will run until the
+`:test-refresh/focus` marker is removed from it.
+
+
+```clojure
+(deftest ^:test-refresh/focus test-addition
+  (is (= 2 (+ 1 1))))
+
+(deftest test-subtraction
+  (is (= 0 (- 10 9 1))))
+```
 
 ## Configuration Features
 
