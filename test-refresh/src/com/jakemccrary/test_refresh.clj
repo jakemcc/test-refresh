@@ -101,7 +101,7 @@
   then sets the metadata back."
   [namespaces selectors func]
   (let [move-meta! (fn [var from-key to-key]
-                     (if-let [x (get (meta var) from-key)]
+                     (when-let [x (get (meta var) from-key)]
                        (alter-meta! var #(-> % (assoc to-key x) (dissoc from-key)))))
         vars (when (seq selectors)
                (->> namespaces
