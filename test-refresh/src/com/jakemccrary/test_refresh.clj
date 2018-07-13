@@ -43,7 +43,6 @@
                (clojure.tools.namespace.find/find-namespaces-in-dir file)))))
 
 (defn- refresh-environment []
-  ;; (clojure.tools.namespace.reload/track-reload tracker)
   (clojure.tools.namespace.repl/refresh))
 
 (def ^:private top-stars (apply str (repeat 45 "*")))
