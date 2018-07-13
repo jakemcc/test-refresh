@@ -2,6 +2,8 @@
 
 ## NEXT
 
+## 0.23.0
+
 - Adds support for impromptu test selecting by adding
   `:test-refresh/focus true` as metadata onto test or namespace. Vars
   with this metadata on it are given priority and test-refresh will
