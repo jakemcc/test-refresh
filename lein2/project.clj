@@ -9,7 +9,7 @@
   ;; lein-test-refresh you are using from profiles.clj while working
   ;; on lein-test-refresh
   :plugins [[com.jakemccrary/lein-test-refresh #=(eval (nth (read-string (slurp "../test-refresh/project.clj")) 2))]]
-  :test-selectors {:integration :inntegration
+  :test-selectors {:integration :integration
                    :ns-metadata :ns-metadata
                    :unit (complement :integration)}
   :test-refresh {:notify-command ["terminal-notifier" "-title" "Tests" "-message"]
