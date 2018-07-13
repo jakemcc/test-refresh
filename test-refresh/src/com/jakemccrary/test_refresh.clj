@@ -103,7 +103,7 @@
   (let [move-meta! (fn [var from-key to-key]
                      (if-let [x (get (meta var) from-key)]
                        (alter-meta! var #(-> % (assoc to-key x) (dissoc from-key)))))
-        vars (if (seq selectors)
+        vars (when (seq selectors)
                (->> namespaces
                     (mapcat (comp vals ns-interns))
                     (remove (fn [var]
