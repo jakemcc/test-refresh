@@ -246,7 +246,7 @@ but they probably work. Leiningen 1 is not officially supported.
 
 ## License
 
-Copyright (C) 2011-2016 [Jake McCrary](http://jakemccrary.com)
+Copyright (C) [Jake McCrary](https://jakemccrary.com)
 
 Distributed under the Eclipse Public License, the same as Clojure.
 
