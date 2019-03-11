@@ -251,17 +251,18 @@
   (let [growl? (:growl options)
         users-notifier (create-user-notifier (:notify-command options))
         should-notify? (partial should-notify? (:notify-on-success options))
-        keystroke-pressed (atom nil)
-        selectors (second (:nses-and-selectors options))
         report (:report options)
         run-once? (:run-once options)
         with-repl? (:with-repl options)
         watch-dirs (:watch-dirs options)
         refresh-dirs (:refresh-dirs options)
+        selectors (second (:nses-and-selectors options))
+        
         run-once-exit-code (atom 0)
-        monitoring? (atom false)]
+        monitoring? (atom false)
+        keystroke-pressed (atom nil)]
 
-    (vreset! focus-flag (:focus-flag options))
+    (vreset! focus-flag (:focus-flag options :test-refresh/focus))
     
     (when (seq refresh-dirs)
       (println "Only refreshing dirs:" (pr-str refresh-dirs))
