@@ -213,9 +213,14 @@
                    (System/exit 0))))
         (loop [c (.read System/in)]
           (if (= c -1)
-            (System/exit 0)
-            (do (run-test-refresh!)
-                (recur (.read System/in)))))))))
+            (do
+              (println "")
+              (println "*****************************************")
+              (println "test-refresh's stdin stream has been closed, stopping monitoring for keystrokes to run tests")
+              (println "*****************************************"))
+            (do
+              (run-test-refresh!)
+              (recur (.read System/in)))))))))
 
 (defn- create-user-notifier [notify-command]
   (let [notify-command (if (string? notify-command)

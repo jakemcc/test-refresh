@@ -77,7 +77,11 @@ polls the file system to see if anything has changed. When there is a
 change your code is tested again.
 
 If you need to rerun your tests without changing a file then hit
-`Enter` when focused on a running `lein test-refresh`.
+`Enter` when focused on a running `lein test-refresh`. This behavior
+will stop if test-refresh thinks it has read till the end of
+STDIN. This is usually caused by hitting ctrl-d, but also when a
+specific version of bash is invoked by test-refresh which can happen
+when running tests or notify commands.
 
 ### Built-in test narrowing (test selector)
 

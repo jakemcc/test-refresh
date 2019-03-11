@@ -2,6 +2,12 @@
 
 ## NEXT
 
+- No longer quits when reaching the end of STDIN stream. This will
+  cause behavior of ctrl-d behavior to change (it will no longer
+  quit). This was done to work around STDIN closing if test-refresh
+  invoked an external process that causes specific version of bash to
+  be invoked.
+
 ## 0.23.0
 
 - Adds support for impromptu test selecting by adding
