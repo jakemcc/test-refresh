@@ -7,6 +7,8 @@
   quit). This was done to work around STDIN closing if test-refresh
   invoked an external process that causes specific version of bash to
   be invoked.
+- Allow default focus flag, `:test-refresh/focus`, to be overridden by
+  specifying `:focus-flag` key value pair in test-refresh configuration.
 
 ## 0.23.0
 

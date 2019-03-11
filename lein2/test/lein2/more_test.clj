@@ -2,6 +2,9 @@
   (:require [clojure.test :refer :all]
             [lein2.core :as core]))
 
-(deftest cows
+(deftest
+  ;; ^:test-refresh/focus
+  ;; ^:f
+  cows
   (is (= :moo (:sound {:sound :moo}))))
 

@@ -17,6 +17,7 @@
                  ;; :notify-on-success false
                  ;; :stack-trace-depth nil
                  ;; :quiet true
+                 :focus-flag :f
                  :changes-only true
                  ;; :watch-dirs ["src" "test"]
                  :refresh-dirs ["src" "test"]

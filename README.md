@@ -13,8 +13,9 @@ It also works with [expectations](https://github.com/clojure-expectations/expect
   refreshing your code and running your tests.
 - Runs previously failing tests first, giving you feedback even
   quicker.
-- Built-in test-selector that lets you narrow the scope of your
-  testing without restarting `lein-test-refresh`.
+- Built-in test-selector, `:test-refresh/focus`, that lets you narrow
+  the scope of your testing without restarting `lein-test-refresh`. A
+  different selector can be overridden through configuration.
 - Optionally only automatically runs tests in changed namespaces.
 - Can pass result of running your tests to a notification command of your
   choice.
@@ -29,7 +30,7 @@ It also works with [expectations](https://github.com/clojure-expectations/expect
 - Supports running your tests once! Useful for taking advantage of
   custom test reporters or quiet output in CI systems.
 - Has optional repl support for changing global state, such as timbre logging levels
-- **EXPERIMENTAL** Detects if your project uses [circleci.test](https://github.com/circleci/circleci.test) and uses that instead of clojure.test.
+- Detects if your project uses [circleci.test](https://github.com/circleci/circleci.test) and uses that instead of clojure.test.
 
 [sample.project.clj](sample.project.clj) show optional configuration.
 It and the rest of this readme should be used as documentation as to
@@ -101,6 +102,9 @@ With the below code, only `test-addition` will run until the
 (deftest test-subtraction
   (is (= 0 (- 10 9 1))))
 ```
+
+You can optionally specify a shorter flag by adding `:focus-flag
+:your-flag` to test-refresh's configuration.
 
 ## Configuration Features
 

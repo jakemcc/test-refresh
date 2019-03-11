@@ -30,10 +30,12 @@
                        :with-repl ":with-repl" "with-repl"
                        :run-once ":run-once" "run-once"} args)
         notify-on-success (or (nil? notify-on-success) notify-on-success)
+        focus-flag (get-in project [:test-refresh :focus-flag] :test-refresh/focus)
         selectors (filter keyword? args)
         watch-dirs (or watch-dirs [])
         refresh-dirs (or refresh-dirs [])]
     {:growl should-growl
+     :focus-flag focus-flag
      :stack-trace-depth stack-trace-depth
      :changes-only changes-only
      :notify-on-success notify-on-success

@@ -22,6 +22,11 @@
     (def capture-report (var-get (find-var 'clojure.test/report)))
     (def test-runner (var-get (find-var 'clojure.test/run-tests)))))
 
+(def focus-flag (volatile! :test-refresh/focus))
+
+(defn focused? [meta]
+  (boolean (get meta @focus-flag)))
+
 (defn- make-change-tracker []
   (clojure.tools.namespace.track/tracker))
 
@@ -100,7 +105,7 @@
   the given selectors, moves their :test metadata
   to :leiningen/skipped-test (so that clojure.test won't think they
   are tests), runs the given function, and then sets the metadata
-  back. Tests marked with :test-refresh/focused metadata are given
+  back. Tests marked with :test-refresh/focus metadata are given
   priority over other selectors."
   [namespaces selectors func]
   (let [move-meta! (fn [var from-key to-key]
@@ -122,7 +127,7 @@
         test-refresh-focused (filter (fn [var]
                                        (let [meta (merge (-> var meta :ns meta)
                                                          (assoc (meta var) :leiningen.test/var var))]
-                                         (:test-refresh/focus meta)))
+                                         (focused? meta)))
                                      all-vars)
         move-all-meta! (fn [from-key to-key]
                          (if (seq test-refresh-focused)
@@ -148,7 +153,7 @@
                                             selector))
                                     meta
                                     args)
-                             (:test-refresh/focus meta))))
+                             (focused? meta))))
                      selectors)]
      ns)))
 
@@ -256,6 +261,8 @@
         run-once-exit-code (atom 0)
         monitoring? (atom false)]
 
+    (vreset! focus-flag (:focus-flag options))
+    
     (when (seq refresh-dirs)
       (println "Only refreshing dirs:" (pr-str refresh-dirs))
       (apply clojure.tools.namespace.repl/set-refresh-dirs refresh-dirs))
