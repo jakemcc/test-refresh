@@ -248,7 +248,7 @@
             (passed? result))))
 
 (defn monitor-project [test-paths options]
-  (let [should-growl (:growl options)
+  (let [growl? (:growl options)
         users-notifier (create-user-notifier (:notify-command options))
         should-notify? (partial should-notify? (:notify-on-success options))
         keystroke-pressed (atom nil)
@@ -299,7 +299,7 @@
               (print-to-console result)
               (reset! run-once-exit-code (if (passed? result) 0 1))
               (when (should-notify? result)
-                (when should-growl
+                (when growl?
                   (growl (:status result) (:message result)))
                 (users-notifier (:message result))))
             (reset! printing false)
