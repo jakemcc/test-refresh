@@ -248,7 +248,9 @@
             (passed? result))))
 
 (defn monitor-project [test-paths options]
-  (let [growl? (:growl options)
+  (let [watch-dirs (:watch-dirs options [])
+        refresh-dirs (:refresh-dirs options [])
+        growl? (:growl options)
         users-notifier (create-user-notifier (:notify-command options))
         should-notify? (partial should-notify? (:notify-on-success options))
         report (:report options)
