@@ -322,3 +322,15 @@
                          :clojure.tools.namespace.track/load
                          :clojure.tools.namespace.track/unload))
           (System/exit @run-once-exit-code))))))
+
+(defn run-in-repl []
+;;  (require 'clojure.java.classpath)
+  (monitor-project ["test"];; (clojure.java.classpath/classpath-directories)
+                   {:nses-and-selectors [:ignore [[(constantly true)]]]}))
+
+(comment
+  java.io.Fileq
+  (require 'clojure.java.classpath)
+  (mapv (fn [f] (clojure.java.io/file f))
+        )
+  )
