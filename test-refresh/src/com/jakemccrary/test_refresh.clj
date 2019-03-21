@@ -326,7 +326,18 @@
                          :clojure.tools.namespace.track/unload))
           (System/exit @run-once-exit-code))))))
 
-(defn run-in-repl [test-path & test-paths]
+(defn run-in-repl
+  "Helper function for running test-refresh from the repl. This ignores
+  any project.clj or profiles.clj settings and blocks the repl. Hit
+  ctrl-c to stop.
+
+  This is intended for running in Cursive's repl so stacktraces become
+  clickable.
+
+  Pass in strings that are the path (relative is fine) to the
+  directories containing your tests.
+"
+  [test-path & test-paths]
   (monitor-project (cons test-path test-paths)
                    {:nses-and-selectors [:ignore [[(constantly true)]]]
                     :do-not-monitor-keystrokes true}))
