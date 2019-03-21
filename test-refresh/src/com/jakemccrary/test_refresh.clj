@@ -259,9 +259,11 @@
         watch-dirs (:watch-dirs options)
         refresh-dirs (:refresh-dirs options)
         selectors (second (:nses-and-selectors options))
-        
+
         run-once-exit-code (atom 0)
         monitoring? (atom false)
+
+        do-not-monitor-keystrokes? (:do-not-monitor-keystrokes options false)
         keystroke-pressed (atom nil)]
 
     (vreset! focus-flag (:focus-flag options :test-refresh/focus))
@@ -311,7 +313,8 @@
               (clojure.main/repl-prompt)
               (flush))
 
-            (when (and (not run-once?)
+            (when (and (not do-not-monitor-keystrokes?)
+                       (not run-once?)
                        (not @monitoring?))
               (monitor-keystrokes keystroke-pressed with-repl?)
               (reset! monitoring? true)))
@@ -323,10 +326,10 @@
                          :clojure.tools.namespace.track/unload))
           (System/exit @run-once-exit-code))))))
 
-(defn run-in-repl []
-;;  (require 'clojure.java.classpath)
-  (monitor-project ["test"];; (clojure.java.classpath/classpath-directories)
-                   {:nses-and-selectors [:ignore [[(constantly true)]]]}))
+(defn run-in-repl [test-path & test-paths]
+  (monitor-project (cons test-path test-paths)
+                   {:nses-and-selectors [:ignore [[(constantly true)]]]
+                    :do-not-monitor-keystrokes true}))
 
 (comment
   java.io.Fileq
