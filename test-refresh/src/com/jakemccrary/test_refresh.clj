@@ -1,6 +1,7 @@
 (ns com.jakemccrary.test-refresh
   (:require clojure.java.shell
             clojure.pprint
+            [clojure.stacktrace :as stacktrace]
             [clojure.string :as str]
             clojure.test
             clojure.tools.namespace.dir
@@ -193,7 +194,9 @@
          result (if (= :ok refresh)
                   (run-selected-tests stack-depth test-paths selectors report namespaces-to-run)
                   {:status "Error"
-                   :message (str "Error refreshing environment: " clojure.core/*e)
+                   :message (str "Error refreshing environment: "
+                                 clojure.core/*e " "
+                                 (stacktrace/root-cause clojure.core/*e))
                    :exception clojure.core/*e})]
      (assoc result :run-time (- (System/currentTimeMillis) started)))))
 
