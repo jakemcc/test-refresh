@@ -15,7 +15,8 @@ It also works with [expectations](https://github.com/clojure-expectations/expect
   quicker.
 - Built-in test-selector, `:test-refresh/focus`, that lets you narrow
   the scope of your testing without restarting `lein-test-refresh`. A
-  different selector can be overridden through configuration.
+  different selector can be overridden through configuration. See
+  the sample project.clj or documentation in this README for more details.
 - Optionally only automatically runs tests in changed namespaces.
 - Can pass result of running your tests to a notification command of your
   choice.
@@ -43,7 +44,7 @@ how `lein-test-refresh` can be used.
 Add the above to your `~/.lein/profiles.clj`. It should look similar to below.
 
 ```clojure
-{:user {:plugins [[com.jakemccrary/lein-test-refresh "0.23.0"]]}}
+{:user {:plugins [[com.jakemccrary/lein-test-refresh "0.24.0"]]}}
 ```
 
 Alternatively you may add it to your `project.clj`.
@@ -51,7 +52,7 @@ Alternatively you may add it to your `project.clj`.
 ```clojure
 (defproject sample
   :dependencies [[org.clojure/clojure "1.8.0"]]
-  :profiles {:dev {:plugins [[com.jakemccrary/lein-test-refresh "0.23.0"]]}})
+  :profiles {:dev {:plugins [[com.jakemccrary/lein-test-refresh "0.24.0"]]}})
 ```
 
 > In my personal setup I also include
@@ -192,6 +193,29 @@ An example is when you see a test failure, you can call
 `(taoensso.timbre/set-level! :debug)` and see more information.
 
 See [this](https://github.com/jakemcc/lein-test-refresh/pull/50) pull request for details.
+
+### Running in a REPL
+
+`lein-test-refresh` supports running in a repl. This was done to
+support running in Cursive's repl so [users could click](https://github.com/jakemcc/lein-test-refresh/issues/80) and navigate to
+source.
+
+To use this feature, add `lein-test-refresh` as a project dependency instead of as a plugin. Then open your repl and do the following
+
+```clojure
+user=> (require 'com.jakemccrary.test-refresh)
+nil
+user=> (com.jakemccrary.test-refresh/run-in-repl "test")
+*********************************************
+*************** Running tests ***************
+```
+
+The tests will run until you kill the evaluation with ctrl-c. 
+
+This feature is one I never use myself. I'd consider it
+experimental. In my very limited testing I've had some weird behavior
+where I couldn't get it to stop running. I'm putting it out there
+though so others can use it.
 
 ## Contributing
 

@@ -1,14 +1,32 @@
 # Changes
 
-## NEXT
+## 0.24.0
 
-- No longer quits when reaching the end of STDIN stream. This will
-  cause behavior of ctrl-d behavior to change (it will no longer
-  quit). This was done to work around STDIN closing if test-refresh
-  invoked an external process that causes specific version of bash to
-  be invoked.
+- **BREAKING** No longer quits when reaching the end of STDIN
+  stream. This will cause behavior of ctrl-d behavior to change (it
+  will no longer quit). This was done to work around STDIN closing if
+  test-refresh invoked an external process that causes specific
+  version of bash to be invoked.
 - Allow default focus flag, `:test-refresh/focus`, to be overridden by
   specifying `:focus-flag` key value pair in test-refresh configuration.
+- More details are printed to screen when there is an exception
+  reloading your code.
+- Added `com.jakemccrary.test-refresh/run-in-repl`. This function is
+  intended to be called from Cursive's repl so that stacktraces become
+  clickable. See issue
+  [#80](https://github.com/jakemcc/lein-test-refresh/issues/80). Details
+  below.
+
+To call `com.jakemccrary.test-refresh/run-in-repl` from a repl, add `lein-test-refresh` as a dependency to your project. Start a repl and then do the following. `run-in-repl` takes one or more paths to your test directories.
+
+```
+user> (require 'com.jakemccrary.test-refresh)
+user> (com.jakemccrary.test-refresh/run-in-repl "test")
+TEST OUTPUT HERE
+```
+
+Hitting CTRL-C stops the tests. This repl is otherwise not useful. Any project.clj or profiles.clj settings are not known by `test-refresh` and as a result are not honored.
+
 
 ## 0.23.0
 
