@@ -1,5 +1,9 @@
 # Changes
 
+## 0.24.1
+
+- Fixes bug that caused `^:test-refresh/focus` to no longer focus.
+
 ## 0.24.0
 
 - **BREAKING** No longer quits when reaching the end of STDIN
