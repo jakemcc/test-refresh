@@ -269,7 +269,7 @@
         do-not-monitor-keystrokes? (:do-not-monitor-keystrokes options false)
         keystroke-pressed (atom nil)]
 
-    (vreset! focus-flag (:focus-flag options :test-refresh/focus))
+    (vreset! focus-flag (or (:focus-flag options) :test-refresh/focus))
     
     (when (seq refresh-dirs)
       (println "Only refreshing dirs:" (pr-str refresh-dirs))

@@ -4,12 +4,12 @@
   :dependencies [[org.clojure/clojure "1.10.0"]
                  [org.clojure/test.check "0.7.0"]]
   :profiles {:dev {:dependencies [   ;[circleci/circleci.test "0.3.1"]
-                                 [com.jakemccrary/lein-test-refresh #=(eval (nth (read-string (slurp "../test-refresh/project.clj")) 2))]
+                           ;      [com.jakemccrary/lein-test-refresh #=(eval (nth (read-string (slurp "../test-refresh/project.clj")) 2))]
                                   ]}}
   ;; Makes sure you've commented out whatever version of
   ;; lein-test-refresh you are using from profiles.clj while working
   ;; on lein-test-refresh
-;;  :plugins [[com.jakemccrary/lein-test-refresh #=(eval (nth (read-string (slurp "../test-refresh/project.clj")) 2))]]
+ :plugins [[com.jakemccrary/lein-test-refresh #=(eval (nth (read-string (slurp "../test-refresh/project.clj")) 2))]]
   :test-selectors {:integration :integration
                    :ns-metadata :ns-metadata
                    :unit (complement :integration)}
