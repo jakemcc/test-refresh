@@ -3,6 +3,7 @@
             clojure.pprint
             [clojure.stacktrace :as stacktrace]
             [clojure.string :as str]
+            clojure.java.io
             clojure.test
             clojure.tools.namespace.dir
             clojure.tools.namespace.find
@@ -19,7 +20,7 @@
   (require 'circleci.test)
   (def capture-report (var-get (find-var 'circleci.test.report/report)))
   (def test-runner (var-get (find-var 'circleci.test/run-tests)))
-  (catch Exception e
+  (catch Exception _
     (def capture-report (var-get (find-var 'clojure.test/report)))
     (def test-runner (var-get (find-var 'clojure.test/run-tests)))))
 
@@ -259,8 +260,6 @@
         report (:report options)
         run-once? (:run-once options)
         with-repl? (:with-repl options)
-        watch-dirs (:watch-dirs options)
-        refresh-dirs (:refresh-dirs options)
         selectors (second (:nses-and-selectors options))
 
         run-once-exit-code (atom 0)
