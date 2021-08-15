@@ -11,8 +11,7 @@
             clojure.tools.namespace.repl
             clojure.tools.namespace.track
             jakemcc.clojure-gntp.gntp
-            [clojure.set :as set])
-  (:import java.text.SimpleDateFormat))
+            [clojure.set :as set]))
 
 
 (try
@@ -318,7 +317,7 @@
             (when (and (not do-not-monitor-keystrokes?)
                        (not run-once?)
                        (not @monitoring?))
-              (monitor-keystrokes keystroke-pressed with-repl?)
+              (monitor-keystrokes keystroke-pressed with-repl?) ;; TODO: this seems wrong? So many futures?
               (reset! monitoring? true)))
           (catch Exception ex (.printStackTrace ex)))
         (Thread/sleep 200)
@@ -327,6 +326,12 @@
                          :clojure.tools.namespace.track/load
                          :clojure.tools.namespace.track/unload))
           (System/exit @run-once-exit-code))))))
+
+(defn -main
+  [& args]
+  (let [test-paths (or nil #_(:dir args)
+                        #{"test"})]
+   (monitor-project test-paths {:nses-and-selectors [:ignore [[(constantly true)]]]})))
 
 (defn run-in-repl
   "Helper function for running test-refresh from the repl. This ignores
