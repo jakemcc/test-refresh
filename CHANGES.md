@@ -1,5 +1,12 @@
 # Changes
 
+## 0.25.0-SNAPSHOT
+
+Breaks project into two, `com.jakemccrary/test-refresh` and `com.jakemccrary/lein-test-refresh`. As the names suggest, `lein-test-refresh` continues being the Leiningen plugin while `test-refresh` contains the core functionalty. This starts supporting `deps.edn` based projects.
+
+- Upgrades `org.clojure/tools.namespace` dependency to `1.1.0`.
+- Introduces dependencies on `org.clojure/tools.cli`.
+
 ## 0.24.1
 
 - Fixes bug that caused `^:test-refresh/focus` to no longer focus.
