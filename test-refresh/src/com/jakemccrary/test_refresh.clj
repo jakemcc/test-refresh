@@ -1,10 +1,10 @@
 (ns com.jakemccrary.test-refresh
   (:require clojure.java.shell
-            clojure.pprint
             [clojure.stacktrace :as stacktrace]
             [clojure.string :as string]
             [clojure.pprint :as pp]
-            clojure.java.io
+            [clojure.edn :as edn]
+            [clojure.java.io :as io]
             clojure.test
             clojure.tools.namespace.dir
             clojure.tools.namespace.find
@@ -343,18 +343,41 @@
   (update-in m [k] (fnil conj []) v))
 
 (def cli-options
-  [["-d" "--dir DIRNAME" "Name of the directory containing tests. Can specify more than once. Defaults to \"test\"."
+  [["-d" "--dir DIRNAME" "Name of the directory containing tests. Specify flag multiple times for specifying multiple test directories. Defaults to \"test\"."
+    :parse-fn str
+    :assoc-fn accumulate]
+   [nil "--no-config" "Run and ignore all .test-refresh.edn files"]
+   ["-c" "--config FILENAME" "Use specified file as a configuration file. Specify flag multiple times to specify multiple files. Later files override values found in earlier files. Defaults to [\"~/.test-refresh.edn\", \".test-refresh.edn\"]"
     :parse-fn str
     :assoc-fn accumulate]
    ["-h" "--help" "Display this help message"]])
 
-(defn help [args]
-  (println "Below are the arguments supported by test-refresh:")
-  (println (:summary args)))
+(defn help
+  ([args] (help args nil))
+  ([args message]
+   (when message
+     (println message))
+   (println "Below are the arguments supported by test-refresh:")
+   (println (:summary args))))
+
+(defn load-config [files]
+  (let [error-on-missing? (seq files)
+        configs (if (seq files)
+                  (mapv io/file files)
+                  [(io/file (System/getProperty "user.home") ".test-refresh.edn") (io/file ".test-refresh.edn")])]
+    (apply merge
+           {:nses-and-selectors [:ignore [[(constantly true)]]]}
+           (for [config (dbg configs)]
+             (if-not (.exists config)
+               (when error-on-missing?
+                 (throw (ex-info (str "Couldn't load config file " (.getAbsoluteFile config))
+                                 {:file (.getAbsoluteFile config)})))
+               (edn/read-string (slurp config))))))) 
 
 (defn -main
   [& args]
-  (let [args (cli/parse-opts args cli-options)]
+  (let [args (cli/parse-opts args cli-options)
+        options (:options args)]
     (cond
       (:errors args)
       (do
@@ -362,13 +385,15 @@
         (help args)
         (System/exit 1))
 
-      (get-in args [:options :help])
+      (:help options)
       (help args)
 
+      (and (:no-config options)
+           (seq (:config options)))
+      (help args "Cannot specify --no-config and --config at same time")
       :else
-      (let [options (:options args)
-            test-paths (set (:dir options ["test"]))]
-        (monitor-project test-paths {:nses-and-selectors [:ignore [[(constantly true)]]]})))))
+      (let [test-paths (set (:dir options ["test"]))]
+        (monitor-project test-paths (load-config (:config options)))))))
 
 (defn run-in-repl
   "Helper function for running test-refresh from the repl. This ignores
