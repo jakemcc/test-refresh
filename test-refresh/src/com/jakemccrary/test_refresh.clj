@@ -3,6 +3,7 @@
             clojure.pprint
             [clojure.stacktrace :as stacktrace]
             [clojure.string :as string]
+            [clojure.pprint :as pp]
             clojure.java.io
             clojure.test
             clojure.tools.namespace.dir
@@ -23,6 +24,12 @@
   (catch Exception _
     (def capture-report (var-get (find-var 'clojure.test/report)))
     (def test-runner (var-get (find-var 'clojure.test/run-tests)))))
+
+(defmacro dbg [& body]
+  `(let [x# ~@body]
+     (println (str "dbg: " (quote ~@body) "="))
+     (pp/pprint x#)
+     x#))
 
 (def focus-flag (volatile! :test-refresh/focus))
 
@@ -347,9 +354,7 @@
 
 (defn -main
   [& args]
-  (prn args)
   (let [args (cli/parse-opts args cli-options)]
-    (prn args)
     (cond
       (:errors args)
       (do
@@ -362,7 +367,7 @@
 
       :else
       (let [options (:options args)
-            test-paths (or (set (:dir options)) #{"test"})]
+            test-paths (set (:dir options ["test"]))]
         (monitor-project test-paths {:nses-and-selectors [:ignore [[(constantly true)]]]})))))
 
 (defn run-in-repl
