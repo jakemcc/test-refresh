@@ -2,7 +2,7 @@
   (:require clojure.java.shell
             clojure.pprint
             [clojure.stacktrace :as stacktrace]
-            [clojure.string :as str]
+            [clojure.string :as string]
             clojure.java.io
             clojure.test
             clojure.tools.namespace.dir
@@ -10,6 +10,7 @@
             clojure.tools.namespace.reload
             clojure.tools.namespace.repl
             clojure.tools.namespace.track
+            [clojure.tools.cli :as cli]
             jakemcc.clojure-gntp.gntp
             [clojure.set :as set]))
 
@@ -268,7 +269,7 @@
         keystroke-pressed (atom nil)]
 
     (vreset! focus-flag (or (:focus-flag options) :test-refresh/focus))
-    
+
     (when (seq refresh-dirs)
       (println "Only refreshing dirs:" (pr-str refresh-dirs))
       (apply clojure.tools.namespace.repl/set-refresh-dirs refresh-dirs))
@@ -327,11 +328,42 @@
                          :clojure.tools.namespace.track/unload))
           (System/exit @run-once-exit-code))))))
 
+(defn- parse-kw
+  [^String s]
+  (if (.startsWith s ":") (read-string s) (keyword s)))
+
+(defn- accumulate [m k v]
+  (update-in m [k] (fnil conj []) v))
+
+(def cli-options
+  [["-d" "--dir DIRNAME" "Name of the directory containing tests. Can specify more than once. Defaults to \"test\"."
+    :parse-fn str
+    :assoc-fn accumulate]
+   ["-h" "--help" "Display this help message"]])
+
+(defn help [args]
+  (println "Below are the arguments supported by test-refresh:")
+  (println (:summary args)))
+
 (defn -main
   [& args]
-  (let [test-paths (or nil #_(:dir args)
-                        #{"test"})]
-   (monitor-project test-paths {:nses-and-selectors [:ignore [[(constantly true)]]]})))
+  (prn args)
+  (let [args (cli/parse-opts args cli-options)]
+    (prn args)
+    (cond
+      (:errors args)
+      (do
+        (run! println (:errors args))
+        (help args)
+        (System/exit 1))
+
+      (get-in args [:options :help])
+      (help args)
+
+      :else
+      (let [options (:options args)
+            test-paths (or (set (:dir options)) #{"test"})]
+        (monitor-project test-paths {:nses-and-selectors [:ignore [[(constantly true)]]]})))))
 
 (defn run-in-repl
   "Helper function for running test-refresh from the repl. This ignores
@@ -342,8 +374,7 @@
   clickable.
 
   Pass in strings that are the path (relative is fine) to the
-  directories containing your tests.
-"
+  directories containing your tests."
   [test-path & test-paths]
   (monitor-project (cons test-path test-paths)
                    {:nses-and-selectors [:ignore [[(constantly true)]]]
@@ -352,6 +383,4 @@
 (comment
   java.io.Fileq
   (require 'clojure.java.classpath)
-  (mapv (fn [f] (clojure.java.io/file f))
-        )
-  )
+  (mapv (fn [f] (clojure.java.io/file f))))
