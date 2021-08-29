@@ -18,7 +18,6 @@ It also works with [expectations](https://github.com/clojure-expectations/expect
 - Can pass result of running your tests to a notification command of your choice.
 - Has built in Growl notification support.
 - Can be configured to only notify you on failures.
-- [Supports](https://github.com/jakemcc/lein-test-refresh/blob/master/CHANGES.md#040) subset of Leiningen test selectors.
 - Times how long it takes to run your tests.
 - Can optionally suppress `clojure.test`'s _Testing namespace_ output. This is extremely useful in making test output with larger codebases readable again.
 - You can hit `enter` in terminal to force tests to rerun.
@@ -26,6 +25,8 @@ It also works with [expectations](https://github.com/clojure-expectations/expect
 - Supports running your tests once! Useful for taking advantage of custom test reporters or quiet output in CI systems.
 - Has optional repl support for changing global state, such as timbre logging levels
 - Detects if your project uses [circleci.test](https://github.com/circleci/circleci.test) and uses that instead of clojure.test.
+- **Leiningen only**: [Supports](https://github.com/jakemcc/lein-test-refresh/blob/master/CHANGES.md#040) subset of Leiningen test selectors.
+
 
 [sample.project.clj](sample.project.clj) show optional configuration.
 It and the rest of this readme should be used as documentation as to how `lein test-refresh` can be used.
