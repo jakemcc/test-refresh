@@ -33,6 +33,8 @@ It and the rest of this readme should be used as documentation as to how `lein t
 
 ## Usage
 
+### Leiningen
+
 [![Latest version](https://clojars.org/com.jakemccrary/lein-test-refresh/latest-version.svg)](https://clojars.org/com.jakemccrary/lein-test-refresh)
 
 Add the above to your `~/.lein/profiles.clj`. It should look similar to below.
@@ -75,6 +77,11 @@ When there is a change your code is tested again.
 If you need to rerun your tests without changing a file then hit `Enter` when focused on a running `lein test-refresh`.
 This behavior will stop if test-refresh thinks it has read till the end of STDIN.
 This is usually caused by hitting ctrl-d, but also when a specific version of bash is invoked by test-refresh which can happen when running tests or notify commands.
+
+## Features
+
+> Any command line example here that is `lein test-refresh :some-argument` is **only** supported by Leiningen.
+> deps.edn usage must be configured through `.test-refresh.edn` files.
 
 ### Built-in test narrowing (test selector)
 
