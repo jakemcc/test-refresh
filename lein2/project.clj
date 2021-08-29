@@ -9,7 +9,7 @@
   ;; Makes sure you've commented out whatever version of
   ;; lein-test-refresh you are using from profiles.clj while working
   ;; on lein-test-refresh
-  :plugins [[com.jakemccrary/lein-test-refresh #=(eval (nth (read-string (slurp "../lein-test-refresh/project.clj")) 2))]]
+  :plugins [[com.jakemccrary/lein-test-refresh #=(eval (read-string (slurp "../version.edn")))]]
   :test-selectors {:integration :integration
                    :ns-metadata :ns-metadata
                    :unit (complement :integration)}

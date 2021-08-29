@@ -1,4 +1,4 @@
-(defproject com.jakemccrary/test-refresh "0.25.0-SNAPSHOT"
+(defproject com.jakemccrary/test-refresh #=(eval (read-string (slurp "../version.edn")))
   :description "Automatically reload code and run clojure.test tests when files change"
   :url "https://github.com/jakemcc/lein-test-refresh"
   :developer "Jake McCrary"
