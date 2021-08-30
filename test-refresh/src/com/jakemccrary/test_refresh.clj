@@ -367,7 +367,7 @@
                   [(io/file (System/getProperty "user.home") ".test-refresh.edn") (io/file ".test-refresh.edn")])]
     (apply merge
            {:nses-and-selectors [:ignore [[(constantly true)]]]}
-           (for [config (dbg configs)]
+           (for [config configs]
              (if-not (.exists config)
                (when error-on-missing?
                  (throw (ex-info (str "Couldn't load config file " (.getAbsoluteFile config))
