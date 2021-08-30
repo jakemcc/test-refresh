@@ -75,8 +75,7 @@ Whenever there is a code change, `test-refresh` will reload your code and rerun 
 
 ### deps.edn based projects
 
-**This is new as-of Augest 2021 and a feature the author, Jake McCrary, hasn't used much.
-Please report back any issues.**
+> **This is new as-of Augest 2021 and a feature the author, Jake McCrary, hasn't used it much. Please report back any issues and feedback as Github issues or through email.**
 
 If you want to use `test-refresh` with a `deps.edn` based project then add it to your `:aliases` section like below.
 
