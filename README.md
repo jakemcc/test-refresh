@@ -71,17 +71,60 @@ The output will look something like this.
     Finished at 08:25:20.619 (run time: 9.691s)
 
 Your terminal will just stay like that.
-Fairly often `lein test-refresh` polls the file system to see if anything has changed.
+Whenever there is a code change, `test-refresh` will reload your code and rerun your tests.
+
+### deps.edn based projects
+
+**This is new as-of Augest 2021 and a feature the author, Jake McCrary, hasn't used much.
+Please report back any issues.**
+
+If you want to use `test-refresh` with a `deps.edn` based project then add it to your `:aliases` section like below.
+
+```
+{:paths ["src"]
+ :deps {org.clojure/clojure {:mvn/version "1.10.3"}}
+ :aliases
+ {:test-refresh {:extra-paths ["test"]
+                 :extra-deps {com.jakemccrary/test-refresh
+                              {:mvn/version "0.25.0-SNAPSHOT"}}
+                 :main-opts ["-m" "com.jakemccrary.test-refresh"]}}}
+```
+
+Run with `clojure -M:test-refresh`
+
+
+```
+$ clojure -M:test-refresh
+*********************************************
+*************** Running tests ***************
+:reloading (hello-test)
+
+<standard clojure.test output>
+
+Failed 1 of 1 assertions
+Finished at 19:05:30.927 (run time: 0.034s)
+```
+
+`test-refresh` will notice when code changes and then reload and rerun your tests.
 When there is a change your code is tested again.
 
-If you need to rerun your tests without changing a file then hit `Enter` when focused on a running `lein test-refresh`.
-This behavior will stop if test-refresh thinks it has read till the end of STDIN.
-This is usually caused by hitting ctrl-d, but also when a specific version of bash is invoked by test-refresh which can happen when running tests or notify commands.
+Configuration for `test-refresh` in deps.edn files **must** be specified through `.test-refresh.edn` files.
+By default `~/.test-refresh.edn` and `$PWD/.test-refresh.edn` files are loaded, with the project specific file overriding settings from the `~/.test-refresh.edn` file.
+
+You can also specify an alternative configuration file at the command line `clojure -M:test-refresh -c config-file.edn`
+
+Here is an [example.test-refresh.edn](example.test-refresh.edn).
 
 ## Features
 
 > Any command line example here that is `lein test-refresh :some-argument` is **only** supported by Leiningen.
 > deps.edn usage must be configured through `.test-refresh.edn` files.
+
+### Hit `Enter` to rerun tests
+
+If you need to rerun your tests without changing a file then hit `Enter` when focused on a running `test-refresh`.
+This behavior will stop if test-refresh thinks it has read till the end of STDIN.
+This is usually caused by hitting ctrl-d, but also when a specific version of bash is invoked by test-refresh which can happen when running tests or notify commands.
 
 ### Built-in test narrowing (test selector)
 
