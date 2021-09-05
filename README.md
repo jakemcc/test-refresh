@@ -27,9 +27,10 @@ It also works with [expectations](https://github.com/clojure-expectations/expect
 - Detects if your project uses [circleci.test](https://github.com/circleci/circleci.test) and uses that instead of clojure.test.
 - **Leiningen only**: [Supports](https://github.com/jakemcc/lein-test-refresh/blob/master/CHANGES.md#040) subset of Leiningen test selectors.
 
+[sample.project.clj](sample.project.clj) show optional Leininen configuration.
+[example.test-refresh.edn](example.test-refresh.edn) shows configuration options available to `deps.edn` based projects.
 
-[sample.project.clj](sample.project.clj) show optional configuration.
-It and the rest of this readme should be used as documentation as to how `lein test-refresh` can be used.
+The sample configuration files and the rest of this documentation show how `test-refresh` can be used.
 
 ## Usage
 
