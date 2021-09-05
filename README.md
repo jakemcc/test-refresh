@@ -2,10 +2,10 @@
 
 [![Build Status](https://api.travis-ci.org/jakemcc/lein-test-refresh.png?branch=master)](http://travis-ci.org/jakemcc/lein-test-refresh)
 
-# lein-test-refresh
+# test-refresh
 
-This is a Leiningen plug-in that automatically refreshes and then runs
-your `clojure.test` tests when a file in your project changes.
+This is a Clojure tool that notices when your source changes and then reloads your code and runs your `clojure.test` tests.
+It works with Leiningen and `deps.edn` based projects.
 
 It also works with [expectations](https://github.com/clojure-expectations/expectations) [clojure.test compatible syntax](https://clojure-expectations.github.io/clojure-test.html).
 
