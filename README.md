@@ -78,7 +78,9 @@ Whenever there is a code change, `test-refresh` will reload your code and rerun 
 
 > **This is new as-of August 2021 and is a feature that the author, Jake McCrary, hasn't used much. Please report back any issues and feedback as Github issues or through email.**
 
-If you want to use `test-refresh` with a `deps.edn` based project then add it to your `:aliases` section like below.
+![Latest version](https://clojars.org/com.jakemccrary/test-refresh/latest-version.svg)
+
+If you want to use `test-refresh` with a `deps.edn` based project then add it to your `:aliases` section like below but using the version specified above.
 
 ```
 {:paths ["src"]
