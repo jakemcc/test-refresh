@@ -11,7 +11,7 @@ It also works with [expectations](https://github.com/clojure-expectations/expect
 
 ## Features
 
-- Allows you to have a quick feedback cycle by automatically refreshing your code and running your tests.
+- Enables quick feedback cycles by automatically refreshing your code and running your tests.
 - Runs previously failing tests first, giving you feedback even quicker.
 - Built-in test-selector, `:test-refresh/focus`, that lets you narrow the scope of your testing without restarting `lein-test-refresh`. A different selector can be overridden through configuration. See the sample project.clj or documentation in this README for more details.
 - Optionally only automatically runs tests in changed namespaces.
