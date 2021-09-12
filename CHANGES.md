@@ -1,6 +1,6 @@
 # Changes
 
-## 0.25.0-SNAPSHOT
+## 0.25.0
 
 Breaks project into two, `com.jakemccrary/test-refresh` and `com.jakemccrary/lein-test-refresh`. As the names suggest, `lein-test-refresh` continues being the Leiningen plugin while `test-refresh` contains the core functionalty. This starts supporting `deps.edn` based projects.
 
