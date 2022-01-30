@@ -41,7 +41,7 @@ The sample configuration files and the rest of this documentation show how `test
 Add the above to your `~/.lein/profiles.clj`. It should look similar to below.
 
 ```clojure
-{:user {:plugins [[com.jakemccrary/lein-test-refresh "0.24.1"]]}}
+{:user {:plugins [[com.jakemccrary/lein-test-refresh "0.25.0"]]}}
 ```
 
 Alternatively you may add it to your `project.clj`.
@@ -49,7 +49,7 @@ Alternatively you may add it to your `project.clj`.
 ```clojure
 (defproject sample
   :dependencies [[org.clojure/clojure "1.8.0"]]
-  :profiles {:dev {:plugins [[com.jakemccrary/lein-test-refresh "0.24.1"]]}})
+  :profiles {:dev {:plugins [[com.jakemccrary/lein-test-refresh "0.25.0"]]}})
 ```
 
 > In my personal setup I also include
