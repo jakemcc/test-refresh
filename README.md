@@ -88,7 +88,7 @@ If you want to use `test-refresh` with a `deps.edn` based project then add it to
  :aliases
  {:test-refresh {:extra-paths ["test"]
                  :extra-deps {com.jakemccrary/test-refresh
-                              {:mvn/version "0.25.0-SNAPSHOT"}}
+                              {:mvn/version "0.25.0"}}
                  :main-opts ["-m" "com.jakemccrary.test-refresh"]}}}
 ```
 
