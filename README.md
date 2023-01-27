@@ -115,6 +115,11 @@ By default `~/.test-refresh.edn` and `$PWD/.test-refresh.edn` files are loaded, 
 
 You can also specify an alternative configuration file at the command line `clojure -M:test-refresh -c config-file.edn`
 
+By default, `test-refresh` looks for tests under the `test` directory.
+You can use the `-d` flag to specify a different directory.
+
+`clojure -M:test-refresh --help` will display a helpful message with descriptions of supported command line flags.
+
 Here is an [example.test-refresh.edn](example.test-refresh.edn).
 
 ## Features
