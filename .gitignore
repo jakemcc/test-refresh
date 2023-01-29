@@ -12,3 +12,5 @@ pom.xml.asc
 .cider-repl-history
 .lsp
 .cpcache
+
+.clj-kondo/cache
