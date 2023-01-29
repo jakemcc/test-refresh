@@ -49,6 +49,7 @@ Alternatively you may add it to your `project.clj`.
 ```clojure
 (defproject sample
   :dependencies [[org.clojure/clojure "1.8.0"]]
+  :test-paths ["test"]
   :profiles {:dev {:plugins [[com.jakemccrary/lein-test-refresh "0.25.0"]]}})
 ```
 
