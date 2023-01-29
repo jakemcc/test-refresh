@@ -34,93 +34,13 @@ The sample configuration files and the rest of this documentation show how `test
 
 ## Usage
 
-### Leiningen
+### Leiningen based projects
 
-[![Latest version](https://clojars.org/com.jakemccrary/lein-test-refresh/latest-version.svg)](https://clojars.org/com.jakemccrary/lein-test-refresh)
-
-Add the above to your `~/.lein/profiles.clj`. It should look similar to below.
-
-```clojure
-{:user {:plugins [[com.jakemccrary/lein-test-refresh "0.25.0"]]}}
-```
-
-Alternatively you may add it to your `project.clj`.
-
-```clojure
-(defproject sample
-  :dependencies [[org.clojure/clojure "1.8.0"]]
-  :profiles {:dev {:plugins [[com.jakemccrary/lein-test-refresh "0.25.0"]]}})
-```
-
-> In my personal setup I also include
-> [humane-test-output](https://github.com/pjstadig/humane-test-output)
-> which changes clojure.test's output to be more readable. Other users
-> include [ultra](https://github.com/venantius/ultra) instead which
-> does even more to the output (color, prettifying exceptions and
-> diffs, etc).
-
-Enter your project's root directory and run `lein test-refresh`.
-The output will look something like this.
-
-    $ lein test-refresh
-    *********************************************
-    *************** Running tests ***************
-
-    <standard clojure.test output>
-
-    Failed 1 of 215 assertions
-    Finished at 08:25:20.619 (run time: 9.691s)
-
-Your terminal will just stay like that.
-Whenever there is a code change, `test-refresh` will reload your code and rerun your tests.
+See [docs/leiningen.md](docs/leiningen.md).
 
 ### deps.edn based projects
 
-> **This is new as-of August 2021 and is a feature that the author, Jake McCrary, hasn't used much. Please report back any issues and feedback as Github issues or through email.**
-
-![Latest version](https://clojars.org/com.jakemccrary/test-refresh/latest-version.svg)
-
-If you want to use `test-refresh` with a `deps.edn` based project then add it to your `:aliases` section like below but using the version specified above.
-
-```
-{:paths ["src"]
- :deps {org.clojure/clojure {:mvn/version "1.10.3"}}
- :aliases
- {:test-refresh {:extra-paths ["test"]
-                 :extra-deps {com.jakemccrary/test-refresh
-                              {:mvn/version "0.25.0"}}
-                 :main-opts ["-m" "com.jakemccrary.test-refresh"]}}}
-```
-
-Run with `clojure -M:test-refresh`
-
-
-```
-$ clojure -M:test-refresh
-*********************************************
-*************** Running tests ***************
-:reloading (hello-test)
-
-<standard clojure.test output>
-
-Failed 1 of 1 assertions
-Finished at 19:05:30.927 (run time: 0.034s)
-```
-
-`test-refresh` will notice when code changes and then reload and rerun your tests.
-When there is a change your code is tested again.
-
-Configuration for `test-refresh` in deps.edn files **must** be specified through `.test-refresh.edn` files.
-By default `~/.test-refresh.edn` and `$PWD/.test-refresh.edn` files are loaded, with the project specific file overriding settings from the `~/.test-refresh.edn` file.
-
-You can also specify an alternative configuration file at the command line `clojure -M:test-refresh -c config-file.edn`
-
-By default, `test-refresh` looks for tests under the `test` directory.
-You can use the `-d` flag to specify a different directory.
-
-`clojure -M:test-refresh --help` will display a helpful message with descriptions of supported command line flags.
-
-Here is an [example.test-refresh.edn](example.test-refresh.edn).
+See [docs/deps_edn.md](docs/deps_edn.md).
 
 ## Features
 
