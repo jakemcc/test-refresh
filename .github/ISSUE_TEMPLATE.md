@@ -4,7 +4,7 @@ lein-test-refresh before submitting.*
 
 **What version of lein-test-refresh?**
 
-**What version of Leiningen?**
+**What version of Leiningen or Clojure (for deps.edn projects)?**
 
 **Can you recreate the issue with a minimal project?**
 
