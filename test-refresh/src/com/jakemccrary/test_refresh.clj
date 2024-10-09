@@ -62,9 +62,8 @@
 (def ^:private top-stars (apply str (repeat 45 "*")))
 (def ^:private side-stars (apply str (repeat 15 "*")))
 
-(defn- print-banner []
-  (println top-stars)
-  (println side-stars "Running tests" side-stars))
+(defn- print-banner [banner]
+  (some-> banner println))
 
 (defn- print-end-message [run-time]
   (let [date-str (.format (java.text.SimpleDateFormat. "HH:mm:ss.SSS")
@@ -166,14 +165,15 @@
                      selectors)]
      ns)))
 
-
 (defn- select-reporting-fn
   "Selects the reporting function based on user specified configuration"
   [report]
-  (when report (require (symbol (namespace (symbol report)))))
-  (let [resolved-report (when report (let [rr (resolve (symbol report))]
-                                       (if rr rr (println "Unable to locate report method:" report))))]
-    (if resolved-report resolved-report capture-report)))
+  (if (= ::no-report report)
+    (fn silent-report [m])
+    (do (when report (require (symbol (namespace (symbol report)))))
+        (let [resolved-report (when report (let [rr (resolve (symbol report))]
+                                             (if rr rr (println "Unable to locate report method:" report))))]
+          (if resolved-report resolved-report capture-report)))))
 
 (defn run-selected-tests [stack-depth test-paths selectors report namespaces-to-run]
   (let [test-namespaces (namespaces-in-directories test-paths)
@@ -284,7 +284,7 @@
     (when report
       (println "Using reporter:" report))
 
-    (when (:quiet options)
+    (when (or (:quiet options) (:silence options))
       (defmethod capture-report :begin-test-ns [m]))
 
     (loop [tracker (make-change-tracker)]
@@ -298,19 +298,24 @@
             (when (and with-repl? @monitoring? something-changed?)
               (println))
 
-            (print-banner)
+            (when-not (:silence options) 
+              (print-banner (:banner options)))
 
             (let [stack-depth (:stack-trace-depth options)
                   was-failed (tracking-failed-tests?)
                   changed-namespaces (if (:changes-only options)
                                        (set (:clojure.tools.namespace.track/load new-tracker))
                                        #{})
+                  report (if (:silence options) ::no-report report)
                   result (run-tests stack-depth test-paths selectors report changed-namespaces)
                   ;; tests need to be run once a failed test is resolved
                   result (if (and was-failed (passed? result))
                            (run-tests stack-depth test-paths selectors report)
                            result)]
-              (print-to-console result)
+
+              (when-not (:silence options)
+                (print-to-console result))
+              
               (reset! run-once-exit-code (if (passed? result) 0 1))
               (when (should-notify? result)
                 (when growl?

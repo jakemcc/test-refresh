@@ -17,11 +17,23 @@
   (vec (concat (:test-path project [])
                (:test-paths project []))))
 
+(def ^:private top-stars (apply str (repeat 45 "*")))
+(def ^:private side-stars (apply str (repeat 15 "*")))
+(def ^:private default-banner (str top-stars
+                                   "\n"
+                                   side-stars
+                                   "Running tests"
+                                   side-stars))
+
 (defn project-options [project args]
   (let [{:keys [notify-command notify-on-success growl
-                silence quiet report changes-only run-once
+                banner silence quiet report changes-only run-once
                 focus-flag
-                with-repl watch-dirs refresh-dirs stack-trace-depth]} (:test-refresh project)
+                with-repl watch-dirs refresh-dirs stack-trace-depth]
+         :or {banner :no-supplied-banner}} (:test-refresh project)
+        banner (if (= banner :no-supplied-banner) 
+                 default-banner
+                 banner)
         growl? (or (some #{:growl ":growl" "growl"} args) growl)
         changes-only (or (some #{:changes-only ":changes-only" "changes-only"} args) changes-only)
         run-once? (or (some #{:run-once ":run-once" "run-once"} args) run-once)
@@ -41,6 +53,8 @@
      :nses-and-selectors (#'test/read-args args project)
      :test-paths (clojure-test-directories project)
      :quiet quiet
+     :banner banner
+     :silence silence
      :report report
      :run-once run-once?
      :with-repl with-repl?
