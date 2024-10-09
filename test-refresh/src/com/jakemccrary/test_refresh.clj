@@ -298,8 +298,7 @@
             (when (and with-repl? @monitoring? something-changed?)
               (println))
 
-            (when-not (:silence options) 
-              (print-banner (:banner options)))
+            (print-banner (:banner options))
 
             (let [stack-depth (:stack-trace-depth options)
                   was-failed (tracking-failed-tests?)
