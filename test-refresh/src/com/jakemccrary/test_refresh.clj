@@ -59,9 +59,6 @@
 (defn- refresh-environment []
   (clojure.tools.namespace.repl/refresh))
 
-(def ^:private top-stars (apply str (repeat 45 "*")))
-(def ^:private side-stars (apply str (repeat 15 "*")))
-
 (defn- print-banner [banner]
   (some-> banner println))
 
@@ -169,7 +166,7 @@
   "Selects the reporting function based on user specified configuration"
   [report]
   (if (= ::no-report report)
-    (fn silent-report [m])
+    (fn silent-report [report])
     (do (when report (require (symbol (namespace (symbol report)))))
         (let [resolved-report (when report (let [rr (resolve (symbol report))]
                                              (if rr rr (println "Unable to locate report method:" report))))]
@@ -273,7 +270,9 @@
         monitoring? (atom false)
 
         do-not-monitor-keystrokes? (:do-not-monitor-keystrokes options false)
-        keystroke-pressed (atom nil)]
+        keystroke-pressed (atom nil)
+        debug-mode? (:debug options)
+        test-paths (if debug-mode? [] test-paths)]
 
     (vreset! focus-flag (or (:focus-flag options) :test-refresh/focus))
 
@@ -284,7 +283,7 @@
     (when report
       (println "Using reporter:" report))
 
-    (when (or (:quiet options) (:silence options))
+    (when (or (:quiet options) debug-mode?)
       (defmethod capture-report :begin-test-ns [m]))
 
     (loop [tracker (make-change-tracker)]
@@ -305,14 +304,15 @@
                   changed-namespaces (if (:changes-only options)
                                        (set (:clojure.tools.namespace.track/load new-tracker))
                                        #{})
-                  report (if (:silence options) ::no-report report)
+                  report (if debug-mode? ::no-report report)
                   result (run-tests stack-depth test-paths selectors report changed-namespaces)
                   ;; tests need to be run once a failed test is resolved
                   result (if (and was-failed (passed? result))
                            (run-tests stack-depth test-paths selectors report)
                            result)]
 
-              (when-not (:silence options)
+              (when-not (and debug-mode?
+                             (-> result :status (not= "Error")))
                 (print-to-console result))
               
               (reset! run-once-exit-code (if (passed? result) 0 1))

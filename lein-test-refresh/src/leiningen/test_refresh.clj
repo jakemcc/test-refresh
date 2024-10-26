@@ -26,14 +26,23 @@
                                    "Running tests"
                                    side-stars))
 
+(defn- debug-mode-banner [banner]
+  ;; Needs to be tested on Linux and Windows.
+  (str "\033[H" ;; Send caret to home position in console
+       "\033[2J" ;; Clears console (preserving scrollback)
+       "\033[0;m" ;; Reset escape sequnce to default
+       (some->> banner (str "\n"))))
+
 (defn project-options [project args]
   (let [{:keys [notify-command notify-on-success growl
-                banner silence quiet report changes-only run-once
+                banner debug quiet report changes-only run-once
                 focus-flag
                 with-repl watch-dirs refresh-dirs stack-trace-depth]} (:test-refresh project)
-        banner (if (and banner (not (string/blank? banner)))
-                 banner
-                 (when-not (true? silence) default-banner))
+        banner (if (true? debug)
+                 (debug-mode-banner banner)
+                 (if (and banner (not (string/blank? banner)))
+                   banner
+                   default-banner))
         growl? (or (some #{:growl ":growl" "growl"} args) growl)
         changes-only (or (some #{:changes-only ":changes-only" "changes-only"} args) changes-only)
         run-once? (or (some #{:run-once ":run-once" "run-once"} args) run-once)
@@ -54,7 +63,7 @@
      :test-paths (clojure-test-directories project)
      :quiet quiet
      :banner banner
-     :silence silence
+     :debug debug
      :report report
      :run-once run-once?
      :with-repl with-repl?
