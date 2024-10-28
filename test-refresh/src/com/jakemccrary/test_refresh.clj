@@ -60,7 +60,8 @@
   (clojure.tools.namespace.repl/refresh))
 
 (defn- print-banner [banner]
-  (some-> banner println))
+  (when (and banner (not (string/blank? banner)))
+    (println banner)))
 
 (defn- print-end-message [run-time]
   (let [date-str (.format (java.text.SimpleDateFormat. "HH:mm:ss.SSS")
