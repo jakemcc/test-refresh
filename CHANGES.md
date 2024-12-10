@@ -1,5 +1,13 @@
 # Changes
 
+## 0.26.0
+
+- Adds support for clearing output
+- Adds support for reloading but not running any tests
+- Adds support for specifying your own custom banner.
+
+See https://github.com/jakemcc/test-refresh/pull/91 for details
+
 ## 0.25.0
 
 Breaks project into two, `com.jakemccrary/test-refresh` and `com.jakemccrary/lein-test-refresh`. As the names suggest, `lein-test-refresh` continues being the Leiningen plugin while `test-refresh` contains the core functionalty. This starts supporting `deps.edn` based projects.
