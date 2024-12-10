@@ -11,6 +11,6 @@
          :main-opts ["-m" "cognitect.test-runner"]}
   :test-refresh {:extra-paths ["test"]
                  :extra-deps {com.jakemccrary/test-refresh
-                              {:mvn/version "0.25.0"}
-                              #_{:local/root "../test-refresh"}}
+                              ;; {:mvn/version "0.25.0"}
+                              {:local/root "../test-refresh"}}
                  :main-opts ["-m" "com.jakemccrary.test-refresh"]}}}
