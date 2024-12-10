@@ -13,5 +13,5 @@ pom.xml.asc
 .lsp
 .cpcache
 
-.clj-kondo/cache
+.clj-kondo/.cache
 test-refresh/.clj-kondo/.cache
