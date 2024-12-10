@@ -19,6 +19,8 @@
                  ;; :stack-trace-depth nil
                  :quiet true
                  ;; :focus-flag :f
+                 :banner "🔥🔥🔥🔥🔥🔥🔥🔥🔥"
+                 :clear true
                  :changes-only true
                  ;; :watch-dirs ["src" "test"]
                  :refresh-dirs ["src" "test"]
