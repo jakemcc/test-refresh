@@ -256,6 +256,24 @@
   (not (and (not notify-on-success)
             (passed? result))))
 
+(def ^:private top-stars (apply str (repeat 45 "*")))
+(def ^:private side-stars (apply str (repeat 15 "*")))
+(def ^:private default-banner (str top-stars
+                                   "\n"
+                                   side-stars
+                                   "Running tests"
+                                   side-stars))
+
+(defn- resolve-banner [banner clear debug]
+  (let [banner (or banner default-banner)]
+    (if (or (true? clear)
+            (and debug
+                 (not (false? clear))))
+      (str "\033[H" ;; Send caret to home position in console
+           "\033[2J" ;; Clears console (preserving scrollback)
+           (when-not (string/blank? banner) (str "\n" banner)))
+      banner)))
+
 (defn monitor-project [test-paths options]
   (let [watch-dirs (:watch-dirs options [])
         refresh-dirs (:refresh-dirs options [])
@@ -273,7 +291,10 @@
         do-not-monitor-keystrokes? (:do-not-monitor-keystrokes options false)
         keystroke-pressed (atom nil)
         debug-mode? (:debug options)
-        test-paths (if debug-mode? [] test-paths)]
+        test-paths (if debug-mode? [] test-paths)
+        banner (resolve-banner (:banner options)
+                               (:clear options)
+                               debug-mode?)]
 
     (vreset! focus-flag (or (:focus-flag options) :test-refresh/focus))
 
@@ -298,7 +319,7 @@
             (when (and with-repl? @monitoring? something-changed?)
               (println))
 
-            (print-banner (:banner options))
+            (print-banner banner)
 
             (let [stack-depth (:stack-trace-depth options)
                   was-failed (tracking-failed-tests?)
