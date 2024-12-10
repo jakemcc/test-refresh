@@ -1,4 +1,6 @@
 {:notify-command ["terminal-notifier" "-title" "Tests" "-message"]
  :notify-on-success true
  :changes-only true
+ :banner "🔥🔥🔥🔥🔥🔥🔥🔥🔥"
+ :clear true
  :quiet true}

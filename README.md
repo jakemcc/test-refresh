@@ -1,7 +1,5 @@
 > Like many Clojure projects, this is stable and doesn't require active maintenance. There might not be recent commits but it is still used and maintained.
 
-[![Build Status](https://api.travis-ci.org/jakemcc/lein-test-refresh.png?branch=master)](http://travis-ci.org/jakemcc/lein-test-refresh)
-
 # test-refresh
 
 This is a Clojure tool that notices when your source changes and then reloads your code and runs your `clojure.test` tests.
