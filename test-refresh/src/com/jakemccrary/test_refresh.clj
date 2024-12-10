@@ -59,12 +59,9 @@
 (defn- refresh-environment []
   (clojure.tools.namespace.repl/refresh))
 
-(def ^:private top-stars (apply str (repeat 45 "*")))
-(def ^:private side-stars (apply str (repeat 15 "*")))
-
-(defn- print-banner []
-  (println top-stars)
-  (println side-stars "Running tests" side-stars))
+(defn- print-banner [banner]
+  (when (and banner (not (string/blank? banner)))
+    (println banner)))
 
 (defn- print-end-message [run-time]
   (let [date-str (.format (java.text.SimpleDateFormat. "HH:mm:ss.SSS")
@@ -166,14 +163,15 @@
                      selectors)]
      ns)))
 
-
 (defn- select-reporting-fn
   "Selects the reporting function based on user specified configuration"
   [report]
-  (when report (require (symbol (namespace (symbol report)))))
-  (let [resolved-report (when report (let [rr (resolve (symbol report))]
-                                       (if rr rr (println "Unable to locate report method:" report))))]
-    (if resolved-report resolved-report capture-report)))
+  (if (= ::no-report report)
+    (fn silent-report [report])
+    (do (when report (require (symbol (namespace (symbol report)))))
+        (let [resolved-report (when report (let [rr (resolve (symbol report))]
+                                             (if rr rr (println "Unable to locate report method:" report))))]
+          (if resolved-report resolved-report capture-report)))))
 
 (defn run-selected-tests [stack-depth test-paths selectors report namespaces-to-run]
   (let [test-namespaces (namespaces-in-directories test-paths)
@@ -273,7 +271,9 @@
         monitoring? (atom false)
 
         do-not-monitor-keystrokes? (:do-not-monitor-keystrokes options false)
-        keystroke-pressed (atom nil)]
+        keystroke-pressed (atom nil)
+        debug-mode? (:debug options)
+        test-paths (if debug-mode? [] test-paths)]
 
     (vreset! focus-flag (or (:focus-flag options) :test-refresh/focus))
 
@@ -284,7 +284,7 @@
     (when report
       (println "Using reporter:" report))
 
-    (when (:quiet options)
+    (when (or (:quiet options) debug-mode?)
       (defmethod capture-report :begin-test-ns [m]))
 
     (loop [tracker (make-change-tracker)]
@@ -298,19 +298,24 @@
             (when (and with-repl? @monitoring? something-changed?)
               (println))
 
-            (print-banner)
+            (print-banner (:banner options))
 
             (let [stack-depth (:stack-trace-depth options)
                   was-failed (tracking-failed-tests?)
                   changed-namespaces (if (:changes-only options)
                                        (set (:clojure.tools.namespace.track/load new-tracker))
                                        #{})
+                  report (if debug-mode? ::no-report report)
                   result (run-tests stack-depth test-paths selectors report changed-namespaces)
                   ;; tests need to be run once a failed test is resolved
                   result (if (and was-failed (passed? result))
                            (run-tests stack-depth test-paths selectors report)
                            result)]
-              (print-to-console result)
+
+              (when-not (and debug-mode?
+                             (-> result :status (not= "Error")))
+                (print-to-console result))
+              
               (reset! run-once-exit-code (if (passed? result) 0 1))
               (when (should-notify? result)
                 (when growl?

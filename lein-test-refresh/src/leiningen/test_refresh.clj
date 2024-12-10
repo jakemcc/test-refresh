@@ -1,5 +1,6 @@
 (ns leiningen.test-refresh
-  (:require [leiningen.test :as test]
+  (:require [clojure.string :as string]
+            [leiningen.test :as test]
             [leiningen.core.project :as project]
             [leiningen.core.eval :as eval]))
 
@@ -17,11 +18,30 @@
   (vec (concat (:test-path project [])
                (:test-paths project []))))
 
+(def ^:private top-stars (apply str (repeat 45 "*")))
+(def ^:private side-stars (apply str (repeat 15 "*")))
+(def ^:private default-banner (str top-stars
+                                   "\n"
+                                   side-stars
+                                   "Running tests"
+                                   side-stars))
+
+(defn- resolve-banner [banner clear debug]
+  (let [banner (or banner default-banner)]
+    (if (or (true? clear)
+            (and debug
+                 (not (false? clear))))
+      (str "\033[H" ;; Send caret to home position in console
+           "\033[2J" ;; Clears console (preserving scrollback)
+           (when-not (string/blank? banner) (str "\n" banner)))
+      banner)))
+
 (defn project-options [project args]
   (let [{:keys [notify-command notify-on-success growl
-                silence quiet report changes-only run-once
+                banner debug clear quiet report changes-only run-once
                 focus-flag
                 with-repl watch-dirs refresh-dirs stack-trace-depth]} (:test-refresh project)
+        banner (resolve-banner banner clear debug)
         growl? (or (some #{:growl ":growl" "growl"} args) growl)
         changes-only (or (some #{:changes-only ":changes-only" "changes-only"} args) changes-only)
         run-once? (or (some #{:run-once ":run-once" "run-once"} args) run-once)
@@ -41,6 +61,8 @@
      :nses-and-selectors (#'test/read-args args project)
      :test-paths (clojure-test-directories project)
      :quiet quiet
+     :banner banner
+     :debug debug
      :report report
      :run-once run-once?
      :with-repl with-repl?
