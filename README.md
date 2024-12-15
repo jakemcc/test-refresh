@@ -166,6 +166,7 @@ I'm putting it out there though so others can use it.
 I encourage pull requests.
 If you're making a large change it is probably a good idea to create an issue and run it by me first.
 If you open a pull request you should expect me to review the code and potentially suggest improvements.
+This review might not happen quickly.
 
 Working on `test-refresh` can be a bit tricky.
 Despite being a tool to enhance testing it has very few tests itself.
@@ -178,6 +179,10 @@ I encourage you to do the following as well (or better yet, add some useful test
 1. The project in `./lein2` is setup to use whatever version is specified in `./test-refresh/project.clj`. As a result it will use the recently `lein install`ed version from the above step. Use the project in `./lein2` to test out your local version of `test-refresh`. Toggle settings in `./lein/project.clj` to test various features. Make tests fail and pass.
 1. Make your changes to the project in `./test-refresh` and `lein install`.
 1. Repeat manual testing in `./lein2`. Add sample code or configuration to `./lein2` project to show your changes.
+1. Don't forget about the deps.edn support. Sample project in `deps.edn` directory.
+
+Most changes and additions belong in the `test-refresh` directory so they will be shared by the Leiningen plugin (`lein-test-refresh`) and use in deps.edn projects.
+If you need to make changes to the Leiningen plugin, edit code in `lein-test-refresh` and do a similar `lein install` as mentioned above for `test-refresh`.
 
 Its a bit painful but it works.
 If there were more active changes happening to the project I'd invest the time to figure out how to test it but given the stability of `test-refresh` I haven't bothered.
