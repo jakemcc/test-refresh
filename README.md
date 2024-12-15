@@ -24,6 +24,9 @@ It also works with [expectations](https://github.com/clojure-expectations/expect
 - Has optional repl support for changing global state, such as timbre logging levels
 - Detects if your project uses [circleci.test](https://github.com/circleci/circleci.test) and uses that instead of clojure.test.
 - **Leiningen only**: [Supports](https://github.com/jakemcc/test-refresh/blob/master/CHANGES.md#040) subset of Leiningen test selectors.
+- Supports clearing output between test runs, see [PR](https://github.com/jakemcc/test-refresh/pull/91) and sample configuration files for details.
+- Supports [custom banner](https://github.com/jakemcc/test-refresh/pull/91) printed between test runs. See sample configuration files.
+- Supports reloading and not running tests. See [PR](https://github.com/jakemcc/test-refresh/pull/91) motivation.
 
 [sample.project.clj](sample.project.clj) show optional Leininen configuration.
 [example.test-refresh.edn](example.test-refresh.edn) shows configuration options available to `deps.edn` based projects.
