@@ -62,4 +62,16 @@
                  ;; cause test-refresh to focus. Intended to be used
                  ;; to let you specify a shorter flag than the default
                  ;; :test-refresh/focus.
-                 :focus-flag :test-refresh/focus})
+                 :focus-flag :test-refresh/focus
+
+                 ;; When set to true, don't actually run tests. Just reload changes.
+                 ;; See https://github.com/jakemcc/test-refresh/pull/91
+                 :debug false
+
+                 ;; Specify to override the default banner that prints with ever new reload.
+                 ;; See https://github.com/jakemcc/test-refresh/pull/91
+                 :banner "🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥"
+
+                 ;; Change to true to clear the console between reloads
+                 ;; See https://github.com/jakemcc/test-refresh/pull/91 for an example
+                 :clear false})
